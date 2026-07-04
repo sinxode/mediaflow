@@ -1,0 +1,95 @@
+@import '../../../styles/shared';
+
+.commentItem {
+  @include flex-row(flex-start, flex-start, $spacing-sm);
+  padding: $spacing-sm 0;
+  border-bottom: 1px dashed $color-border;
+  width: 100%;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.avatarCol {
+  flex-shrink: 0;
+}
+
+.contentCol {
+  @include flex-col(flex-start, stretch, 2px);
+  flex: 1;
+  min-width: 0;
+}
+
+.header {
+  @include flex-row(flex-start, center, $spacing-xs);
+  height: 20px;
+}
+
+.userName {
+  font-size: 12.5px;
+  font-weight: $font-weight-bold;
+  color: $color-text;
+}
+
+.time {
+  font-size: 11px;
+  color: lighten($color-text-secondary, 10%);
+}
+
+.editedTag {
+  font-size: 10.5px;
+  color: lighten($color-text-secondary, 15%);
+  font-style: italic;
+}
+
+.message {
+  font-size: 13px;
+  color: $color-text;
+  line-height: 1.5;
+  margin: 2px 0 0 0;
+  white-space: pre-wrap;
+}
+
+.actionsContainer {
+  margin-top: 2px;
+}
+
+// Inline confirm delete layout
+.confirmDeleteRow {
+  @include flex-row(flex-start, center, 6px);
+  font-size: 11px;
+  color: $color-danger;
+  font-weight: $font-weight-medium;
+  margin-top: 4px;
+}
+
+.confirmText {
+  margin-right: 2px;
+}
+
+.confirmBtn, .cancelBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: $font-family;
+  font-size: 11px;
+  font-weight: $font-weight-bold;
+  padding: 1px 4px;
+  border-radius: 4px;
+  transition: background-color $transition-fast;
+}
+
+.confirmBtn {
+  color: $color-danger;
+  &:hover {
+    background-color: rgba($color-danger, 0.08);
+  }
+}
+
+.cancelBtn {
+  color: $color-text-secondary;
+  &:hover {
+    background-color: $color-surface;
+  }
+}

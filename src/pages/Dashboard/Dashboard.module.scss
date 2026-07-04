@@ -1,0 +1,380 @@
+@import '../../styles/shared';
+
+.dashboard {
+  @include flex-col(flex-start, stretch, $spacing-md);
+  
+  @include tablet-and-up {
+    gap: $spacing-xl;
+  }
+}
+
+// Stats Card Grid
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-sm;
+  width: 100%;
+  
+  @include desktop-and-up {
+    grid-template-columns: repeat(4, 1fr);
+    gap: $spacing-md;
+  }
+}
+
+.statsCardWrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+// Main Scaffold Layout
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-md;
+  width: 100%;
+  
+  @include desktop-and-up {
+    grid-template-columns: 1.8fr 1.2fr;
+    gap: $spacing-xl;
+    align-items: start;
+  }
+}
+
+.leftCol {
+  @include flex-col(flex-start, stretch, $spacing-xl);
+}
+
+.rightCol {
+  width: 100%;
+  
+  @include desktop-and-up {
+    position: sticky;
+    top: calc($header-height + $spacing-xl);
+  }
+}
+
+// Section Headers
+.section {
+  @include flex-col(flex-start, stretch, $spacing-sm);
+}
+
+.sectionHeader {
+  @include flex-row(space-between, center);
+}
+
+.sectionHeaderInside {
+  @include flex-row(space-between, center);
+  margin-bottom: $spacing-md;
+}
+
+.sectionTitle {
+  font-size: 15px;
+  font-weight: $font-weight-bold;
+  color: $color-text;
+  letter-spacing: -0.01em;
+}
+
+// Tasks List Container
+.tasksList {
+  @include flex-col(flex-start, stretch, $spacing-xs);
+}
+
+.taskCardContainer {
+  width: 100%;
+  cursor: pointer;
+}
+
+// Review Queue Card Preview Layout
+.reviewCard {
+  background-color: $color-background;
+}
+
+.reviewList {
+  @include flex-col(flex-start, stretch, 0);
+}
+
+.reviewItem {
+  @include flex-row(space-between, center, $spacing-md);
+  padding: $spacing-sm 0;
+  border-bottom: 1px solid $color-border;
+  
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  
+  &:first-child {
+    padding-top: 0;
+  }
+}
+
+.reviewMeta {
+  @include flex-col(center, flex-start, 2px);
+  flex: 1;
+}
+
+.reviewName {
+  font-size: 13.5px;
+  font-weight: $font-weight-semibold;
+  color: $color-text;
+  line-height: 1.3;
+}
+
+.reviewCreator {
+  font-size: 11px;
+  color: $color-text-secondary;
+}
+
+// Timeline Activity Feed Layout
+.activityCard {
+  background-color: $color-background;
+}
+
+.timeline {
+  @include flex-col(flex-start, stretch, 0);
+  margin-top: $spacing-md;
+}
+
+.timelineItem {
+  display: flex;
+  gap: $spacing-md;
+  
+  &:last-child {
+    .timelineLine {
+      display: none; // No trailing line on last element
+    }
+  }
+}
+
+.timelineIndicator {
+  @include flex-col(flex-start, center, 0);
+}
+
+.timelineLine {
+  width: 1.5px;
+  background-color: $color-border;
+  flex: 1;
+  margin: $spacing-xxs 0;
+  min-height: 24px;
+}
+
+.timelineContent {
+  flex: 1;
+  padding-bottom: $spacing-md;
+}
+
+.timelineText {
+  font-size: 13px;
+  color: $color-text;
+  line-height: 1.4;
+  margin-bottom: 2px;
+}
+
+.timelineUser {
+  font-weight: $font-weight-semibold;
+  color: $color-text;
+}
+
+.timelineTarget {
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+}
+
+.timelineTime {
+  font-size: 11px;
+  color: $color-text-secondary;
+}
+
+.healthAlertBar {
+  background-color: rgba($color-danger, 0.04);
+  border: 1px solid rgba($color-danger, 0.15);
+  border-radius: $radius-button !important;
+  margin-bottom: $spacing-md;
+  width: 100%;
+}
+
+.healthAlertContent {
+  @include flex-row(flex-start, center, $spacing-xs);
+  padding: $spacing-sm $spacing-md;
+  font-size: 12.5px;
+  color: $color-danger;
+  font-weight: $font-weight-medium;
+  width: 100%;
+}
+
+.healthAlertIcon {
+  width: 16px;
+  height: 16px;
+  color: $color-danger;
+  flex-shrink: 0;
+}
+
+.alertActionBtn {
+  margin-left: auto;
+  color: $color-danger !important;
+  height: 24px !important;
+  font-size: 11px !important;
+  padding: 0 8px !important;
+  border-radius: 4px !important;
+  
+  &:hover {
+    background-color: rgba($color-danger, 0.08) !important;
+  }
+}
+
+// Welcome Banner Component
+.welcomeBanner {
+  position: relative;
+  background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: $spacing-lg $spacing-xl;
+  width: 100%;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  
+  @media (max-width: 576px) {
+    padding: $spacing-md $spacing-lg;
+  }
+}
+
+.bannerGridPattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 20px 20px;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+.bannerGlow1 {
+  position: absolute;
+  top: -40px;
+  right: -20px;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, rgba($color-primary, 0.28) 0%, rgba(0, 0, 0, 0) 70%);
+  filter: blur(25px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bannerGlow2 {
+  position: absolute;
+  bottom: -60px;
+  left: 10%;
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.18) 0%, rgba(0, 0, 0, 0) 70%);
+  filter: blur(20px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.floatingIcon {
+  position: absolute;
+  color: rgba(255, 255, 255, 0.05);
+  pointer-events: none;
+  z-index: 0;
+  
+  &.icon1 {
+    top: 15px;
+    left: 20%;
+    width: 24px;
+    height: 24px;
+    transform: rotate(15deg);
+  }
+  
+  &.icon2 {
+    bottom: 20px;
+    right: 30%;
+    width: 32px;
+    height: 32px;
+    transform: rotate(-10deg);
+  }
+  
+  &.icon3 {
+    top: 25px;
+    right: 15%;
+    width: 28px;
+    height: 28px;
+    transform: rotate(45deg);
+  }
+}
+
+.bannerContent {
+  position: relative;
+  z-index: 1;
+  @include flex-col(flex-start, stretch, $spacing-md);
+  
+  @media (min-width: 768px) {
+    @include flex-row(space-between, center, $spacing-lg);
+  }
+}
+
+.bannerText {
+  @include flex-col(flex-start, flex-start, 4px);
+  flex: 1;
+}
+
+.bannerTag {
+  font-size: 10px;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: lighten($color-primary, 10%);
+  background-color: rgba($color-primary, 0.12);
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+}
+
+.bannerTitle {
+  font-size: 22px;
+  font-weight: $font-weight-bold;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.02em;
+  
+  @media (min-width: 768px) {
+    font-size: 26px;
+  }
+}
+
+.bannerDesc {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  max-width: 560px;
+  line-height: 1.45;
+}
+
+.bannerActions {
+  flex-shrink: 0;
+  @include flex-row(flex-start, center);
+}
+
+.bannerBtn {
+  background-color: $color-primary !important;
+  color: #ffffff !important;
+  border: none !important;
+  font-weight: $font-weight-semibold !important;
+  box-shadow: 0 4px 12px rgba($color-primary, 0.3) !important;
+  transition: transform $transition-fast, box-shadow $transition-fast !important;
+  
+  &:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 16px rgba($color-primary, 0.45) !important;
+    background-color: darken($color-primary, 5%) !important;
+  }
+  
+  &:active {
+    transform: translateY(0) !important;
+  }
+}
+

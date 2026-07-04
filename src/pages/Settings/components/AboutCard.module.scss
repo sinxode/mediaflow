@@ -1,0 +1,138 @@
+@import '../../../styles/shared';
+
+.aboutCard {
+  background-color: $color-background;
+  border: 1px solid $color-border;
+  border-radius: $radius-card;
+  width: 100%;
+}
+
+.sectionTitle {
+  font-size: 13px;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-md;
+  border-bottom: 1px dashed $color-border;
+  padding-bottom: $spacing-xs;
+}
+
+.heroRow {
+  @include flex-row(flex-start, center, $spacing-md);
+  margin-bottom: $spacing-lg;
+}
+
+.logoBox {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background-color: $color-primary;
+  color: $color-background;
+  font-size: 18px;
+  font-weight: $font-weight-bold;
+  @include flex-row(center, center);
+  flex-shrink: 0;
+  box-shadow: $shadow-sm;
+}
+
+.heroText {
+  @include flex-col(center, flex-start, 1px);
+}
+
+.appName {
+  font-size: 16px;
+  font-weight: $font-weight-bold;
+  color: $color-text;
+}
+
+.subtitle {
+  font-size: 11px;
+  color: $color-text-secondary;
+}
+
+// Specs Grid
+.specsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-sm;
+  width: 100%;
+  margin-bottom: $spacing-lg;
+  
+  @media (min-width: 576px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.specItem {
+  @include flex-row(flex-start, center, $spacing-xs);
+  background-color: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-button;
+  padding: $spacing-sm;
+}
+
+.specIcon {
+  width: 16px;
+  height: 16px;
+  color: $color-primary;
+  flex-shrink: 0;
+}
+
+.specMeta {
+  @include flex-col(center, flex-start, 1px);
+  min-width: 0;
+}
+
+.label {
+  font-size: 10px;
+  font-weight: $font-weight-medium;
+  color: lighten($color-text-secondary, 10%);
+}
+
+.value {
+  font-size: 12px;
+  font-weight: $font-weight-bold;
+  color: $color-text;
+  @include text-truncate;
+  width: 100%;
+}
+
+// Credits
+.creditsSection {
+  border-top: 1px dashed $color-border;
+  padding-top: $spacing-md;
+}
+
+.creditsLabel {
+  font-size: 11px;
+  font-weight: $font-weight-bold;
+  color: $color-text;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.creditsText {
+  font-size: 12px;
+  color: $color-text-secondary;
+  line-height: 1.5;
+}
+
+.nameLink {
+  color: $color-primary;
+  font-weight: $font-weight-semibold;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color $transition-fast, opacity $transition-fast;
+  
+  &:hover {
+    border-bottom-color: $color-primary;
+    opacity: 0.85;
+  }
+  
+  &:active {
+    opacity: 0.65;
+  }
+}

@@ -1,0 +1,95 @@
+@import '../../../styles/shared';
+
+.tabsContainer {
+  border-bottom: 1px solid $color-border;
+  background-color: $color-background;
+  padding: $spacing-xs 0;
+  width: 100%;
+}
+
+.tabsScroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  padding-bottom: 2px;
+  
+  // Thin scrollbar on mobile
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: darken($color-surface, 8%);
+    border-radius: 4px;
+  }
+  
+  @include tablet-and-up {
+    overflow-x: visible;
+    padding-bottom: 0;
+  }
+}
+
+.tabsList {
+  @include flex-row(flex-start, center, 4px);
+  width: max-content;
+  background-color: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-input;
+  padding: 4px;
+  
+  @include tablet-and-up {
+    width: auto;
+    display: inline-flex;
+  }
+}
+
+.tabBtn {
+  position: relative;
+  height: 32px;
+  padding: 0 $spacing-md;
+  border-radius: calc($radius-input - 4px);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  
+  &:focus {
+    box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.15);
+  }
+}
+
+.activeBg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: $color-background;
+  border-radius: calc($radius-input - 4px);
+  box-shadow: $shadow-sm;
+  border: 1px solid $color-border;
+  z-index: 1;
+}
+
+.tabText {
+  position: relative;
+  z-index: 2;
+  font-family: $font-family;
+  font-size: 12px;
+  font-weight: $font-weight-semibold;
+  color: $color-text-secondary;
+  transition: color $transition-fast;
+  white-space: nowrap;
+}
+
+.activeTab {
+  .tabText {
+    color: $color-primary;
+  }
+}

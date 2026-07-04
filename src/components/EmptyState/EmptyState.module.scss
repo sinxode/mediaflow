@@ -1,0 +1,55 @@
+@import '../../styles/shared';
+
+.emptyState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-style: dashed;
+  background-color: transparent;
+  min-height: 240px;
+}
+
+.container {
+  @include flex-col(center, center, $spacing-sm);
+  max-width: 380px;
+  width: 100%;
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  background-color: $color-surface;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-xs;
+  
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.title {
+  font-weight: $font-weight-semibold;
+  color: $color-text;
+  letter-spacing: -0.01em;
+}
+
+.description {
+  font-size: 13px;
+  color: $color-text-secondary;
+  line-height: 1.5;
+}
+
+.action {
+  margin-top: $spacing-xs;
+  width: 100%;
+  
+  & > * {
+    width: auto;
+  }
+}

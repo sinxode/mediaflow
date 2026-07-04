@@ -1,0 +1,46 @@
+@import '../../../styles/shared';
+
+.warningContainer {
+  @include flex-col(flex-start, stretch, $spacing-xs);
+  background-color: rgba($color-danger, 0.04);
+  border: 1px solid rgba($color-danger, 0.15);
+  border-radius: $radius-card;
+  padding: $spacing-md;
+  width: 100%;
+}
+
+.header {
+  @include flex-row(flex-start, center, $spacing-xs);
+}
+
+.warningIcon {
+  width: 18px;
+  height: 18px;
+  color: $color-danger;
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: 13.5px;
+  font-weight: $font-weight-bold;
+  color: $color-text;
+  margin: 0;
+}
+
+.description {
+  font-size: 11.5px;
+  color: $color-text-secondary;
+  margin: 0;
+  line-height: 1.45;
+}
+
+.actionsRow {
+  @include flex-row(flex-end, center, 6px);
+  margin-top: 2px;
+  
+  & > button {
+    height: 28px !important;
+    font-size: 11.5px !important;
+    border-radius: 8px !important;
+  }
+}

@@ -1,0 +1,168 @@
+@import '../../../styles/shared';
+
+.headerContainer {
+  @include flex-col(flex-start, stretch, $spacing-sm);
+  width: 100%;
+  border-bottom: 1px solid $color-border;
+  padding-bottom: $spacing-md;
+  margin-bottom: $spacing-md;
+}
+
+.backRow {
+  @include flex-row(flex-start, center);
+}
+
+.backBtn {
+  font-size: 12px !important;
+  color: $color-text-secondary !important;
+  height: 28px !important;
+  padding: 0 8px !important;
+  
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+.titleRow {
+  @include flex-col(space-between, flex-start, $spacing-xs);
+  width: 100%;
+  
+  @include tablet-and-up {
+    @include flex-row(space-between, center, $spacing-md);
+  }
+}
+
+.titleInfo {
+  @include flex-col(center, flex-start, 6px);
+  flex: 1;
+}
+
+.badges {
+  @include flex-row(flex-start, center, $spacing-xxs);
+}
+
+.title {
+  font-size: 20px;
+  font-weight: $font-weight-bold;
+  color: $color-text;
+  letter-spacing: -0.02em;
+  margin: 0;
+  
+  @include tablet-and-up {
+    font-size: 24px;
+  }
+}
+
+.actions {
+  @include flex-row(flex-start, center, $spacing-xs);
+  width: 100%;
+  
+  @include tablet-and-up {
+    width: auto;
+  }
+  
+  & > button {
+    height: 34px !important;
+    font-size: 13px !important;
+    border-radius: $radius-button !important;
+  }
+}
+
+.deleteBtn {
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+// Meta pills
+.metaRow {
+  @include flex-row(flex-start, center, $spacing-xs);
+  flex-wrap: wrap;
+}
+
+.metaPill {
+  display: inline-flex;
+  align-items: center;
+  background-color: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: 10px;
+  padding: 3px $spacing-xs;
+  font-size: 11px;
+}
+
+.metaLabel {
+  color: lighten($color-text-secondary, 10%);
+  margin-right: 6px;
+  font-weight: $font-weight-medium;
+  border-right: 1px solid $color-border;
+  padding-right: 6px;
+}
+
+.metaValue {
+  color: $color-text;
+  font-weight: $font-weight-semibold;
+  @include flex-row(center, center, 4px);
+}
+
+.userDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: $color-primary;
+}
+
+.metaIcon {
+  width: 11px;
+  height: 11px;
+  color: lighten($color-text-secondary, 15%);
+}
+
+// Badge styling duplication (for scope encapsulation)
+.categoryBadge {
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: $font-weight-semibold;
+  border-radius: 6px;
+  background-color: $color-primary-light;
+  color: $color-primary;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.priorityBadge {
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: $font-weight-semibold;
+  border-radius: 6px;
+  
+  &.low {
+    background-color: lighten($color-border, 2%);
+    color: $color-text-secondary;
+  }
+  &.medium {
+    background-color: $color-primary-light;
+    color: $color-primary;
+  }
+  &.high {
+    background-color: rgba($color-danger, 0.08);
+    color: $color-danger;
+  }
+}
+
+.statusBadge {
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: $font-weight-semibold;
+  border-radius: 6px;
+  
+  &.created { background-color: #F1F5F9; color: #475569; }
+  &.assigned { background-color: #EEF2FF; color: #4F46E5; }
+  &.working { background-color: #E0F2FE; color: #0284C7; }
+  &.ready-for-review { background-color: #F5F3FF; color: #7C3AED; }
+  &.reviewing { background-color: #FDF2F8; color: #DB2777; }
+  &.approved { background-color: #ECFDF5; color: #047857; }
+  &.published { background-color: #DCFCE7; color: #16A34A; }
+  &.completed { background-color: #F0FDF4; color: #15803D; }
+}

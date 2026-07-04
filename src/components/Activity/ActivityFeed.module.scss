@@ -1,0 +1,22 @@
+@import '../../styles/shared';
+
+.feedContainer {
+  @include flex-col(flex-start, stretch, $spacing-sm);
+  width: 100%;
+}
+
+.logsList {
+  @include flex-col(flex-start, stretch, 0);
+  width: 100%;
+}
+
+.errorAlert {
+  background-color: rgba($color-danger, 0.08);
+  border: 1px solid rgba($color-danger, 0.15);
+  color: $color-danger;
+  padding: $spacing-sm;
+  border-radius: $radius-button;
+  font-size: 12px;
+  font-weight: $font-weight-medium;
+  width: 100%;
+}

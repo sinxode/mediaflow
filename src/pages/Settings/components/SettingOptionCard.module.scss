@@ -1,0 +1,122 @@
+@import '../../../styles/shared';
+
+.optionsContainer {
+  @include flex-col(flex-start, stretch, $spacing-xs);
+  width: 100%;
+}
+
+.sectionLabel {
+  font-size: 13px;
+  font-weight: $font-weight-semibold;
+  color: $color-text;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-sm;
+  width: 100%;
+  
+  @media (min-width: 576px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.optionCard {
+  @include flex-col(flex-start, stretch, $spacing-xs);
+  background-color: $color-background;
+  border: 1px solid $color-border;
+  border-radius: $radius-button;
+  padding: $spacing-sm;
+  cursor: pointer;
+  transition: border-color $transition-normal, box-shadow $transition-normal;
+  
+  &:hover {
+    border-color: darken($color-border, 5%);
+  }
+}
+
+.selected {
+  border-color: $color-primary;
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.15);
+  
+  &:hover {
+    border-color: $color-primary;
+  }
+}
+
+// Mini previews
+.previewBox {
+  height: 52px;
+  border-radius: 6px;
+  border: 1px solid $color-border;
+  display: flex;
+  overflow: hidden;
+}
+
+.previewSidebar {
+  width: 18px;
+  height: 100%;
+  border-right: 1px solid $color-border;
+}
+
+.previewContent {
+  flex: 1;
+  padding: 4px;
+  @include flex-col(flex-start, stretch, 3px);
+}
+
+.previewHeader {
+  height: 6px;
+  border-radius: 2px;
+}
+
+.previewLine, .previewLineShort {
+  height: 3px;
+  border-radius: 1px;
+}
+
+.previewLine { width: 80%; }
+.previewLineShort { width: 50%; }
+
+// Colors per theme id
+.light {
+  background-color: #FFFFFF;
+  .previewSidebar { background-color: #F8FAFC; }
+  .previewHeader { background-color: #F1F5F9; }
+  .previewLine { background-color: #E2E8F0; }
+  .previewLineShort { background-color: #E2E8F0; }
+}
+
+.dark {
+  background-color: #0F172A;
+  border-color: #334155;
+  .previewSidebar { background-color: #1E293B; border-color: #334155; }
+  .previewHeader { background-color: #334155; }
+  .previewLine { background-color: #1E293B; }
+  .previewLineShort { background-color: #1E293B; }
+}
+
+.system {
+  background: linear-gradient(135deg, #FFFFFF 50%, #0F172A 50%);
+  .previewSidebar { background-color: rgba($color-border, 0.2); }
+  .previewHeader { background-color: rgba($color-border, 0.3); }
+  .previewLine { background-color: rgba($color-border, 0.2); }
+  .previewLineShort { background-color: rgba($color-border, 0.2); }
+}
+
+// Meta text
+.meta {
+  @include flex-col(center, flex-start, 1px);
+}
+
+.label {
+  font-size: 12px;
+  font-weight: $font-weight-bold;
+  color: $color-text;
+}
+
+.desc {
+  font-size: 10px;
+  color: $color-text-secondary;
+}

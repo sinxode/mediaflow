@@ -1,0 +1,108 @@
+@import '../../styles/shared';
+
+.feedCard {
+  height: 100%;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: $font-weight-bold;
+  margin-bottom: $spacing-md;
+  color: $color-text;
+  letter-spacing: -0.01em;
+}
+
+.feedList {
+  @include flex-col(flex-start, stretch, 0);
+}
+
+.feedItem {
+  display: flex;
+  gap: $spacing-md;
+  
+  &:last-child {
+    .line {
+      display: none;
+    }
+  }
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dotWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: $color-surface;
+  border: 1px solid $color-border;
+  flex-shrink: 0;
+  
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+.line {
+  width: 1px;
+  background-color: $color-border;
+  flex: 1;
+  margin: $spacing-xxs 0;
+}
+
+.content {
+  flex: 1;
+  padding-bottom: $spacing-md;
+}
+
+.text {
+  font-size: 13px;
+  color: $color-text;
+  line-height: 1.4;
+  margin-bottom: 2px;
+}
+
+.user {
+  font-weight: $font-weight-semibold;
+  color: $color-text;
+}
+
+.target {
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+}
+
+.time {
+  font-size: 11px;
+  color: $color-text-secondary;
+}
+
+.iconPublish {
+  color: $color-success;
+}
+
+.iconReview {
+  color: $color-review;
+}
+
+.iconCreate {
+  color: $color-primary;
+}
+
+.iconDefault {
+  color: $color-text-secondary;
+}
+
+.empty {
+  font-size: 13px;
+  color: $color-text-secondary;
+  padding: $spacing-md 0;
+  text-align: center;
+}

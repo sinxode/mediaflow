@@ -1,0 +1,27 @@
+@import '../../../styles/shared';
+
+.badge {
+  font-size: 10px;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 16px;
+  line-height: 1;
+}
+
+.creator {
+  background-color: $color-primary-light;
+  color: $color-primary;
+  border: 1px solid rgba($color-primary, 0.15);
+}
+
+.reviewer {
+  background-color: rgba($color-review, 0.08);
+  color: $color-review;
+  border: 1px solid rgba($color-review, 0.15);
+}

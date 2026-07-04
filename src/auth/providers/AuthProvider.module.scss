@@ -1,0 +1,65 @@
+@import '../../styles/shared';
+
+.loadingScreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: $color-background;
+  @include flex-row(center, center);
+  z-index: 1000;
+}
+
+.loaderContainer {
+  @include flex-col(center, center, $spacing-md);
+  text-align: center;
+}
+
+.logoBadge {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background-color: $color-primary;
+  color: $color-background;
+  font-size: 20px;
+  font-weight: $font-weight-bold;
+  @include flex-row(center, center);
+  box-shadow: $shadow-lg;
+  animation: logoPulse 2s infinite ease-in-out;
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid $color-border;
+  border-top-color: $color-primary;
+  border-radius: 50%;
+  animation: spin 0.8s infinite linear;
+}
+
+.loadingText {
+  font-family: $font-family;
+  font-size: 13px;
+  font-weight: $font-weight-medium;
+  color: $color-text-secondary;
+  margin-top: 4px;
+  letter-spacing: -0.01em;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes logoPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.96);
+    opacity: 0.9;
+  }
+}

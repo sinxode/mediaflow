@@ -1,0 +1,133 @@
+// MediaFlow SCSS Layout Foundation
+@import 'variables';
+@import 'breakpoints';
+@import 'mixins';
+
+// Application Layout Shell
+.app-container {
+  min-height: 100vh;
+  background-color: $color-background;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  
+  @include tablet-and-up {
+    flex-direction: row;
+  }
+}
+
+// Sidebar Structure (Desktop)
+.app-sidebar {
+  display: none;
+  
+  @include tablet-and-up {
+    display: flex;
+    flex-direction: column;
+    width: $sidebar-width;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    border-right: 1px solid $color-border;
+    background-color: $color-surface;
+    z-index: $z-sidebar;
+    transition: width $transition-normal;
+  }
+}
+
+// Top Header (Desktop & Mobile)
+.app-header {
+  height: calc($header-height + env(safe-area-inset-top, 0px));
+  border-bottom: 1px solid $color-border;
+  background-color: $color-background;
+  position: sticky;
+  top: 0;
+  z-index: $z-header;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 $spacing-md;
+  padding-top: env(safe-area-inset-top, 0px);
+  
+  @include tablet-and-up {
+    height: $header-height;
+    padding: 0 $spacing-xl;
+    padding-top: 0;
+  }
+}
+
+// Content Layout (Desktop & Mobile)
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  
+  @include tablet-and-up {
+    margin-left: $sidebar-width;
+  }
+}
+
+.app-content {
+  flex: 1;
+  padding: $spacing-md;
+  padding-bottom: calc($bottom-nav-height + 24px); // Extra room for mobile bottom nav
+  overflow-y: auto;
+  overflow-x: hidden;
+  
+  @include tablet-and-up {
+    padding: $spacing-xl;
+    padding-bottom: $spacing-xl;
+  }
+}
+
+// Bottom Navigation (Mobile)
+.app-bottom-nav {
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: calc($bottom-nav-height + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid $color-border;
+  background-color: $color-background;
+  z-index: $z-bottom-nav;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  
+  @include tablet-and-up {
+    display: none;
+  }
+}
+
+// Grid layout helper for cards
+.grid-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-md;
+  width: 100%;
+  
+  @media (min-width: 576px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  @media (min-width: 1440px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.grid-two-col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-md;
+  
+  @include tablet-and-up {
+    grid-template-columns: 2fr 1fr;
+    gap: $spacing-xl;
+  }
+}

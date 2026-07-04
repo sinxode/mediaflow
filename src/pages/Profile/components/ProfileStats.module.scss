@@ -1,0 +1,92 @@
+@import '../../../styles/shared';
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-xs;
+  width: 100%;
+  
+  @include tablet-and-up {
+    grid-template-columns: repeat(4, 1fr);
+    gap: $spacing-sm;
+  }
+}
+
+.statCard {
+  @include flex-row(space-between, center, $spacing-xs);
+  background-color: $color-background;
+  border: 1px solid $color-border;
+  border-radius: $radius-button;
+  padding: $spacing-xs $spacing-sm;
+  transition: transform $transition-fast, border-color $transition-fast, box-shadow $transition-fast;
+  
+  @include hover-active {
+    border-color: darken($color-border, 5%);
+    box-shadow: $shadow-sm;
+    transform: translateY(-0.5px);
+  }
+}
+
+.info {
+  @include flex-col(center, flex-start, 2px);
+}
+
+.label {
+  font-size: 11px;
+  font-weight: $font-weight-medium;
+  color: $color-text-secondary;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.value {
+  font-size: 18px;
+  font-weight: $font-weight-bold;
+  color: $color-text;
+  line-height: 1.1;
+}
+
+.iconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background-color: $color-surface;
+  color: $color-text-secondary;
+  
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+// Semantic colors
+.created {
+  .iconContainer {
+    color: $color-primary;
+    background-color: $color-primary-light;
+  }
+}
+
+.reviewed {
+  .iconContainer {
+    color: $color-review;
+    background-color: $color-review-light;
+  }
+}
+
+.completed {
+  .iconContainer {
+    color: $color-success;
+    background-color: $color-success-light;
+  }
+}
+
+.published {
+  .iconContainer {
+    color: $color-warning;
+    background-color: $color-warning-light;
+  }
+}

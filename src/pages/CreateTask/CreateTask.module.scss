@@ -1,0 +1,292 @@
+@import '../../styles/shared';
+
+.createPageContainer {
+  @include flex-col(flex-start, stretch, $spacing-md);
+  width: 100%;
+  padding-bottom: 120px; // Clear space for bottom sticky action bar
+}
+
+// Sandbox switcher
+.sandboxBar {
+  background-color: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-button !important;
+  margin-bottom: $spacing-xs;
+}
+
+.sandboxContent {
+  @include flex-col(space-between, stretch, $spacing-xs);
+  padding: $spacing-xs $spacing-sm;
+  
+  @media (min-width: 768px) {
+    @include flex-row(space-between, center, $spacing-md);
+  }
+}
+
+.sandboxMeta {
+  @include flex-row(flex-start, center, $spacing-xs);
+  font-size: 12px;
+  color: $color-text-secondary;
+}
+
+.sandboxIcon {
+  width: 16px;
+  height: 16px;
+  color: $color-primary;
+  flex-shrink: 0;
+}
+
+.roleToggles {
+  @include flex-row(flex-start, center, $spacing-xxs);
+  
+  & > button {
+    height: 28px !important;
+    font-size: 11px !important;
+    padding: 0 $spacing-sm !important;
+    border-radius: 8px !important;
+  }
+}
+
+// Grid Layout
+.formWorkspace {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-md;
+  width: 100%;
+  
+  @include tablet-and-up {
+    grid-template-columns: 1.8fr 1.2fr;
+    gap: $spacing-xl;
+    align-items: start;
+  }
+}
+
+.formSection {
+  width: 100%;
+}
+
+.formCard {
+  background-color: $color-background;
+  border: 1px solid $color-border;
+  border-radius: $radius-card;
+}
+
+.indicatorRow {
+  @include flex-row(flex-end, center);
+  margin-bottom: $spacing-sm;
+}
+
+.saveBadge {
+  @include flex-row(center, center, 6px);
+  font-size: 11px;
+  font-weight: $font-weight-semibold;
+  padding: 3px 8px;
+  border-radius: 10px;
+  
+  &.saved {
+    background-color: $color-success-light;
+    color: $color-success;
+    .badgeDot { background-color: $color-success; }
+  }
+  
+  &.unsaved {
+    background-color: $color-warning-light;
+    color: $color-warning;
+    .badgeDot { background-color: $color-warning; }
+  }
+}
+
+.badgeDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+
+.form {
+  @include flex-col(flex-start, stretch, $spacing-md);
+}
+
+// Field block layout
+.fieldBlock {
+  @include flex-col(flex-start, stretch, $spacing-xxs);
+  width: 100%;
+}
+
+.inputLabel {
+  font-family: $font-family;
+  font-size: 13px;
+  font-weight: $font-weight-medium;
+  color: $color-text;
+}
+
+.textInput, .textareaInput, .selectInput, .dateInput {
+  width: 100%;
+  border-radius: $radius-input;
+  border: 1px solid $color-border;
+  background-color: $color-background;
+  color: $color-text;
+  font-family: $font-family;
+  font-size: 14px;
+  transition: border-color $transition-fast, box-shadow $transition-fast;
+  
+  &::placeholder {
+    color: lighten($color-text-secondary, 15%);
+  }
+  
+  &:focus {
+    @include focus-ring;
+  }
+}
+
+.textInput {
+  height: 48px;
+  padding: 0 $spacing-md;
+}
+
+.textareaInput {
+  padding: $spacing-md;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.selectWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.selectInput {
+  height: 48px;
+  padding: 0 $spacing-md;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right $spacing-md center;
+}
+
+// Custom Date Input
+.customDateWrapper {
+  width: 100%;
+}
+
+.dateInput {
+  height: 48px;
+  padding: 0 $spacing-md;
+  cursor: pointer;
+}
+
+// Desktop actions are in the bottom bar, mobile actions are inline
+.formActionsMobile {
+  @include flex-row(flex-end, center, $spacing-xs);
+  border-top: 1px solid $color-border;
+  padding-top: $spacing-md;
+  margin-top: $spacing-xs;
+  
+  @include tablet-and-up {
+    display: none; // Hides inline buttons on desktop
+  }
+  
+  & > button {
+    flex: 1;
+  }
+}
+
+// Right Sidebar Preview
+.previewSection {
+  @include flex-col(flex-start, stretch, $spacing-md);
+  width: 100%;
+}
+
+.tipsCard {
+  border-style: dashed;
+  background-color: $color-surface;
+}
+
+.tipsHeader {
+  @include flex-row(flex-start, center, $spacing-xs);
+  margin-bottom: $spacing-xxs;
+  
+  h4 {
+    font-size: 13.5px;
+    font-weight: $font-weight-bold;
+    color: $color-text;
+  }
+}
+
+.tipsIcon {
+  width: 16px;
+  height: 16px;
+  color: $color-primary;
+}
+
+.tipsText {
+  font-size: 12px;
+  color: $color-text-secondary;
+  line-height: 1.5;
+}
+
+// Sticky bottom Actions bar
+.stickyActionsBar {
+  display: none; // Hidden on mobile by default to prevent viewport overlaps with bottom nav
+  
+  @include tablet-and-up {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: $sidebar-width; // Offset for desktop fixed sidebar
+    right: 0;
+    height: 72px;
+    background-color: $color-background;
+    border-top: 1px solid $color-border;
+    z-index: 100;
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.03);
+  }
+}
+
+.actionsBarContainer {
+  height: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 $spacing-xl;
+  @include flex-row(space-between, center);
+  
+  & > button {
+    height: 40px !important;
+    font-size: 13px !important;
+    border-radius: $radius-button !important;
+  }
+}
+
+.rightActions {
+  @include flex-row(flex-end, center, $spacing-sm);
+  
+  & > button {
+    height: 40px !important;
+    font-size: 13px !important;
+    border-radius: $radius-button !important;
+  }
+}
+
+// Modal Success Content
+.successModal {
+  @include flex-col(center, center, $spacing-sm);
+  text-align: center;
+  padding: $spacing-xs 0;
+  
+  p {
+    font-size: 13.5px;
+    color: $color-text-secondary;
+    line-height: 1.5;
+    
+    strong {
+      color: $color-text;
+    }
+  }
+}
+
+.successIcon {
+  width: 48px;
+  height: 48px;
+  color: $color-success;
+}

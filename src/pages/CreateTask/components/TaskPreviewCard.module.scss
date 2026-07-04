@@ -1,0 +1,204 @@
+@import '../../../styles/shared';
+
+.previewContainer {
+  @include flex-col(flex-start, stretch, $spacing-xxs);
+  width: 100%;
+}
+
+.previewLabel {
+  font-family: $font-family;
+  font-size: 13px;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: $color-text-secondary;
+}
+
+.previewCardOuter {
+  padding: $spacing-md;
+  border: 2px dashed $color-border;
+  border-radius: $radius-card;
+  background-color: $color-surface;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 120px;
+}
+
+.taskCardRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  background-color: $color-background;
+  border: 1px solid $color-border;
+  border-radius: $radius-button;
+  padding: $spacing-xs $spacing-sm;
+  box-shadow: $shadow-sm;
+  width: 100%;
+  min-height: 64px;
+  
+  @include mobile-only {
+    flex-wrap: wrap;
+    gap: $spacing-xs;
+    padding: $spacing-sm;
+  }
+}
+
+.iconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background-color: $color-surface;
+  color: $color-text-secondary;
+  flex-shrink: 0;
+  border: 1px solid $color-border;
+  
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.mainInfo {
+  flex: 1;
+  @include flex-col(center, flex-start, 2px);
+  min-width: 0;
+  
+  @include mobile-only {
+    width: calc(100% - 44px);
+  }
+}
+
+.titleWrapper {
+  @include flex-row(flex-start, baseline, $spacing-xs);
+  width: 100%;
+  
+  @include mobile-only {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+.title {
+  font-size: 13.5px;
+  font-weight: $font-weight-semibold;
+  color: $color-text;
+  @include text-truncate;
+  max-width: 180px;
+  
+  @include mobile-only {
+    max-width: 100%;
+  }
+}
+
+.categoryLabel {
+  font-size: 11px;
+  color: $color-text-secondary;
+  @include text-truncate;
+}
+
+.metadata {
+  @include flex-row(flex-start, center, 6px);
+  font-size: 11px;
+  color: lighten($color-text-secondary, 10%);
+}
+
+.metaItem {
+  @include flex-row(flex-start, center, 4px);
+}
+
+.metaIcon {
+  width: 11px;
+  height: 11px;
+}
+
+.dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: $color-primary;
+}
+
+.creatorInitial {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 12px;
+  height: 12px;
+  background-color: $color-border;
+  color: $color-text-secondary;
+  font-size: 8px;
+  font-weight: $font-weight-bold;
+  border-radius: 50%;
+}
+
+.metaDivider {
+  color: lighten($color-border, 10%);
+}
+
+.actionArea {
+  @include flex-row(flex-end, center, $spacing-md);
+  flex-shrink: 0;
+  
+  @include mobile-only {
+    width: 100%;
+    justify-content: space-between;
+    padding-top: $spacing-xs;
+    border-top: 1px solid $color-surface;
+  }
+}
+
+.badges {
+  @include flex-row(flex-end, center, $spacing-xs);
+}
+
+.chevron {
+  width: 16px;
+  height: 16px;
+  color: lighten($color-text-secondary, 15%);
+  display: none;
+  
+  @include tablet-and-up {
+    display: block;
+  }
+}
+
+.priorityBadge {
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: $font-weight-semibold;
+  border-radius: 6px;
+  
+  &.low {
+    background-color: lighten($color-border, 2%);
+    color: $color-text-secondary;
+  }
+  &.medium {
+    background-color: $color-primary-light;
+    color: $color-primary;
+  }
+  &.high {
+    background-color: rgba($color-danger, 0.08);
+    color: $color-danger;
+  }
+}
+
+.statusBadge {
+  padding: 3px 8px;
+  font-size: 10px;
+  font-weight: $font-weight-semibold;
+  border-radius: $radius-badge;
+  
+  &.created { background-color: #F1F5F9; color: #475569; }
+  &.assigned { background-color: #EEF2FF; color: #4F46E5; }
+  &.working { background-color: #E0F2FE; color: #0284C7; }
+  &.ready-for-review { background-color: #F5F3FF; color: #7C3AED; }
+  &.reviewing { background-color: #FDF2F8; color: #DB2777; }
+  &.approved { background-color: #ECFDF5; color: #047857; }
+  &.published { background-color: #DCFCE7; color: #16A34A; }
+  &.completed { background-color: #F0FDF4; color: #15803D; }
+}

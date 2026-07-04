@@ -1,0 +1,77 @@
+@import '../../styles/shared';
+
+.dropdownCard {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 320px;
+  background-color: $color-background;
+  border: 1px solid $color-border;
+  border-radius: $radius-card;
+  box-shadow: $shadow-lg;
+  z-index: 150;
+  @include flex-col(flex-start, stretch, 0);
+  overflow: hidden;
+}
+
+.header {
+  @include flex-row(space-between, center, $spacing-xs);
+  padding: $spacing-sm $spacing-md;
+  border-bottom: 1px solid $color-border;
+  background-color: $color-surface;
+}
+
+.title {
+  font-size: 13px;
+  font-weight: $font-weight-bold;
+  color: $color-text;
+}
+
+.markReadBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: $font-family;
+  font-size: 11px;
+  font-weight: $font-weight-medium;
+  color: $color-primary;
+  @include flex-row(center, center, 4px);
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: background-color $transition-fast;
+  
+  &:hover {
+    background-color: $color-primary-light;
+  }
+}
+
+.scrollList {
+  max-height: 280px;
+  overflow-y: auto;
+  @include flex-col(flex-start, stretch, 0);
+}
+
+.footerLink {
+  width: 100%;
+  background-color: $color-surface;
+  border: none;
+  border-top: 1px solid $color-border;
+  cursor: pointer;
+  font-family: $font-family;
+  font-size: 11.5px;
+  font-weight: $font-weight-bold;
+  color: $color-text-secondary;
+  padding: $spacing-sm;
+  @include flex-row(center, center, 6px);
+  transition: background-color $transition-fast, color $transition-fast;
+  
+  &:hover {
+    background-color: $color-border;
+    color: $color-text;
+  }
+}
+
+.btnIcon {
+  width: 14px;
+  height: 14px;
+}

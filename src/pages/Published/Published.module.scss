@@ -1,0 +1,78 @@
+@import '../../styles/shared';
+
+.archivePage {
+  @include flex-col(flex-start, stretch, $spacing-md);
+  width: 100%;
+}
+
+.statsSection {
+  width: 100%;
+}
+
+.filtersSection {
+  width: 100%;
+  margin-top: $spacing-xs;
+}
+
+// Grid Layout
+.workspaceGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-md;
+  width: 100%;
+  
+  @include tablet-and-up {
+    grid-template-columns: 2fr 1.1fr;
+    gap: $spacing-xl;
+    align-items: start;
+  }
+}
+
+.timelineColumn {
+  width: 100%;
+}
+
+.timelineSectionsList {
+  @include flex-col(flex-start, stretch, $spacing-lg);
+  width: 100%;
+}
+
+.timelineGroup {
+  @include flex-col(flex-start, stretch, $spacing-sm);
+  width: 100%;
+}
+
+.groupHeader {
+  @include flex-row(center, center, $spacing-sm);
+  width: 100%;
+}
+
+.line {
+  flex: 1;
+  height: 1px;
+  background-color: $color-border;
+}
+
+.groupText {
+  font-size: 11px;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: lighten($color-text-secondary, 10%);
+  background-color: $color-background;
+  padding: 0 $spacing-xs;
+}
+
+.cardsList {
+  @include flex-col(flex-start, stretch, $spacing-sm);
+  width: 100%;
+}
+
+.sidebarColumn {
+  width: 100%;
+  
+  @include tablet-and-up {
+    position: sticky;
+    top: calc($header-height + $spacing-xl);
+  }
+}

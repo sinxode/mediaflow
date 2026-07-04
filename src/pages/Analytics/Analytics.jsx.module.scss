@@ -1,0 +1,99 @@
+@import '../../styles/shared';
+
+.analyticsPage {
+  @include flex-col(flex-start, stretch, $spacing-md);
+  width: 100%;
+}
+
+.filtersBar {
+  @include flex-col(flex-start, stretch, $spacing-xs);
+  background-color: $color-background;
+  border: 1px solid $color-border;
+  border-radius: $radius-card;
+  padding: $spacing-sm $spacing-md;
+  width: 100%;
+  
+  @media (min-width: 768px) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: $spacing-sm;
+  }
+}
+
+.filterMeta {
+  @include flex-row(flex-start, center, 6px);
+  flex-direction: row;
+  align-items: center;
+}
+
+.filterIcon {
+  width: 15px;
+  height: 15px;
+  color: $color-text-secondary;
+}
+
+.filterText {
+  font-size: 12.5px;
+  font-weight: $font-weight-bold;
+  color: $color-text;
+}
+
+.dropdownsRow {
+  @include flex-row(flex-start, center, $spacing-xs);
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+}
+
+.select {
+  height: 32px;
+  border-radius: $radius-input;
+  border: 1px solid $color-border;
+  background-color: $color-background;
+  color: $color-text;
+  font-family: $font-family;
+  font-size: 12px;
+  padding: 0 $spacing-sm;
+  cursor: pointer;
+  outline: none;
+  flex: 1;
+  min-width: 0;
+  transition: border-color $transition-fast;
+  
+  @media (min-width: 768px) {
+    flex: initial;
+    min-width: 130px;
+  }
+  
+  &:focus {
+    border-color: $color-primary;
+  }
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-sm;
+  width: 100%;
+  
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.workspaceGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-md;
+  width: 100%;
+  
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.col {
+  @include flex-col(flex-start, stretch, 0);
+  width: 100%;
+}

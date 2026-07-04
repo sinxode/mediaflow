@@ -1,0 +1,53 @@
+@import '../../../styles/shared';
+
+.progressContainer {
+  @include flex-col(flex-start, stretch, 6px);
+  background-color: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-button;
+  padding: $spacing-sm $spacing-md;
+  width: 100%;
+}
+
+.labelRow {
+  @include flex-row(space-between, center, $spacing-xs);
+}
+
+.progressLabel {
+  font-size: 11.5px;
+  font-weight: $font-weight-medium;
+  color: $color-text;
+}
+
+.percentText {
+  font-size: 11.5px;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+}
+
+.progressBarBg {
+  width: 100%;
+  height: 6px;
+  background-color: $color-border;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progressBarFill {
+  height: 100%;
+  background-color: $color-primary;
+  border-radius: 3px;
+  transition: width $transition-fast ease;
+  
+  &.processing {
+    background: linear-gradient(90deg, $color-primary 50%, lighten($color-primary, 15%) 75%, $color-primary 100%);
+    background-size: 200% 100%;
+    animation: shine 1.2s infinite linear;
+  }
+}
+
+@keyframes shine {
+  to {
+    background-position-x: -200%;
+  }
+}

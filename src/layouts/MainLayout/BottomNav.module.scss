@@ -1,0 +1,106 @@
+@import '../../styles/shared';
+
+.bottomNav {
+  display: flex;
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 95%;
+  height: 54px;
+  background-color: rgba($color-surface, 0.72) !important;
+  backdrop-filter: blur(20px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(140%) !important;
+  border: 1px solid rgba($color-border, 0.7);
+  border-radius: $radius-input;
+  padding: 4px;
+  z-index: $z-bottom-nav;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08), 0 0 60px rgba(139, 92, 246, 0.08);
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: -80px;
+    left: -80px;
+    right: -80px;
+    bottom: -80px;
+    background: transparent;
+    backdrop-filter: blur(24px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(140%) !important;
+    border-radius: 60px;
+    z-index: -2;
+    pointer-events: none;
+    -webkit-mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 0) 65%);
+    mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 0) 65%);
+  }
+  
+  @include tablet-and-up {
+    display: none; // Hidden on tablets/desktops
+  }
+}
+
+.navItem {
+  position: relative;
+  height: 46px;
+  padding: 0 $spacing-md;
+  border-radius: calc($radius-input - 4px);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  @include flex-col(center, center, 2px);
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  color: $color-text-secondary;
+  font-family: $font-family;
+  font-size: 9px;
+  font-weight: $font-weight-semibold;
+  transition: color $transition-fast;
+  
+  .icon, .labelText {
+    position: relative;
+    z-index: 2;
+  }
+  
+  .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $color-text-secondary;
+    transition: transform $transition-fast, color $transition-fast;
+    
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+  
+  &:active {
+    .icon {
+      transform: scale(0.9);
+    }
+  }
+  
+  &.active {
+    .labelText {
+      color: #ffffff;
+    }
+    
+    .icon {
+      color: #ffffff;
+    }
+  }
+}
+
+.activeBg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: $color-primary;
+  border-radius: calc($radius-input - 4px);
+  box-shadow: 0 4px 12px rgba($color-primary, 0.35);
+  border: 1px solid darken($color-primary, 5%);
+  z-index: 1;
+}

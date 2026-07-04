@@ -1,0 +1,56 @@
+@import '../../styles/shared';
+
+.detailsContainer {
+  @include flex-col(flex-start, stretch, $spacing-md);
+  width: 100%;
+}
+
+// Workspace Grid Layout
+.workspaceGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-md;
+  width: 100%;
+  
+  @include tablet-and-up {
+    grid-template-columns: 2fr 1fr;
+    gap: $spacing-xl;
+    align-items: start;
+  }
+}
+
+.mainWorkspace {
+  @include flex-col(flex-start, stretch, $spacing-xl);
+}
+
+.cardWrapper {
+  width: 100%;
+}
+
+.sidebarColumn {
+  width: 100%;
+  @include flex-col(flex-start, stretch, $spacing-lg);
+  
+  @include tablet-and-up {
+    position: sticky;
+    top: calc($header-height + $spacing-xl);
+  }
+}
+
+.loadingBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--color-primary, #4f46e5);
+  z-index: 9999;
+  animation: loading-bar-anim 1s infinite linear;
+  transform-origin: 0% 50%;
+}
+
+@keyframes loading-bar-anim {
+  0% { transform: scaleX(0); }
+  50% { transform: scaleX(0.5); }
+  100% { transform: scaleX(1); }
+}

@@ -1,0 +1,112 @@
+@import '../../styles/shared';
+
+.settingsPage {
+  @include flex-col(flex-start, stretch, $spacing-md);
+  width: 100%;
+}
+
+// Workspace Layout
+.settingsWorkspace {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-md;
+  width: 100%;
+  
+  @include tablet-and-up {
+    grid-template-columns: 1.1fr 2.9fr;
+    gap: $spacing-xl;
+    align-items: start;
+  }
+}
+
+.navigationColumn {
+  width: 100%;
+  
+  @include tablet-and-up {
+    position: sticky;
+    top: calc($header-height + $spacing-xl);
+  }
+}
+
+.contentColumn {
+  width: 100%;
+  min-height: 380px;
+}
+
+.sectionContent {
+  width: 100%;
+}
+
+.settingsCard {
+  background-color: $color-background;
+  border: 1px solid $color-border;
+  border-radius: $radius-card;
+  width: 100%;
+}
+
+.sectionTitle {
+  font-size: 13px;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: $color-text-secondary;
+  margin-bottom: 2px;
+}
+
+.sectionDesc {
+  font-size: 11px;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-md;
+  border-bottom: 1px dashed $color-border;
+  padding-bottom: $spacing-xs;
+}
+
+.togglesList {
+  @include flex-col(flex-start, stretch, 0);
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-sm;
+  width: 100%;
+  
+  @media (min-width: 576px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.fieldBlock {
+  @include flex-col(flex-start, stretch, $spacing-xxs);
+  width: 100%;
+}
+
+.inputLabel {
+  font-family: $font-family;
+  font-size: 12.5px;
+  font-weight: $font-weight-medium;
+  color: $color-text;
+}
+
+.selectInput {
+  width: 100%;
+  height: 40px;
+  border-radius: $radius-input;
+  border: 1px solid $color-border;
+  background-color: $color-background;
+  color: $color-text;
+  font-family: $font-family;
+  font-size: 13px;
+  padding: 0 $spacing-sm;
+  transition: border-color $transition-fast, box-shadow $transition-fast;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right $spacing-sm center;
+  
+  &:focus {
+    @include focus-ring;
+  }
+}

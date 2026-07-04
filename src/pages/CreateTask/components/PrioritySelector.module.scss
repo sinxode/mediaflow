@@ -1,0 +1,71 @@
+@import '../../../styles/shared';
+
+.prioritySelector {
+  @include flex-col(flex-start, stretch, $spacing-xxs);
+  width: 100%;
+}
+
+.label {
+  font-family: $font-family;
+  font-size: 13px;
+  font-weight: $font-weight-medium;
+  color: $color-text;
+}
+
+.chipsRow {
+  display: flex;
+  background-color: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-input;
+  padding: 4px;
+  width: 100%;
+  gap: 4px;
+  position: relative;
+}
+
+.chip {
+  position: relative;
+  flex: 1;
+  height: 36px;
+  border-radius: calc($radius-input - 4px);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  
+  &:focus {
+    box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.15);
+  }
+}
+
+.activeBg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: $color-background;
+  border-radius: calc($radius-input - 4px);
+  box-shadow: $shadow-sm;
+  border: 1.5px solid $color-primary;
+  z-index: 1;
+}
+
+.chipText {
+  position: relative;
+  z-index: 2;
+  font-family: $font-family;
+  font-size: 13px;
+  font-weight: $font-weight-semibold;
+  color: $color-text-secondary;
+  transition: color $transition-fast;
+}
+
+.selected {
+  .chipText {
+    color: $color-primary;
+  }
+}

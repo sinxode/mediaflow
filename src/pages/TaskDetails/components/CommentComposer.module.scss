@@ -1,0 +1,57 @@
+@import '../../../styles/shared';
+
+.composerForm {
+  @include flex-row(flex-start, flex-start, $spacing-sm);
+  padding-top: $spacing-md;
+  border-top: 1px solid $color-border;
+  width: 100%;
+}
+
+.avatarCol {
+  flex-shrink: 0;
+}
+
+.inputCol {
+  @include flex-col(flex-start, stretch, $spacing-xs);
+  flex: 1;
+  min-width: 0;
+}
+
+.textarea {
+  width: 100%;
+  border-radius: $radius-input;
+  border: 1px solid $color-border;
+  background-color: $color-background;
+  color: $color-text;
+  font-family: $font-family;
+  font-size: 13px;
+  padding: $spacing-sm;
+  line-height: 1.5;
+  resize: vertical;
+  transition: border-color $transition-fast, box-shadow $transition-fast;
+  
+  &:focus {
+    @include focus-ring;
+  }
+}
+
+.footerRow {
+  @include flex-row(space-between, center, $spacing-md);
+  width: 100%;
+  
+  & > button {
+    height: 32px !important;
+    font-size: 12px !important;
+    border-radius: 8px !important;
+  }
+}
+
+.charCount {
+  font-size: 10.5px;
+  color: $color-text-secondary;
+  
+  &.limitWarn {
+    color: $color-danger;
+    font-weight: $font-weight-bold;
+  }
+}

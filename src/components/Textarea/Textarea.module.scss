@@ -1,0 +1,61 @@
+@import '../../styles/shared';
+
+.textareaWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xxs;
+  width: 100%;
+}
+
+.label {
+  font-family: $font-family;
+  font-size: 13px;
+  font-weight: $font-weight-medium;
+  color: $color-text;
+}
+
+.textarea {
+  width: 100%;
+  padding: $spacing-md;
+  border-radius: $radius-input;
+  border: 1px solid $color-border;
+  background-color: $color-background;
+  color: $color-text;
+  font-family: $font-family;
+  font-size: 14px;
+  line-height: 1.5;
+  resize: vertical;
+  transition: border-color $transition-fast, box-shadow $transition-fast;
+  
+  &::placeholder {
+    color: lighten($color-text-secondary, 10%);
+  }
+  
+  &:focus {
+    @include focus-ring;
+  }
+  
+  &:disabled {
+    background-color: $color-surface;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+// Error state
+.hasError {
+  .textarea {
+    border-color: $color-danger;
+    
+    &:focus {
+      box-shadow: 0 0 0 4px rgba($color-danger, 0.15);
+    }
+  }
+}
+
+.errorMessage {
+  font-size: 12px;
+  color: $color-danger;
+  font-weight: $font-weight-regular;
+  margin-top: 2px;
+}

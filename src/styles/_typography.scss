@@ -1,0 +1,75 @@
+// MediaFlow Typography System
+@import 'variables';
+
+body {
+  font-family: $font-family;
+  font-weight: $font-weight-regular;
+  line-height: 1.5;
+  color: $color-text;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-family;
+  font-weight: $font-weight-semibold;
+  color: $color-text;
+  line-height: 1.25;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: 28px;
+  font-weight: $font-weight-bold;
+  
+  @media (min-width: 768px) {
+    font-size: 32px;
+  }
+}
+
+h2 {
+  font-size: 22px;
+  font-weight: $font-weight-bold;
+  
+  @media (min-width: 768px) {
+    font-size: 24px;
+  }
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: $font-weight-semibold;
+}
+
+h4 {
+  font-size: 16px;
+  font-weight: $font-weight-semibold;
+}
+
+p {
+  margin: 0;
+  font-size: 14px;
+  color: $color-text-secondary;
+  line-height: 1.5;
+}
+
+// Typography Helpers
+.text-xs { font-size: 11px; }
+.text-sm { font-size: 13px; }
+.text-base { font-size: 14px; }
+.text-lg { font-size: 16px; }
+.text-xl { font-size: 18px; }
+
+.font-normal { font-weight: $font-weight-regular; }
+.font-medium { font-weight: $font-weight-medium; }
+.font-semibold { font-weight: $font-weight-semibold; }
+.font-bold { font-weight: $font-weight-bold; }
+
+.text-primary { color: $color-primary; }
+.text-secondary { color: $color-text-secondary; }
+.text-muted { color: lighten($color-text-secondary, 15%); }
+.text-success { color: $color-success; }
+.text-warning { color: $color-warning; }
+.text-danger { color: $color-danger; }
+.text-review { color: $color-review; }

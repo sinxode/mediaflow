@@ -1,0 +1,245 @@
+@import '../../../../styles/shared';
+
+.taskCardRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  background-color: $color-background;
+  border: 1px solid $color-border;
+  border-radius: $radius-button;
+  padding: $spacing-xs $spacing-sm;
+  transition: transform $transition-fast, border-color $transition-fast, box-shadow $transition-fast;
+  cursor: pointer;
+  user-select: none;
+  min-height: 64px; // Target height for 10-15 cards per screen height
+  width: 100%;
+  
+  @include hover-active {
+    transform: translateY(-1px);
+    border-color: darken($color-border, 8%);
+    box-shadow: $shadow-sm;
+    
+    .chevron {
+      transform: translateX(2px);
+      color: $color-primary;
+    }
+    
+    .statusBadge {
+      transform: scale(1.02);
+    }
+  }
+  
+  @include mobile-only {
+    flex-wrap: wrap;
+    gap: $spacing-xs;
+    padding: $spacing-sm;
+  }
+}
+
+// Category Icon
+.iconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background-color: $color-surface;
+  color: $color-text-secondary;
+  flex-shrink: 0;
+  border: 1px solid $color-border;
+  
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+// Middle Column Information
+.mainInfo {
+  flex: 1;
+  @include flex-col(center, flex-start, 2px);
+  min-width: 0; // Support truncation
+  
+  @include mobile-only {
+    width: calc(100% - 44px); // Clear icon spacing
+  }
+}
+
+.titleWrapper {
+  @include flex-row(flex-start, baseline, $spacing-xs);
+  width: 100%;
+  
+  @include mobile-only {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+.title {
+  font-size: 13.5px;
+  font-weight: $font-weight-semibold;
+  color: $color-text;
+  @include text-truncate;
+  max-width: 320px;
+  
+  @include mobile-only {
+    max-width: 100%;
+  }
+}
+
+.descriptionPreview {
+  font-size: 12px;
+  color: $color-text-secondary;
+  @include text-truncate;
+  max-width: 380px;
+  display: none;
+  
+  @include tablet-and-up {
+    display: inline;
+  }
+}
+
+// Metadata row
+.metadata {
+  @include flex-row(flex-start, center, 6px);
+  font-size: 11px;
+  color: lighten($color-text-secondary, 10%);
+  width: 100%;
+}
+
+.metaItem {
+  @include flex-row(flex-start, center, 4px);
+}
+
+.metaIcon {
+  width: 11px;
+  height: 11px;
+}
+
+.dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: $color-primary;
+}
+
+.creatorInitial {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 12px;
+  height: 12px;
+  background-color: $color-border;
+  color: $color-text-secondary;
+  font-size: 8px;
+  font-weight: $font-weight-bold;
+  border-radius: 50%;
+}
+
+.metaDivider {
+  color: lighten($color-border, 10%);
+}
+
+// Right Action Area (Badges + Chevron)
+.actionArea {
+  @include flex-row(flex-end, center, $spacing-md);
+  flex-shrink: 0;
+  
+  @include mobile-only {
+    width: 100%;
+    justify-content: space-between;
+    padding-top: $spacing-xs;
+    border-top: 1px solid $color-surface;
+  }
+}
+
+.badges {
+  @include flex-row(flex-end, center, $spacing-xs);
+}
+
+.chevron {
+  width: 16px;
+  height: 16px;
+  color: lighten($color-text-secondary, 15%);
+  transition: transform $transition-fast, color $transition-fast;
+  display: none;
+  
+  @include tablet-and-up {
+    display: block;
+  }
+}
+
+// Priority Badge
+.priorityBadge {
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: $font-weight-semibold;
+  border-radius: 6px;
+  line-height: 1.2;
+  
+  &.low {
+    background-color: lighten($color-border, 2%);
+    color: $color-text-secondary;
+  }
+  
+  &.medium {
+    background-color: $color-primary-light;
+    color: $color-primary;
+  }
+  
+  &.high {
+    background-color: rgba($color-danger, 0.08);
+    color: $color-danger;
+  }
+}
+
+// Status Badges (All 8 States)
+.statusBadge {
+  padding: 3px 8px;
+  font-size: 10px;
+  font-weight: $font-weight-semibold;
+  border-radius: $radius-badge;
+  line-height: 1;
+  transition: transform $transition-fast;
+  
+  &.created {
+    background-color: #F1F5F9;
+    color: #475569;
+  }
+  
+  &.assigned {
+    background-color: #EEF2FF;
+    color: #4F46E5;
+  }
+  
+  &.working {
+    background-color: #E0F2FE;
+    color: #0284C7;
+  }
+  
+  &.ready-for-review {
+    background-color: #F5F3FF;
+    color: #7C3AED;
+  }
+  
+  &.reviewing {
+    background-color: #FDF2F8;
+    color: #DB2777;
+  }
+  
+  &.approved {
+    background-color: #ECFDF5;
+    color: #047857;
+  }
+  
+  &.published {
+    background-color: #DCFCE7;
+    color: #16A34A;
+  }
+  
+  &.completed {
+    background-color: #F0FDF4;
+    color: #15803D;
+  }
+}

@@ -1,0 +1,127 @@
+@import '../../styles/shared';
+
+.statsCard {
+  @include flex-col(space-between, stretch, $spacing-xs);
+  min-height: 120px;
+  height: 100%;
+  width: 100%;
+  flex: 1;
+  
+  @media (max-width: 768px) {
+    min-height: 90px;
+    height: 100% !important;
+    width: 100% !important;
+    flex: 1 !important;
+    padding: 12px $spacing-sm !important;
+  }
+}
+
+.header {
+  @include flex-row(space-between, center);
+}
+
+.title {
+  font-size: 13px;
+  font-weight: $font-weight-medium;
+  color: $color-text-secondary;
+  
+  @media (max-width: 768px) {
+    font-size: 11.5px;
+  }
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background-color: $color-surface;
+  color: $color-primary;
+  border: 1px solid $color-border;
+  
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+  
+  @media (max-width: 768px) {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    
+    svg {
+      width: 12px;
+      height: 12px;
+    }
+  }
+}
+
+.body {
+  @include flex-row(flex-start, baseline, 6px);
+  margin-top: $spacing-xxs;
+  
+  @media (max-width: 768px) {
+    margin-top: 2px;
+    gap: 4px;
+  }
+}
+
+.value {
+  font-size: 28px;
+  font-weight: $font-weight-bold;
+  color: $color-text;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
+}
+
+.trend {
+  @include flex-row(center, center, 2px);
+  padding: 2px 6px;
+  font-size: 11px;
+  font-weight: $font-weight-semibold;
+  border-radius: 6px;
+  line-height: 1;
+  
+  svg {
+    width: 12px;
+    height: 12px;
+  }
+  
+  &.up {
+    background-color: $color-success-light;
+    color: $color-success;
+  }
+  
+  &.down {
+    background-color: $color-danger-light;
+    color: $color-danger;
+  }
+  
+  @media (max-width: 768px) {
+    padding: 1px 4px;
+    font-size: 9.5px;
+    border-radius: 4px;
+    
+    svg {
+      width: 10px;
+      height: 10px;
+    }
+  }
+}
+
+.description {
+  font-size: 12px;
+  color: lighten($color-text-secondary, 10%);
+  margin-top: $spacing-xxs;
+  
+  @media (max-width: 768px) {
+    font-size: 10px;
+    margin-top: 1px;
+  }
+}

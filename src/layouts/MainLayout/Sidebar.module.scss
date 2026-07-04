@@ -1,0 +1,149 @@
+@import '../../styles/shared';
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  background-color: $color-surface;
+  border-right: 1px solid $color-border;
+  width: 280px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: $z-sidebar;
+  transform: translateX(-100%);
+  transition: transform $transition-normal;
+  
+  @include tablet-and-up {
+    width: 240px;
+    transform: translateX(0); // Always visible on desktop
+  }
+  
+  &.open {
+    transform: translateX(0); // Slide out on mobile
+    box-shadow: $shadow-lg;
+  }
+}
+
+.header {
+  @include flex-row(space-between, center);
+  padding: $spacing-md $spacing-xl;
+  height: 64px;
+  border-bottom: 1px solid $color-border;
+  
+  @include tablet-and-up {
+    justify-content: flex-start;
+  }
+}
+
+.logo {
+  font-family: $font-family;
+  font-size: 20px;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+  letter-spacing: -0.03em;
+}
+
+.closeButton {
+  padding: 0 !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  color: $color-text-secondary;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  
+  @include tablet-and-up {
+    display: none !important;
+  }
+  
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: $spacing-md;
+  overflow-y: auto;
+  @include custom-scrollbar;
+}
+
+.linksGroup {
+  @include flex-col(flex-start, stretch, 6px);
+}
+
+.navLink {
+  @include flex-row(flex-start, center, $spacing-sm);
+  padding: 10px $spacing-sm;
+  color: $color-text-secondary;
+  font-size: 13px;
+  font-weight: $font-weight-medium;
+  border-radius: 12px;
+  transition: background-color $transition-fast, color $transition-fast;
+  
+  svg {
+    width: 18px;
+    height: 18px;
+    transition: transform $transition-fast;
+  }
+  
+  @include hover-active {
+    background-color: lighten($color-border, 2%);
+    color: $color-text;
+    
+    svg {
+      transform: translateX(1px);
+    }
+  }
+  
+  &.active {
+    background-color: $color-primary-light;
+    color: $color-primary;
+    
+    svg {
+      color: $color-primary;
+    }
+  }
+}
+
+.footer {
+  padding-top: $spacing-md;
+  border-top: 1px solid $color-border;
+}
+
+.logoutButton {
+  @include flex-row(flex-start, center, $spacing-sm);
+  width: 100%;
+  padding: 10px $spacing-sm;
+  color: $color-danger;
+  font-size: 13px;
+  font-weight: $font-weight-medium;
+  border-radius: 12px;
+  transition: background-color $transition-fast;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+  
+  @include hover-active {
+    background-color: rgba($color-danger, 0.06);
+  }
+}
+
+.connectionWrapper {
+  margin-top: $spacing-sm;
+  display: flex;
+  justify-content: center;
+}
+

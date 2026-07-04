@@ -1,0 +1,56 @@
+@import '../../styles/shared';
+
+.appContainer {
+  min-height: 100vh;
+  background-color: $color-background;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  
+  @include tablet-and-up {
+    flex-direction: row;
+  }
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba($color-text, 0.2);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  z-index: calc($z-sidebar - 1);
+  
+  @include tablet-and-up {
+    display: none; // Hidden on desktop
+  }
+}
+
+.appMain {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  
+  @include tablet-and-up {
+    margin-left: $sidebar-width;
+  }
+}
+
+.appContent {
+  flex: 1;
+  padding: $spacing-md;
+  // Extra space at bottom to clear mobile bottom navigation
+  padding-bottom: calc($bottom-nav-height + 24px + env(safe-area-inset-bottom, 0px));
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: $color-background;
+  
+  @include tablet-and-up {
+    padding: $spacing-xl;
+    padding-bottom: $spacing-xl;
+  }
+}

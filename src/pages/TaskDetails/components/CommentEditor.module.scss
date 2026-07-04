@@ -1,0 +1,36 @@
+@import '../../../styles/shared';
+
+.editorForm {
+  @include flex-col(flex-start, stretch, $spacing-xs);
+  width: 100%;
+  margin-top: 4px;
+}
+
+.textarea {
+  width: 100%;
+  border-radius: $radius-input;
+  border: 1px solid $color-border;
+  background-color: $color-background;
+  color: $color-text;
+  font-family: $font-family;
+  font-size: 13px;
+  padding: $spacing-sm;
+  line-height: 1.5;
+  resize: vertical;
+  transition: border-color $transition-fast, box-shadow $transition-fast;
+  
+  &:focus {
+    @include focus-ring;
+  }
+}
+
+.actionsRow {
+  @include flex-row(flex-end, center, 6px);
+  width: 100%;
+  
+  & > button {
+    height: 28px !important;
+    font-size: 11.5px !important;
+    border-radius: 8px !important;
+  }
+}

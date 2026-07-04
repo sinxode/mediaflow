@@ -1,0 +1,159 @@
+@import '../../../styles/shared';
+
+.container {
+  @include flex-col(flex-start, stretch, $spacing-md);
+  width: 100%;
+}
+
+.insightsSection {
+  @include flex-col(flex-start, stretch, $spacing-xs);
+  width: 100%;
+}
+
+.sectionTitle {
+  font-size: 13px;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: $color-text-secondary;
+}
+
+.insightsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-xs;
+  width: 100%;
+}
+
+.insightCard {
+  position: relative;
+  overflow: hidden;
+  height: 64px;
+  background-color: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-button !important;
+}
+
+.bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  
+  &.primary { background-color: $color-primary; }
+  &.success { background-color: $color-success; }
+  &.warning { background-color: $color-warning; }
+  &.review { background-color: $color-review; }
+}
+
+.insightContent {
+  @include flex-col(center, flex-start, 0);
+  padding: 0 $spacing-sm;
+  height: 100%;
+  margin-left: 3px;
+}
+
+.insightValue {
+  font-size: 16px;
+  font-weight: $font-weight-bold;
+  color: $color-text;
+  line-height: 1.1;
+}
+
+.insightLabel {
+  font-size: 10px;
+  font-weight: $font-weight-medium;
+  color: $color-text-secondary;
+}
+
+// Activity Feed Card
+.activityCard {
+  background-color: $color-background;
+  border: 1px solid $color-border;
+  border-radius: $radius-card;
+}
+
+.activityHeader {
+  @include flex-row(flex-start, center, $spacing-xs);
+  margin-bottom: $spacing-md;
+  border-bottom: 1px dashed $color-border;
+  padding-bottom: $spacing-xs;
+}
+
+.sectionTitleInside {
+  font-size: 13px;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: $color-text;
+}
+
+.sparkleIcon {
+  width: 14px;
+  height: 14px;
+  color: $color-primary;
+}
+
+// Timeline layout
+.timeline {
+  @include flex-col(flex-start, stretch, 0);
+}
+
+.timelineItem {
+  display: flex;
+  gap: $spacing-sm;
+  position: relative;
+  
+  &:last-child {
+    .timelineLine {
+      display: none; // No trailing line on last element
+    }
+  }
+}
+
+.indicatorCol {
+  @include flex-col(flex-start, center, 0);
+  flex-shrink: 0;
+  width: 28px;
+}
+
+.timelineLine {
+  width: 1.5px;
+  background-color: $color-border;
+  flex: 1;
+  margin: 4px 0;
+}
+
+.contentCol {
+  flex: 1;
+  padding-bottom: $spacing-md;
+}
+
+.timelineText {
+  font-size: 12.5px;
+  color: $color-text-secondary;
+  line-height: 1.4;
+}
+
+.user {
+  color: $color-text;
+}
+
+.target {
+  font-style: italic;
+  color: $color-text;
+}
+
+.time {
+  font-size: 10px;
+  color: lighten($color-text-secondary, 15%);
+  display: block;
+  margin-top: 1px;
+}
+
+// Semantic coloring for activity icons if needed
+.iconApproved { color: $color-success; }
+.iconChanges { color: $color-warning; }
+.iconPublished { color: $color-review; }
+.iconDefault { color: $color-text-secondary; }

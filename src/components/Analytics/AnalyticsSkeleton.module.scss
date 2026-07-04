@@ -1,0 +1,79 @@
+@import '../../styles/shared';
+
+.container {
+  @include flex-col(flex-start, stretch, $spacing-md);
+  width: 100%;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-sm;
+  width: 100%;
+  
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.cardPulse {
+  background-color: $color-border;
+  border-radius: $radius-card;
+  height: 90px;
+  padding: $spacing-sm;
+  @include flex-col(flex-start, stretch, 6px);
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.labelPulse {
+  width: 70px;
+  height: 8px;
+  background-color: rgba(#FFFFFF, 0.4);
+  border-radius: 2px;
+}
+
+.valuePulse {
+  width: 40px;
+  height: 24px;
+  background-color: rgba(#FFFFFF, 0.4);
+  border-radius: 4px;
+}
+
+.subPulse {
+  width: 110px;
+  height: 8px;
+  background-color: rgba(#FFFFFF, 0.4);
+  border-radius: 2px;
+}
+
+.panelPulse {
+  background-color: $color-border;
+  border-radius: $radius-card;
+  height: 180px;
+  padding: $spacing-md;
+  @include flex-col(flex-start, stretch, $spacing-sm);
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.titlePulse {
+  width: 160px;
+  height: 12px;
+  background-color: rgba(#FFFFFF, 0.4);
+  border-radius: 2px;
+}
+
+.linePulse {
+  width: 100%;
+  height: 14px;
+  background-color: rgba(#FFFFFF, 0.4);
+  border-radius: 4px;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}

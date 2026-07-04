@@ -1,0 +1,37 @@
+@import '../../styles/shared';
+
+.emptyState {
+  @include flex-col(center, center, $spacing-xs);
+  padding: $spacing-lg $spacing-md;
+  text-align: center;
+}
+
+.iconWrapper {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background-color: $color-surface;
+  border: 1px solid $color-border;
+  @include flex-row(center, center);
+  color: $color-text-secondary;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+}
+
+.title {
+  font-size: 13.5px;
+  font-weight: $font-weight-bold;
+  color: $color-text;
+  margin: 0;
+}
+
+.description {
+  font-size: 11px;
+  color: $color-text-secondary;
+  margin: 0;
+  max-width: 240px;
+  line-height: 1.4;
+}

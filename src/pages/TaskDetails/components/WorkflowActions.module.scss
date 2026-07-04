@@ -1,0 +1,166 @@
+@import '../../../styles/shared';
+
+.actionsPanel {
+  @include flex-col(flex-start, stretch, $spacing-md);
+  width: 100%;
+}
+
+.sectionTitle {
+  font-size: 13px;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-xs;
+}
+
+// Horizontal Stepper Progress Bar
+.stepperContainer {
+  position: relative;
+  width: 100%;
+  padding: $spacing-xs 0 $spacing-md;
+  margin-bottom: $spacing-xs;
+}
+
+.progressLineBg {
+  position: absolute;
+  top: 22px; // Centered to 28px circle (8px padding + 14px half-height)
+  left: calc(100% / 14);
+  right: calc(100% / 14);
+  height: 3px;
+  background-color: $color-border;
+  border-radius: 2px;
+  z-index: 0;
+}
+
+.progressLineActive {
+  position: absolute;
+  top: 22px;
+  left: calc(100% / 14);
+  height: 3px;
+  background-color: $color-primary;
+  border-radius: 2px;
+  transition: width $transition-normal cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 0;
+}
+
+.stepsList {
+  position: relative;
+  z-index: 1;
+  @include flex-row(space-between, flex-start);
+  width: 100%;
+}
+
+.stepNode {
+  flex: 1;
+  @include flex-col(center, center, 8px);
+  text-align: center;
+  position: relative;
+}
+
+.nodeCircle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: $color-background;
+  border: 2px solid $color-border;
+  @include flex-row(center, center);
+  font-size: 11px;
+  font-weight: $font-weight-bold;
+  color: lighten($color-text-secondary, 10%);
+  transition: all $transition-fast;
+}
+
+.nodeLabel {
+  font-size: 10px;
+  font-weight: $font-weight-semibold;
+  color: lighten($color-text-secondary, 15%);
+  transition: color $transition-fast;
+  
+  @include tablet-and-up {
+    font-size: 11px;
+  }
+}
+
+.checkIcon {
+  width: 12px;
+  height: 12px;
+  color: $color-background;
+  stroke-width: 3.5px;
+}
+
+// Stepper states
+.completed {
+  .nodeCircle {
+    background-color: $color-primary;
+    border-color: $color-primary;
+    color: $color-background;
+  }
+  .nodeLabel {
+    color: $color-text;
+  }
+}
+
+.active {
+  .nodeCircle {
+    background-color: $color-background;
+    border-color: $color-primary;
+    color: $color-primary;
+    box-shadow: 0 0 0 4px rgba($color-primary, 0.12);
+  }
+  .nodeLabel {
+    color: $color-primary;
+    font-weight: $font-weight-bold;
+  }
+}
+
+.future {
+  .nodeCircle {
+    background-color: $color-background;
+    border-color: $color-border;
+  }
+}
+
+// Action button row below progress stepper
+.actionsFooterRow {
+  @include flex-col(flex-start, stretch, $spacing-xs);
+  border-top: 1px solid $color-border;
+  padding-top: $spacing-md;
+  
+  @media (min-width: 576px) {
+    @include flex-row(space-between, center, $spacing-md);
+  }
+}
+
+.actionsLabel {
+  font-size: 12px;
+  font-weight: $font-weight-bold;
+  color: $color-text-secondary;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.buttonsGroup {
+  @include flex-row(flex-start, center, $spacing-xs);
+  flex-wrap: wrap;
+  
+  & > button {
+    height: 36px !important;
+    font-size: 12.5px !important;
+    border-radius: $radius-button !important;
+  }
+}
+
+.noActionsMsg {
+  font-size: 12.5px;
+  color: lighten($color-text-secondary, 15%);
+  font-style: italic;
+}
+
+.hintText {
+  font-size: 11.5px;
+  color: $color-danger;
+  font-weight: $font-weight-medium;
+  margin-top: $spacing-xxs;
+  line-height: 1.4;
+}

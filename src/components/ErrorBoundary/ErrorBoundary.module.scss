@@ -1,0 +1,62 @@
+@import '../../styles/shared';
+
+.crashScreen {
+  width: 100vw;
+  height: 100vh;
+  @include flex-row(center, center);
+  background-color: $color-background;
+  padding: $spacing-md;
+}
+
+.errorCard {
+  max-width: 480px;
+  width: 100%;
+  border: 1px solid $color-border;
+  border-radius: $radius-card !important;
+  background-color: $color-background;
+  padding: $spacing-xl !important;
+  box-shadow: $shadow-lg;
+  @include flex-col(flex-start, stretch, $spacing-md);
+}
+
+.header {
+  @include flex-row(flex-start, center, $spacing-sm);
+}
+
+.crashIcon {
+  width: 28px;
+  height: 28px;
+  color: $color-danger;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: $font-weight-bold;
+  color: $color-text;
+  margin: 0;
+}
+
+.description {
+  font-size: 13.5px;
+  color: $color-text-secondary;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.stackTrace {
+  background-color: $color-surface;
+  border: 1px solid $color-border;
+  padding: $spacing-sm;
+  border-radius: $radius-input;
+  font-family: monospace;
+  font-size: 11px;
+  color: $color-danger;
+  max-height: 100px;
+  overflow: auto;
+  white-space: pre-wrap;
+}
+
+.actions {
+  @include flex-row(flex-end, center);
+  width: 100%;
+}

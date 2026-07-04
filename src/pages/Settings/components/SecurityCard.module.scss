@@ -1,0 +1,144 @@
+@import '../../../styles/shared';
+
+.securityCard {
+  background-color: $color-background;
+  border: 1px solid $color-border;
+  border-radius: $radius-card;
+  width: 100%;
+}
+
+.sectionTitle {
+  font-size: 13px;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-md;
+  border-bottom: 1px dashed $color-border;
+  padding-bottom: $spacing-xs;
+}
+
+.toggleWrapper {
+  margin-bottom: $spacing-md;
+  border-bottom: 1px solid $color-surface;
+  padding-bottom: $spacing-xs;
+}
+
+.passwordSection {
+  @include flex-col(flex-start, stretch, $spacing-sm);
+  margin-bottom: $spacing-lg;
+  border-bottom: 1px solid $color-surface;
+  padding-bottom: $spacing-md;
+}
+
+.subTitle {
+  font-size: 13px;
+  font-weight: $font-weight-bold;
+  color: $color-text;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-sm;
+  width: 100%;
+  
+  @media (min-width: 576px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.fieldBlock {
+  @include flex-col(flex-start, stretch, $spacing-xxs);
+  width: 100%;
+}
+
+.inputLabel {
+  font-family: $font-family;
+  font-size: 12.5px;
+  font-weight: $font-weight-medium;
+  color: $color-text;
+}
+
+.textInput {
+  width: 100%;
+  height: 40px;
+  border-radius: $radius-input;
+  border: 1px solid $color-border;
+  background-color: $color-background;
+  color: $color-text;
+  font-family: $font-family;
+  font-size: 13px;
+  padding: 0 $spacing-sm;
+  transition: border-color $transition-fast, box-shadow $transition-fast;
+  
+  &:focus {
+    @include focus-ring;
+  }
+}
+
+.btnRow {
+  @include flex-row(flex-start, center);
+  
+  & > button {
+    height: 32px !important;
+    font-size: 11px !important;
+    border-radius: 8px !important;
+  }
+}
+
+// Sessions list
+.sessionsSection {
+  @include flex-col(flex-start, stretch, $spacing-xxs);
+  width: 100%;
+}
+
+.desc {
+  font-size: 11px;
+  color: $color-text-secondary;
+  margin-bottom: 4px;
+}
+
+.sessionsList {
+  @include flex-col(flex-start, stretch, 0);
+  border: 1px solid $color-border;
+  border-radius: $radius-button;
+}
+
+.sessionRow {
+  @include flex-row(space-between, center, $spacing-sm);
+  padding: $spacing-sm $spacing-md;
+  border-bottom: 1px solid $color-border;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.sessionInfo {
+  @include flex-col(center, flex-start, 1px);
+  min-width: 0;
+}
+
+.device {
+  font-size: 12.5px;
+  font-weight: $font-weight-semibold;
+  color: $color-text;
+  @include text-truncate;
+}
+
+.location {
+  font-size: 10.5px;
+  color: $color-text-secondary;
+}
+
+.status {
+  font-size: 11px;
+  color: $color-text-secondary;
+  font-weight: $font-weight-medium;
+  
+  &.active {
+    color: $color-success;
+    font-weight: $font-weight-bold;
+  }
+}

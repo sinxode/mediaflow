@@ -1,0 +1,47 @@
+@import '../../styles/shared';
+
+.reviewPage {
+  @include flex-col(flex-start, stretch, $spacing-md);
+  width: 100%;
+}
+
+.metricsSection {
+  width: 100%;
+}
+
+.tabsSection {
+  width: 100%;
+  margin-top: $spacing-xs;
+}
+
+// Grid Layout
+.workspaceGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-md;
+  width: 100%;
+  
+  @include tablet-and-up {
+    grid-template-columns: 2fr 1.1fr;
+    gap: $spacing-xl;
+    align-items: start;
+  }
+}
+
+.queueColumn {
+  width: 100%;
+}
+
+.queueList {
+  @include flex-col(flex-start, stretch, $spacing-sm);
+  width: 100%;
+}
+
+.sidebarColumn {
+  width: 100%;
+  
+  @include tablet-and-up {
+    position: sticky;
+    top: calc($header-height + $spacing-xl);
+  }
+}

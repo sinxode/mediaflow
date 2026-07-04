@@ -1,0 +1,21 @@
+@import '../../styles/shared';
+
+.timelineContainer {
+  @include flex-col(flex-start, stretch, $spacing-md);
+  background-color: $color-background;
+  border: 1px solid $color-border;
+  border-radius: $radius-card;
+  padding: $spacing-md;
+  width: 100%;
+}
+
+.sidebarTitle {
+  font-size: 13px;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: $color-text-secondary;
+  margin: 0;
+  border-bottom: 1px dashed $color-border;
+  padding-bottom: $spacing-xs;
+}

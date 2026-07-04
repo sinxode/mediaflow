@@ -1,0 +1,98 @@
+@import '../../../styles/shared';
+
+.timelineCard {
+  background-color: $color-background;
+  border: 1px solid $color-border;
+  border-radius: $radius-card;
+  width: 100%;
+}
+
+.title {
+  font-size: 13px;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-md;
+  border-bottom: 1px dashed $color-border;
+  padding-bottom: $spacing-xs;
+}
+
+.timeline {
+  @include flex-col(flex-start, stretch, 0);
+}
+
+.timelineItem {
+  display: flex;
+  gap: $spacing-sm;
+  
+  &:last-child {
+    .line {
+      display: none;
+    }
+  }
+}
+
+.iconCol {
+  @include flex-col(flex-start, center, 0);
+  flex-shrink: 0;
+  width: 32px;
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: $color-surface;
+  border: 1px solid $color-border;
+  
+  svg {
+    width: 13px;
+    height: 13px;
+  }
+}
+
+.line {
+  width: 1.5px;
+  background-color: $color-border;
+  flex: 1;
+  margin: 4px 0;
+}
+
+.contentCol {
+  flex: 1;
+  padding-bottom: $spacing-md;
+}
+
+.activityText {
+  font-size: 13px;
+  color: $color-text-secondary;
+  line-height: 1.4;
+}
+
+.action {
+  color: $color-text;
+  font-weight: $font-weight-medium;
+}
+
+.target {
+  color: $color-text;
+  font-weight: $font-weight-semibold;
+}
+
+.time {
+  font-size: 10.5px;
+  color: lighten($color-text-secondary, 15%);
+  display: block;
+  margin-top: 1px;
+}
+
+// Semantic colors
+.iconCreated { color: $color-primary; }
+.iconApproved { color: $color-review; }
+.iconPublished { color: $color-warning; }
+.iconCompleted { color: $color-success; }
+.iconDefault { color: $color-text-secondary; }

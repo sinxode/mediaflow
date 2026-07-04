@@ -1,0 +1,55 @@
+@import '../../styles/shared';
+
+.skeletonItem {
+  @include flex-row(flex-start, center, $spacing-sm);
+  padding: $spacing-sm;
+  border-bottom: 1px solid $color-border;
+  width: 100%;
+}
+
+.avatarPulse {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: $color-border;
+  animation: pulse 1.5s infinite ease-in-out;
+  flex-shrink: 0;
+}
+
+.contentCol {
+  @include flex-col(center, flex-start, 4px);
+  flex: 1;
+}
+
+.titlePulse {
+  width: 100px;
+  height: 10px;
+  border-radius: 2px;
+  background-color: $color-border;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.descPulse {
+  width: 85%;
+  height: 8px;
+  border-radius: 2px;
+  background-color: $color-border;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.timePulse {
+  width: 45px;
+  height: 7px;
+  border-radius: 2px;
+  background-color: $color-border;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}

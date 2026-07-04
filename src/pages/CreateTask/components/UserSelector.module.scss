@@ -1,0 +1,157 @@
+@import '../../../styles/shared';
+
+.userSelector {
+  @include flex-col(flex-start, stretch, $spacing-xxs);
+  width: 100%;
+  position: relative;
+  
+  &.open {
+    z-index: 150;
+  }
+}
+
+.label {
+  font-family: $font-family;
+  font-size: 13px;
+  font-weight: $font-weight-medium;
+  color: $color-text;
+}
+
+.selectBox {
+  @include flex-row(space-between, center, $spacing-sm);
+  height: 48px;
+  padding: 0 $spacing-md;
+  border-radius: $radius-input;
+  border: 1px solid $color-border;
+  background-color: $color-background;
+  cursor: pointer;
+  transition: border-color $transition-fast, box-shadow $transition-fast;
+  
+  &:hover {
+    border-color: darken($color-border, 5%);
+  }
+}
+
+.activeBox {
+  border-color: $color-primary;
+  box-shadow: $shadow-focus;
+}
+
+.selectedUserInfo {
+  @include flex-row(flex-start, center, $spacing-sm);
+  min-width: 0;
+  flex: 1;
+}
+
+.meta {
+  @include flex-col(center, flex-start, 0);
+  min-width: 0;
+}
+
+.name {
+  font-size: 13.5px;
+  font-weight: $font-weight-semibold;
+  color: $color-text;
+  @include text-truncate;
+}
+
+.role {
+  font-size: 11px;
+  color: $color-text-secondary;
+}
+
+.chevron {
+  width: 16px;
+  height: 16px;
+  color: $color-text-secondary;
+  flex-shrink: 0;
+}
+
+// Dropdown Overlay
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 6px;
+  background-color: $color-background;
+  border: 1px solid $color-border;
+  border-radius: $radius-input;
+  box-shadow: $shadow-lg;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.searchContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid $color-border;
+  padding: 8px $spacing-md;
+  background-color: $color-surface;
+}
+
+.searchIcon {
+  position: absolute;
+  left: calc($spacing-md + 4px);
+  width: 14px;
+  height: 14px;
+  color: $color-text-secondary;
+}
+
+.searchInput {
+  width: 100%;
+  height: 32px;
+  padding-left: 28px;
+  font-size: 12.5px;
+  font-family: $font-family;
+  color: $color-text;
+  
+  &::placeholder {
+    color: lighten($color-text-secondary, 15%);
+  }
+}
+
+.usersList {
+  max-height: 200px;
+  overflow-y: auto;
+  @include custom-scrollbar;
+}
+
+.userRow {
+  @include flex-row(space-between, center, $spacing-md);
+  padding: $spacing-xs $spacing-md;
+  cursor: pointer;
+  transition: background-color $transition-fast;
+  
+  @include hover-active {
+    background-color: $color-surface;
+  }
+}
+
+.selectedRow {
+  background-color: $color-primary-light;
+  
+  @include hover-active {
+    background-color: lighten($color-primary-light, 1%);
+  }
+}
+
+.userRowInfo {
+  @include flex-row(flex-start, center, $spacing-sm);
+  min-width: 0;
+}
+
+.checkIcon {
+  width: 16px;
+  height: 16px;
+  color: $color-primary;
+  flex-shrink: 0;
+}
+
+.emptyState {
+  font-size: 12px;
+  color: $color-text-secondary;
+  padding: $spacing-md;
+  text-align: center;
+}

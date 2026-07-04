@@ -1,0 +1,152 @@
+@import '../../styles/shared';
+
+.profilePage {
+  @include flex-col(flex-start, stretch, $spacing-md);
+  width: 100%;
+}
+
+// Sandbox switcher
+.sandboxBar {
+  background-color: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-button !important;
+  margin-bottom: $spacing-xs;
+}
+
+.sandboxContent {
+  @include flex-col(space-between, stretch, $spacing-xs);
+  padding: $spacing-xs $spacing-sm;
+  
+  @media (min-width: 768px) {
+    @include flex-row(space-between, center, $spacing-md);
+  }
+}
+
+.sandboxMeta {
+  @include flex-row(flex-start, center, $spacing-xs);
+  font-size: 12px;
+  color: $color-text-secondary;
+}
+
+.sandboxIcon {
+  width: 16px;
+  height: 16px;
+  color: $color-primary;
+  flex-shrink: 0;
+}
+
+.roleToggles {
+  @include flex-row(flex-start, center, $spacing-xxs);
+  
+  & > button {
+    height: 28px !important;
+    font-size: 11px !important;
+    padding: 0 $spacing-sm !important;
+    border-radius: 8px !important;
+  }
+}
+
+// Workspace Layout
+.profileWorkspace {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-md;
+  width: 100%;
+  
+  @include tablet-and-up {
+    grid-template-columns: 2fr 1.1fr;
+    gap: $spacing-xl;
+    align-items: start;
+  }
+}
+
+.mainContent {
+  @include flex-col(flex-start, stretch, $spacing-md);
+  width: 100%;
+}
+
+.wrapper {
+  width: 100%;
+}
+
+.sidebarColumn {
+  @include flex-col(flex-start, stretch, $spacing-md);
+  width: 100%;
+  
+  @include tablet-and-up {
+    position: sticky;
+    top: calc($header-height + $spacing-xl);
+  }
+}
+
+// Info Card Panel
+.infoCard {
+  background-color: $color-background;
+  border: 1px solid $color-border;
+  border-radius: $radius-card;
+  width: 100%;
+}
+
+.sidebarTitle {
+  font-size: 13px;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-md;
+  border-bottom: 1px dashed $color-border;
+  padding-bottom: $spacing-xs;
+}
+
+.infoList {
+  @include flex-col(flex-start, stretch, $spacing-sm);
+}
+
+.infoRow {
+  @include flex-row(space-between, center, $spacing-xs);
+  font-size: 13px;
+  min-height: 28px;
+}
+
+.infoLabel {
+  color: lighten($color-text-secondary, 10%);
+  font-weight: $font-weight-medium;
+}
+
+.infoValue {
+  color: $color-text;
+  font-weight: $font-weight-semibold;
+}
+
+.statusVal {
+  @include flex-row(flex-end, center, 6px);
+  color: $color-text;
+  font-weight: $font-weight-semibold;
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: $color-success;
+}
+
+// Empty state placeholders wrapper inside card
+.emptyCard {
+  background-color: $color-background;
+  border: 1px solid $color-border;
+  border-radius: $radius-card;
+  padding: $spacing-md;
+  width: 100%;
+}
+
+.emptyTitle {
+  font-size: 13px;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-sm;
+  padding-bottom: $spacing-xs;
+  border-bottom: 1px dashed $color-border;
+}

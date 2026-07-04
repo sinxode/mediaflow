@@ -1,0 +1,79 @@
+@import '../../styles/shared';
+
+.statusPill {
+  @include flex-row(flex-start, center, 6px);
+  padding: 4px 8px;
+  border-radius: 20px;
+  border: 1px solid $color-border;
+  background-color: $color-background;
+  display: inline-flex;
+  transition: all $transition-fast ease;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    animation: pulse 1.6s infinite ease-in-out;
+  }
+}
+
+.label {
+  font-size: 10.5px;
+  font-weight: $font-weight-medium;
+  color: $color-text-secondary;
+}
+
+// Connected state
+.connected {
+  border-color: rgba($color-success, 0.15);
+  background-color: rgba($color-success, 0.03);
+  
+  .dot {
+    background-color: $color-success;
+    &::after { background-color: $color-success; }
+  }
+}
+
+// Reconnecting state
+.reconnecting {
+  border-color: rgba($color-review, 0.15);
+  background-color: rgba($color-review, 0.03);
+  
+  .dot {
+    background-color: $color-review;
+    &::after { background-color: $color-review; }
+  }
+}
+
+// Offline state
+.offline {
+  border-color: rgba($color-danger, 0.15);
+  background-color: rgba($color-danger, 0.03);
+  
+  .dot {
+    background-color: $color-danger;
+    &::after { background-color: $color-danger; }
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}

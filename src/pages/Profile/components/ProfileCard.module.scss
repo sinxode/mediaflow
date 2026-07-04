@@ -1,0 +1,82 @@
+@import '../../../styles/shared';
+
+.profileCard {
+  background-color: $color-background;
+  border: 1px solid $color-border;
+  border-radius: $radius-card;
+  box-shadow: $shadow-sm;
+  width: 100%;
+}
+
+.cardContent {
+  @include flex-col(center, center, $spacing-md);
+  text-align: center;
+  
+  @media (min-width: 576px) {
+    @include flex-row(flex-start, center, $spacing-lg);
+    text-align: left;
+  }
+}
+
+.avatarWrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.profileAvatar {
+  width: 80px !important;
+  height: 80px !important;
+  border-radius: 50% !important;
+  border: 2px solid $color-primary-light;
+  font-size: 32px !important;
+}
+
+.statusDot {
+  position: absolute;
+  bottom: 2px;
+  right: 4px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: $color-success;
+  border: 2px solid $color-background;
+}
+
+.userInfo {
+  @include flex-col(center, center, 2px);
+  
+  @media (min-width: 576px) {
+    @include flex-col(center, flex-start, 2px);
+  }
+}
+
+.userName {
+  font-size: 20px;
+  font-weight: $font-weight-bold;
+  color: $color-text;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.userRole {
+  font-size: 12px;
+  font-weight: $font-weight-semibold;
+  color: $color-primary;
+  background-color: $color-primary-light;
+  padding: 2px $spacing-sm;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin: 4px 0;
+}
+
+.userEmail {
+  font-size: 13px;
+  color: $color-text-secondary;
+}
+
+.memberSince {
+  font-size: 11px;
+  color: lighten($color-text-secondary, 15%);
+  margin-top: 4px;
+}

@@ -1,0 +1,63 @@
+@import '../../styles/shared';
+
+.pageContainer {
+  @include flex-col(flex-start, stretch, $spacing-md);
+  width: 100%;
+}
+
+.workspace {
+  @include flex-col(flex-start, stretch, $spacing-sm);
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.tabsRow {
+  @include flex-row(flex-start, center, $spacing-xxs);
+  border-bottom: 1px solid $color-border;
+  width: 100%;
+}
+
+.tabBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: $font-family;
+  font-size: 13.5px;
+  font-weight: $font-weight-medium;
+  color: $color-text-secondary;
+  padding: $spacing-sm $spacing-md;
+  position: relative;
+  transition: color $transition-fast;
+  
+  &:hover {
+    color: $color-text;
+  }
+  
+  &.active {
+    color: $color-primary;
+    font-weight: $font-weight-bold;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background-color: $color-primary;
+    }
+  }
+}
+
+.feedCard {
+  background-color: $color-background;
+  border: 1px solid $color-border;
+  border-radius: $radius-card !important;
+  overflow: hidden;
+}
+
+.alertsList {
+  @include flex-col(flex-start, stretch, 0);
+  width: 100%;
+}

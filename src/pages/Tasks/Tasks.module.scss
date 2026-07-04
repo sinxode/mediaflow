@@ -1,0 +1,21 @@
+@import '../../styles/shared';
+
+.tasksPageContainer {
+  @include flex-col(flex-start, stretch, $spacing-sm);
+  width: 100%;
+}
+
+.statsSection {
+  width: 100%;
+  margin-bottom: $spacing-xs;
+}
+
+.listContainer {
+  width: 100%;
+  padding-top: $spacing-md;
+}
+
+.tasksList {
+  @include flex-col(flex-start, stretch, 8px); // High task-density spacing
+  width: 100%;
+}

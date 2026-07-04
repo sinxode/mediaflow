@@ -1,0 +1,33 @@
+@import '../../../styles/shared';
+
+.threadContainer {
+  @include flex-col(flex-start, stretch, $spacing-md);
+  width: 100%;
+}
+
+.sectionTitle {
+  font-size: 13px;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: $color-text-secondary;
+}
+
+.feed {
+  @include flex-col(flex-start, stretch, 0);
+  border: 1px solid $color-border;
+  border-radius: $radius-button;
+  background-color: $color-background;
+  padding: 0 $spacing-md;
+}
+
+.errorAlert {
+  background-color: rgba($color-danger, 0.08);
+  border: 1px solid rgba($color-danger, 0.15);
+  color: $color-danger;
+  padding: $spacing-sm;
+  border-radius: $radius-button;
+  font-size: 12px;
+  font-weight: $font-weight-medium;
+  width: 100%;
+}

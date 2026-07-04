@@ -1,0 +1,39 @@
+@import '../../../../styles/shared';
+
+.loadingContainer {
+  @include flex-col(flex-start, stretch, $spacing-xs);
+  width: 100%;
+}
+
+.skeletonRow {
+  @include flex-row(space-between, center, $spacing-sm);
+  background-color: $color-background;
+  border: 1px solid $color-border;
+  border-radius: $radius-button;
+  padding: $spacing-xs $spacing-sm;
+  min-height: 64px;
+  width: 100%;
+}
+
+.iconSkeleton {
+  flex-shrink: 0;
+}
+
+.infoSkeleton {
+  flex: 1;
+  @include flex-col(center, flex-start, $spacing-xxs);
+  min-width: 0;
+}
+
+.titleSkeleton {
+  margin-bottom: 2px !important;
+}
+
+.textSkeleton {
+  margin-bottom: 0 !important;
+}
+
+.badgesSkeleton {
+  @include flex-row(flex-end, center, $spacing-xs);
+  flex-shrink: 0;
+}

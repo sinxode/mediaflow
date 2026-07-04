@@ -1,0 +1,101 @@
+@import '../../styles/shared';
+
+.modalRoot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: $z-modal;
+}
+
+.backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba($color-text, 0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.container {
+  position: relative;
+  z-index: $z-modal;
+  width: 100%;
+  padding: $spacing-md;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.modal {
+  background-color: $color-background;
+  border-radius: $radius-modal;
+  box-shadow: $shadow-lg;
+  border: 1px solid $color-border;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 48px);
+  width: 100%;
+  pointer-events: auto;
+  overflow: hidden;
+}
+
+// Sizes
+.sm {
+  max-width: 400px;
+}
+
+.md {
+  max-width: 560px;
+}
+
+.lg {
+  max-width: 800px;
+}
+
+// Elements
+.header {
+  @include flex-row(space-between, center);
+  padding: $spacing-lg $spacing-xl $spacing-md;
+  border-bottom: 1px solid $color-border;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: $font-weight-bold;
+  letter-spacing: -0.01em;
+}
+
+.closeButton {
+  border-radius: 50% !important;
+  width: 32px !important;
+  height: 32px !important;
+  padding: 0 !important;
+  color: $color-text-secondary;
+  
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.content {
+  padding: $spacing-xl;
+  overflow-y: auto;
+  font-size: 14px;
+  color: $color-text-secondary;
+  @include custom-scrollbar;
+}
+
+.footer {
+  @include flex-row(flex-end, center, $spacing-sm);
+  padding: $spacing-md $spacing-xl $spacing-lg;
+  border-top: 1px solid $color-border;
+  background-color: $color-surface;
+}

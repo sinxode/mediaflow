@@ -1,0 +1,244 @@
+@import '../../styles/shared';
+
+.loginContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: $color-surface;
+  @include flex-row(center, center);
+  padding: $spacing-md;
+  overflow-y: auto;
+}
+
+.loginCardWrapper {
+  width: 100%;
+  max-width: 440px;
+  @include flex-col(center, stretch, $spacing-md);
+}
+
+.loginCard {
+  background-color: $color-background;
+  border: 1px solid $color-border;
+  border-radius: $radius-card;
+  box-shadow: $shadow-lg;
+  width: 100%;
+}
+
+.logoHeader {
+  @include flex-col(center, center, $spacing-xs);
+  text-align: center;
+  margin-bottom: $spacing-lg;
+}
+
+.logoBadge {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background-color: $color-primary;
+  color: $color-background;
+  font-size: 18px;
+  font-weight: $font-weight-bold;
+  @include flex-row(center, center);
+  box-shadow: $shadow-md;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: $font-weight-bold;
+  color: $color-text;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 12.5px;
+  color: $color-text-secondary;
+}
+
+.form {
+  @include flex-col(flex-start, stretch, $spacing-md);
+}
+
+// Alert Boxes
+.errorAlert, .successAlert {
+  @include flex-row(flex-start, center, $spacing-xs);
+  padding: $spacing-sm;
+  border-radius: $radius-button;
+  font-size: 12.5px;
+  font-weight: $font-weight-medium;
+  border: 1px solid;
+}
+
+.errorAlert {
+  background-color: rgba($color-danger, 0.08);
+  border-color: rgba($color-danger, 0.2);
+  color: $color-danger;
+  
+  .alertIcon { color: $color-danger; }
+}
+
+.successAlert {
+  background-color: $color-success-light;
+  border-color: rgba($color-success, 0.2);
+  color: $color-success;
+  
+  .alertIcon { color: $color-success; }
+}
+
+.alertIcon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+// Field layout
+.fieldBlock {
+  @include flex-col(flex-start, stretch, $spacing-xxs);
+  width: 100%;
+}
+
+.label {
+  font-family: $font-family;
+  font-size: 13px;
+  font-weight: $font-weight-medium;
+  color: $color-text;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.inputIcon {
+  position: absolute;
+  left: $spacing-md;
+  width: 15px;
+  height: 15px;
+  color: $color-text-secondary;
+  pointer-events: none;
+}
+
+.input {
+  width: 100%;
+  height: 46px;
+  padding-left: 40px;
+  padding-right: 44px;
+  border-radius: $radius-input;
+  border: 1px solid $color-border;
+  background-color: $color-background;
+  color: $color-text;
+  font-family: $font-family;
+  font-size: 13.5px;
+  transition: border-color $transition-fast, box-shadow $transition-fast;
+  
+  &:focus {
+    @include focus-ring;
+  }
+}
+
+.passwordToggle {
+  position: absolute;
+  right: $spacing-md;
+  background: transparent;
+  border: none;
+  color: $color-text-secondary;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  outline: none;
+  
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.formMeta {
+  @include flex-row(space-between, center);
+  width: 100%;
+}
+
+.checkboxLabel {
+  @include flex-row(flex-start, center, 6px);
+  font-size: 12.5px;
+  color: $color-text-secondary;
+  cursor: pointer;
+}
+
+.checkbox {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  border: 1px solid $color-border;
+  cursor: pointer;
+}
+
+.submitBtn {
+  width: 100%;
+  height: 46px !important;
+  font-size: 13.5px !important;
+  border-radius: $radius-button !important;
+}
+
+// Button loading spinner
+.spinnerRow {
+  @include flex-row(center, center, 8px);
+}
+
+.btnSpinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #FFFFFF;
+  border-radius: 50%;
+  animation: spin 0.8s infinite linear;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+// Development credentials card
+.sandboxHelpCard {
+  width: 100%;
+  background-color: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-button;
+  padding: $spacing-sm $spacing-md;
+}
+
+.helpHeader {
+  @include flex-row(flex-start, center, $spacing-xs);
+  font-size: 12.5px;
+  font-weight: $font-weight-bold;
+  color: $color-text;
+  margin-bottom: $spacing-xs;
+}
+
+.helpIcon {
+  width: 14px;
+  height: 14px;
+  color: $color-primary;
+}
+
+.helpDetails {
+  font-size: 11.5px;
+  color: $color-text-secondary;
+  @include flex-col(flex-start, stretch, 2px);
+  
+  code {
+    background-color: $color-background;
+    padding: 1px 4px;
+    border-radius: 4px;
+    border: 1px solid $color-border;
+    font-family: monospace;
+    font-size: 11px;
+    color: $color-primary;
+  }
+}

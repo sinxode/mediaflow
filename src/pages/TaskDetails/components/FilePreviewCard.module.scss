@@ -1,0 +1,109 @@
+@import '../../../styles/shared';
+
+.previewCard {
+  @include flex-row(flex-start, center, $spacing-sm);
+  background-color: $color-background;
+  border: 1px solid $color-border;
+  border-radius: $radius-button;
+  padding: $spacing-sm;
+  width: 100%;
+}
+
+.mediaFrame {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  border: 1px solid $color-border;
+  background-color: $color-surface;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.imageThumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.iconPlaceholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  svg {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+.extBadge {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.65);
+  color: #FFFFFF;
+  font-size: 8px;
+  font-weight: $font-weight-bold;
+  text-align: center;
+  padding: 1px 0;
+  letter-spacing: 0.05em;
+}
+
+.metadataCol {
+  @include flex-col(center, flex-start, 2px);
+  flex: 1;
+  min-width: 0;
+}
+
+.fileName {
+  font-size: 12.5px;
+  font-weight: $font-weight-bold;
+  color: $color-text;
+  @include text-truncate;
+  width: 100%;
+  margin: 0;
+}
+
+.fileDetails {
+  font-size: 10.5px;
+  color: lighten($color-text-secondary, 10%);
+}
+
+.actionsGroup {
+  @include flex-row(flex-end, center, 4px);
+  flex-shrink: 0;
+}
+
+.actionBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  @include flex-row(center, center);
+  color: $color-text-secondary;
+  transition: background-color $transition-fast, color $transition-fast;
+  
+  &:hover {
+    background-color: $color-surface;
+    color: $color-primary;
+  }
+  
+  svg {
+    width: 15px;
+    height: 15px;
+  }
+}
+
+// Format Icon Color mappings
+.iconPdf { color: $color-danger; }
+.iconVideo { color: $color-primary; }
+.iconZip { color: $color-review; }
+.iconImage { color: $color-success; }
+.iconDefault { color: $color-text-secondary; }

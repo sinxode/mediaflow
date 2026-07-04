@@ -1,0 +1,97 @@
+@import '../../styles/shared';
+
+.taskCard {
+  @include flex-col(space-between, stretch, $spacing-xs);
+  height: 100%;
+  padding: $spacing-sm !important;
+  
+  @include tablet-and-up {
+    padding: $spacing-md !important;
+  }
+}
+
+.header {
+  @include flex-row(space-between, center);
+}
+
+.category {
+  font-size: 11px;
+  color: $color-text-secondary;
+  font-weight: $font-weight-medium;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badges {
+  @include flex-row(flex-end, center, $spacing-xxs);
+}
+
+.title {
+  font-size: 14px;
+  font-weight: $font-weight-semibold;
+  color: $color-text;
+  line-height: 1.35;
+  @include line-clamp(2);
+  min-height: auto;
+  margin-bottom: 2px;
+}
+
+.descriptionSnippet {
+  font-size: 11.5px;
+  color: $color-text-secondary;
+  line-height: 1.4;
+  @include line-clamp(1);
+  margin-bottom: $spacing-xs;
+}
+
+.metaInfoRow {
+  @include flex-row(space-between, center, $spacing-xs);
+  margin-bottom: $spacing-xs;
+  background-color: $color-surface;
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+
+.userMeta {
+  @include flex-col(center, flex-start, 2px);
+  flex: 1;
+  min-width: 0;
+}
+
+.metaLabel {
+  font-size: 8.5px;
+  font-weight: $font-weight-bold;
+  color: lighten($color-text-secondary, 15%);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.userWrapper {
+  @include flex-row(flex-start, center, 4px);
+  width: 100%;
+}
+
+.userName {
+  font-size: 11px;
+  color: $color-text;
+  font-weight: $font-weight-medium;
+  @include text-truncate;
+}
+
+.footer {
+  @include flex-row(space-between, center, $spacing-xs);
+  padding-top: $spacing-xs;
+  border-top: 1px dashed $color-border;
+}
+
+.deadline {
+  @include flex-row(flex-start, center, 6px);
+  font-size: 11.5px;
+  color: $color-text-secondary;
+  
+  svg {
+    width: 13px;
+    height: 13px;
+    color: lighten($color-text-secondary, 10%);
+  }
+}

@@ -1,0 +1,59 @@
+@import '../../styles/shared';
+
+.metricCard {
+  @include flex-col(flex-start, stretch, $spacing-xs);
+  background-color: $color-background;
+  border: 1px solid $color-border;
+  border-radius: $radius-card !important;
+  padding: $spacing-md !important;
+  box-shadow: $shadow-sm;
+}
+
+.header {
+  @include flex-row(space-between, center, $spacing-xs);
+}
+
+.title {
+  font-size: 12px;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: $color-text-secondary;
+}
+
+.iconWrapper {
+  color: $color-primary;
+  
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.valueRow {
+  @include flex-row(flex-start, baseline, $spacing-xs);
+  margin-top: 4px;
+}
+
+.value {
+  font-size: 26px;
+  font-weight: $font-weight-bold;
+  color: $color-text;
+  font-family: $font-family;
+}
+
+.trendBadge {
+  font-size: 10px;
+  font-weight: $font-weight-bold;
+  color: $color-success;
+  background-color: rgba($color-success, 0.08);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.description {
+  font-size: 11px;
+  color: lighten($color-text-secondary, 5%);
+  margin: 0;
+  line-height: 1.4;
+}

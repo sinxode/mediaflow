@@ -1,0 +1,215 @@
+@import '../../../styles/shared';
+
+.reviewCard {
+  @include flex-col(flex-start, stretch, $spacing-sm);
+  background-color: $color-background;
+  border: 1px solid $color-border;
+  border-radius: $radius-card;
+  padding: $spacing-md;
+  position: relative;
+  transition: transform $transition-normal, border-color $transition-normal, box-shadow $transition-normal;
+  overflow: hidden;
+  
+  @include hover-active {
+    border-color: darken($color-border, 8%);
+    box-shadow: $shadow-md;
+    transform: translateY(-1px);
+    
+    .chevron {
+      transform: translateX(2px);
+    }
+  }
+}
+
+// Left visual bar highlight for High priority items
+.priorityIndicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: $color-danger;
+}
+
+.highPriority {
+  border-color: rgba($color-danger, 0.15);
+  background-color: rgba($color-danger, 0.01);
+  
+  @include hover-active {
+    border-color: rgba($color-danger, 0.25);
+    box-shadow: 0 4px 16px rgba($color-danger, 0.04);
+  }
+}
+
+.cardHeader {
+  @include flex-col(space-between, flex-start, $spacing-xs);
+  width: 100%;
+  
+  @include tablet-and-up {
+    @include flex-row(space-between, flex-start, $spacing-md);
+  }
+}
+
+.titleInfo {
+  @include flex-col(center, flex-start, 2px);
+  flex: 1;
+}
+
+.category {
+  font-size: 11px;
+  font-weight: $font-weight-medium;
+  color: $color-text-secondary;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.title {
+  font-size: 14.5px;
+  font-weight: $font-weight-semibold;
+  color: $color-text;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.submitter {
+  font-size: 11px;
+  color: $color-text-secondary;
+  margin-top: 2px;
+  
+  strong {
+    color: $color-text;
+  }
+}
+
+.headerBadges {
+  @include flex-row(flex-end, center, $spacing-xs);
+  flex-shrink: 0;
+}
+
+// Meta Row details
+.metaRow {
+  @include flex-row(flex-start, center, 8px);
+  font-size: 11px;
+  color: lighten($color-text-secondary, 10%);
+}
+
+.metaItem {
+  @include flex-row(flex-start, center, 4px);
+}
+
+.metaIcon {
+  width: 12px;
+  height: 12px;
+  color: lighten($color-text-secondary, 15%);
+}
+
+.metaDivider {
+  color: lighten($color-border, 10%);
+}
+
+// Action area footer
+.actionsFooter {
+  @include flex-col(space-between, stretch, $spacing-sm);
+  border-top: 1px dashed $color-border;
+  padding-top: $spacing-sm;
+  margin-top: $spacing-xs;
+  
+  @include tablet-and-up {
+    @include flex-row(space-between, center, $spacing-md);
+  }
+}
+
+.openBtn {
+  height: 32px !important;
+  font-size: 12px !important;
+  color: $color-text-secondary !important;
+  border-radius: 10px !important;
+  align-self: flex-start;
+  
+  svg {
+    width: 14px;
+    height: 14px;
+    transition: transform $transition-fast;
+  }
+}
+
+.quickActions {
+  @include flex-row(flex-end, center, $spacing-xs);
+  flex-wrap: wrap;
+  
+  & > button {
+    height: 32px !important;
+    font-size: 12px !important;
+    border-radius: 10px !important;
+    flex: 1;
+    
+    @include tablet-and-up {
+      flex: 0 1 auto;
+    }
+  }
+}
+
+// Role specific action triggers overrides
+.approveBtn {
+  background-color: $color-success !important;
+  color: $color-background !important;
+  border-color: $color-success !important;
+  
+  @include hover-active {
+    background-color: darken($color-success, 8%) !important;
+    border-color: darken($color-success, 8%) !important;
+  }
+}
+
+.requestBtn {
+  background-color: $color-surface !important;
+  color: $color-warning !important;
+  border-color: $color-border !important;
+  
+  @include hover-active {
+    background-color: $color-warning-light !important;
+    border-color: rgba($color-warning, 0.2) !important;
+  }
+}
+
+.publishBtn {
+  background-color: $color-review-light !important;
+  color: $color-review !important;
+  border-color: rgba($color-review, 0.2) !important;
+  
+  @include hover-active {
+    background-color: $color-review !important;
+    color: $color-background !important;
+    border-color: $color-review !important;
+  }
+}
+
+.completeBtn {
+  background-color: $color-primary !important;
+}
+
+// Badge styling duplication (for scope encapsulation)
+.priorityBadge {
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: $font-weight-semibold;
+  border-radius: 6px;
+  
+  &.low { background-color: lighten($color-border, 2%); color: $color-text-secondary; }
+  &.medium { background-color: $color-primary-light; color: $color-primary; }
+  &.high { background-color: rgba($color-danger, 0.08); color: $color-danger; }
+}
+
+.statusBadge {
+  padding: 3px 8px;
+  font-size: 10px;
+  font-weight: $font-weight-semibold;
+  border-radius: $radius-badge;
+  
+  &.ready-for-review { background-color: #F5F3FF; color: #7C3AED; }
+  &.reviewing { background-color: #FDF2F8; color: #DB2777; }
+  &.changes-requested { background-color: #FEF3C7; color: #D97706; }
+  &.approved { background-color: #ECFDF5; color: #047857; }
+  &.ready-to-publish { background-color: #E0F2FE; color: #0284C7; }
+  &.completed { background-color: #F0FDF4; color: #15803D; }
+}

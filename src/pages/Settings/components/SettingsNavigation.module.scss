@@ -1,0 +1,163 @@
+@import '../../../styles/shared';
+
+.navigationWrapper {
+  width: 100%;
+}
+
+// Mobile layouts
+.mobileNavScroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  padding-bottom: $spacing-xs;
+  border-bottom: 1px solid $color-border;
+  margin-bottom: $spacing-sm;
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  
+  @include tablet-and-up {
+    display: none; // Hides mobile bar on desktop
+  }
+}
+
+.mobileNavList {
+  @include flex-row(flex-start, center, 4px);
+  width: max-content;
+  background-color: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-input;
+  padding: 4px;
+}
+
+.mobileBtn {
+  position: relative;
+  height: 32px;
+  padding: 0 $spacing-sm;
+  border-radius: calc($radius-input - 4px);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  @include flex-row(center, center, 4px);
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  
+  svg {
+    width: 13px;
+    height: 13px;
+    color: $color-text-secondary;
+  }
+}
+
+.mobileActiveBg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: $color-background;
+  border-radius: calc($radius-input - 4px);
+  box-shadow: $shadow-sm;
+  border: 1px solid $color-border;
+  z-index: 1;
+}
+
+.btnIcon, .btnText {
+  position: relative;
+  z-index: 2;
+}
+
+.btnText {
+  font-family: $font-family;
+  font-size: 11px;
+  font-weight: $font-weight-semibold;
+  color: $color-text-secondary;
+}
+
+.mobileActive {
+  .btnText { color: $color-primary; }
+  svg { color: $color-primary; }
+}
+
+// Desktop Menu layout
+.desktopMenu {
+  display: none;
+  
+  @include tablet-and-up {
+    display: block;
+    width: 100%;
+  }
+}
+
+.menuTitle {
+  font-size: 13px;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-md;
+  border-bottom: 1px dashed $color-border;
+  padding-bottom: $spacing-xs;
+}
+
+.menuList {
+  @include flex-col(flex-start, stretch, 4px);
+  width: 100%;
+}
+
+.desktopBtn {
+  position: relative;
+  height: 40px;
+  border-radius: $radius-button;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  outline: none;
+}
+
+.desktopActiveBg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: $color-primary-light;
+  border-radius: $radius-button;
+  border-left: 2px solid $color-primary;
+  z-index: 1;
+}
+
+.desktopBtnContent {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  padding: 0 $spacing-md;
+  @include flex-row(flex-start, center, $spacing-sm);
+}
+
+.desktopIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $color-text-secondary;
+  
+  svg {
+    width: 15px;
+    height: 15px;
+  }
+}
+
+.desktopText {
+  font-family: $font-family;
+  font-size: 13px;
+  font-weight: $font-weight-semibold;
+  color: $color-text-secondary;
+}
+
+.desktopActive {
+  .desktopText { color: $color-primary; }
+  .desktopIcon { color: $color-primary; }
+}

@@ -1,0 +1,298 @@
+@import '../../../styles/shared';
+
+.accountCard {
+  background-color: $color-background;
+  border: 1px solid $color-border;
+  border-radius: $radius-card;
+  width: 100%;
+}
+
+.sectionTitle {
+  font-size: 13px;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-md;
+  border-bottom: 1px dashed $color-border;
+  padding-bottom: $spacing-xs;
+}
+
+.avatarSection {
+  @include flex-col(flex-start, center, $spacing-md);
+  margin-bottom: $spacing-lg;
+  
+  @media (min-width: 576px) {
+    @include flex-row(flex-start, center, $spacing-md);
+  }
+}
+
+.uploadAvatar {
+  width: 64px !important;
+  height: 64px !important;
+  border-radius: 50% !important;
+  font-size: 24px !important;
+}
+
+.avatarMeta {
+  @include flex-col(center, center, 2px);
+  text-align: center;
+  
+  @media (min-width: 576px) {
+    @include flex-col(center, flex-start, 2px);
+    text-align: left;
+  }
+}
+
+.label {
+  font-size: 13px;
+  font-weight: $font-weight-bold;
+  color: $color-text;
+}
+
+.desc {
+  font-size: 11px;
+  color: $color-text-secondary;
+}
+
+.actions {
+  @include flex-row(center, center, 6px);
+  margin-top: 4px;
+  
+  & > button {
+    height: 28px !important;
+    font-size: 11px !important;
+    border-radius: 8px !important;
+  }
+}
+
+.removeBtn {
+  color: $color-danger !important;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-sm;
+  width: 100%;
+  
+  @media (min-width: 576px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.fieldBlock {
+  @include flex-col(flex-start, stretch, $spacing-xxs);
+  width: 100%;
+}
+
+.inputLabel {
+  font-family: $font-family;
+  font-size: 12.5px;
+  font-weight: $font-weight-medium;
+  color: $color-text;
+}
+
+.textInput {
+  width: 100%;
+  height: 40px;
+  border-radius: $radius-input;
+  border: 1px solid $color-border;
+  background-color: $color-background;
+  color: $color-text;
+  font-family: $font-family;
+  font-size: 13px;
+  padding: 0 $spacing-sm;
+  transition: border-color $transition-fast, box-shadow $transition-fast;
+  
+  &:focus {
+    @include focus-ring;
+  }
+}
+
+// Cropping and Editing Modal Styles
+.cropModalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  @include flex-row(center, center);
+  padding: $spacing-md;
+}
+
+.cropModalContent {
+  background-color: $color-background;
+  border: 1px solid $color-border;
+  border-radius: $radius-card;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  animation: modalFadeIn 0.25s ease-out;
+}
+
+.modalHeader {
+  padding: $spacing-sm $spacing-md;
+  border-bottom: 1px dashed $color-border;
+  @include flex-row(space-between, center);
+  
+  h3 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: $font-weight-bold;
+    color: $color-text;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  color: $color-text-secondary;
+  cursor: pointer;
+  @include flex-row(center, center);
+  padding: 4px;
+  border-radius: 50%;
+  transition: background-color $transition-fast;
+  
+  &:hover {
+    background-color: $color-border;
+  }
+}
+
+.modalBody {
+  padding: $spacing-md;
+  @include flex-col(center, stretch, $spacing-md);
+}
+
+.previewContainer {
+  width: 240px;
+  height: 240px;
+  margin: 0 auto;
+  border: 2px dashed $color-border;
+  border-radius: $radius-card;
+  overflow: hidden;
+  position: relative;
+  background-color: lighten($color-border, 5%);
+  @include flex-row(center, center);
+}
+
+.imageWrapper {
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+  border: 2px solid $color-primary;
+  transition: border-radius 0.2s ease;
+  
+  &.circle {
+    border-radius: 50%;
+  }
+  
+  &.square {
+    border-radius: $radius-card;
+  }
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+  }
+}
+
+.controlGroup {
+  @include flex-col(flex-start, stretch, $spacing-xs);
+  width: 100%;
+}
+
+.controlLabel {
+  font-size: 11.5px;
+  font-weight: $font-weight-bold;
+  color: $color-text-secondary;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.sliderWrapper {
+  @include flex-row(space-between, center, $spacing-sm);
+  width: 100%;
+  
+  input[type="range"] {
+    flex: 1;
+    height: 4px;
+    background-color: $color-border;
+    border-radius: 2px;
+    outline: none;
+    -webkit-appearance: none;
+    
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background-color: $color-primary;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: transform $transition-fast;
+      
+      &:hover {
+        transform: scale(1.15);
+      }
+    }
+  }
+  
+  .valueText {
+    font-size: 11.5px;
+    font-weight: $font-weight-semibold;
+    color: $color-text;
+    min-width: 32px;
+    text-align: right;
+  }
+}
+
+.shapeSelectors {
+  @include flex-row(flex-start, center, $spacing-xs);
+  width: 100%;
+}
+
+.shapeBtn {
+  flex: 1;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid $color-border;
+  background-color: $color-background;
+  color: $color-text-secondary;
+  font-size: 11.5px;
+  font-weight: $font-weight-semibold;
+  cursor: pointer;
+  transition: all $transition-fast;
+  
+  &.active {
+    border-color: $color-primary;
+    background-color: rgba($color-primary, 0.05);
+    color: $color-primary;
+  }
+}
+
+.modalFooter {
+  padding: $spacing-sm $spacing-md;
+  border-top: 1px dashed $color-border;
+  @include flex-row(flex-end, center, $spacing-xs);
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

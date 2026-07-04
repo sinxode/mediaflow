@@ -1,0 +1,96 @@
+@import '../../../styles/shared';
+
+.sidebarCard {
+  background-color: $color-background;
+  border: 1px solid $color-border;
+  border-radius: $radius-card;
+  width: 100%;
+}
+
+.sidebarTitle {
+  font-size: 13px;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-md;
+  padding-bottom: $spacing-xs;
+  border-bottom: 1px dashed $color-border;
+}
+
+.metaList {
+  @include flex-col(flex-start, stretch, $spacing-sm);
+}
+
+.metaRow {
+  @include flex-row(space-between, center, $spacing-xs);
+  font-size: 13px;
+  min-height: 28px;
+}
+
+.metaLabel {
+  color: lighten($color-text-secondary, 10%);
+  font-weight: $font-weight-medium;
+  flex-shrink: 0;
+}
+
+.metaValueContainer {
+  @include flex-row(flex-end, center);
+  min-width: 0;
+  text-align: right;
+}
+
+.metaValue {
+  color: $color-text;
+  font-weight: $font-weight-semibold;
+  @include text-truncate;
+}
+
+.userValue {
+  @include flex-row(flex-end, center, 6px);
+  min-width: 0;
+}
+
+.userName {
+  color: $color-text;
+  font-weight: $font-weight-semibold;
+  @include text-truncate;
+  max-width: 100px;
+}
+
+// Badge styling duplication (for scope encapsulation)
+.priorityBadge {
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: $font-weight-semibold;
+  border-radius: 6px;
+  
+  &.low {
+    background-color: lighten($color-border, 2%);
+    color: $color-text-secondary;
+  }
+  &.medium {
+    background-color: $color-primary-light;
+    color: $color-primary;
+  }
+  &.high {
+    background-color: rgba($color-danger, 0.08);
+    color: $color-danger;
+  }
+}
+
+.statusBadge {
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: $font-weight-semibold;
+  border-radius: 6px;
+  
+  &.created { background-color: #F1F5F9; color: #475569; }
+  &.assigned { background-color: #EEF2FF; color: #4F46E5; }
+  &.working { background-color: #E0F2FE; color: #0284C7; }
+  &.ready-for-review { background-color: #F5F3FF; color: #7C3AED; }
+  &.reviewing { background-color: #FDF2F8; color: #DB2777; }
+  &.approved { background-color: #ECFDF5; color: #047857; }
+  &.published { background-color: #DCFCE7; color: #16A34A; }
+  &.completed { background-color: #F0FDF4; color: #15803D; }
+}
