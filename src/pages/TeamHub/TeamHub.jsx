@@ -102,17 +102,6 @@ const TeamHub = () => {
     loadData();
   }, []);
 
-  // Scroll to bottom on new messages
-  useEffect(() => {
-    if (activeTab === 'discussion' && messages.length > 0) {
-      if (initialLoadRef.current) {
-        initialLoadRef.current = false;
-        return;
-      }
-      messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [messages, activeTab]);
-
   // Load Drawer Messages
   useEffect(() => {
     if (drawerItem) {
@@ -147,6 +136,11 @@ const TeamHub = () => {
       setMessages((prev) => [...prev, savedMsg]);
       setComposerText('');
       setAttachedFile(null);
+      
+      // Smooth scroll to bottom on message post
+      setTimeout(() => {
+        messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
       
       // Refresh feed activity
       const acts = await TeamHubService.getActivities();
