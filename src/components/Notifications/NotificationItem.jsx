@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Avatar from '../Avatar/Avatar';
+import { DeepLinkHandler } from '../../services/notifications/DeepLinkHandler';
 import styles from './NotificationItem.module.scss';
 
 const NotificationItem = ({ alert, onMarkRead }) => {
@@ -34,10 +35,12 @@ const NotificationItem = ({ alert, onMarkRead }) => {
     if (!is_read && onMarkRead) {
       await onMarkRead(id);
     }
-    // Redirect user to the related task view
-    if (related_task_id) {
-      navigate(`/tasks`);
-    }
+    
+    // Redirect via DeepLinkHandler
+    DeepLinkHandler.handleLink(
+      alert.metadata || { item_type: 'task', item_id: related_task_id },
+      navigate
+    );
   };
 
   // Resolve dummy avatar initials based on type

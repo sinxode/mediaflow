@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Avatar from '../../../components/Avatar/Avatar';
 import RoleBadge from './RoleBadge';
+import MentionRenderer from '../../../components/Mentions/MentionRenderer';
 import CommentActions from './CommentActions';
 import CommentEditor from './CommentEditor';
 import styles from './CommentItem.module.scss';
@@ -81,7 +82,7 @@ const CommentItem = ({ comment, currentUser, onUpdate, onDelete }) => {
           />
         ) : (
           <>
-            <p className={styles.message}>{comment.message}</p>
+            <p className={styles.message}><MentionRenderer text={comment.message} /></p>
             
             {isOwner && !loading && (
               <div className={styles.actionsContainer}>

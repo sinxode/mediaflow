@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   MessageSquare,
@@ -28,13 +28,19 @@ import Modal from '../../components/Modal/Modal';
 import { TeamHubService } from '../../services/teamhub/teamHubService';
 import { useAuth } from '../../auth/hooks/useAuth';
 import styles from './TeamHub.module.scss';
+import MentionAutocomplete from '../../components/Mentions/MentionAutocomplete';
+import MentionRenderer from '../../components/Mentions/MentionRenderer';
+import { parseAndTriggerMentions } from '../../services/notifications/notificationService';
 
 const TeamHub = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuth();
   const fileInputRef = useRef(null);
   const messageEndRef = useRef(null);
   const initialLoadRef = useRef(true);
+  const discussionTextareaRef = useRef(null);
+  const drawerTextareaRef = useRef(null);
 
   // Active Tab: 'discussion' | 'ideas' | 'plans'
   const [activeTab, setActiveTab] = useState('discussion');
@@ -77,6 +83,9 @@ const TeamHub = () => {
   // Floating Notification Toast
   const [toastMessage, setToastMessage] = useState(null);
 
+  // Slack-like Tab Unread counts
+  const [unreadCounts, setUnreadCounts] = useState({ discussion: 0, ideas: 0, plans: 0 });
+
   // Load Data
   const loadData = async () => {
     try {
@@ -87,10 +96,10 @@ const TeamHub = () => {
         TeamHubService.getPlans(),
         TeamHubService.getActivities()
       ]);
-      setMessages(msgs);
-      setIdeas(ids);
-      setPlans(plns);
-      setActivities(acts);
+      setMessages(msgs || []);
+      setIdeas(ids || []);
+      setPlans(plns || []);
+      setActivities(acts || []);
     } catch (err) {
       console.error('Failed to load Team Hub content', err);
     } finally {
@@ -100,6 +109,69 @@ const TeamHub = () => {
 
   useEffect(() => {
     loadData();
+  }, []);
+
+  // Calculate Slack-like Tab Unread counts based on timestamps
+  const calculateUnreads = () => {
+    try {
+      const lastDiscussion = localStorage.getItem('mediaflow_last_viewed_discussion') || new Date(0).toISOString();
+      const lastIdeas = localStorage.getItem('mediaflow_last_viewed_ideas') || new Date(0).toISOString();
+      const lastPlans = localStorage.getItem('mediaflow_last_viewed_plans') || new Date(0).toISOString();
+
+      const newMsgs = messages.filter(m => m.created_at > lastDiscussion && m.created_by !== user?.id).length;
+      const newIdeas = ideas.filter(i => i.updated_at > lastIdeas && i.created_by !== user?.id).length;
+      const newPlans = plans.filter(p => p.updated_at > lastPlans && p.created_by !== user?.id).length;
+
+      setUnreadCounts({
+        discussion: newMsgs,
+        ideas: newIdeas,
+        plans: newPlans
+      });
+    } catch (err) {
+      console.warn('Failed to calculate unread counts', err);
+    }
+  };
+
+  // Update timestamps when activeTab shifts
+  useEffect(() => {
+    try {
+      localStorage.setItem(`mediaflow_last_viewed_${activeTab}`, new Date().toISOString());
+      calculateUnreads();
+    } catch (e) {
+      console.error(e);
+    }
+  }, [activeTab, messages, ideas, plans]);
+
+  // Handle router deep-linking state redirect from location state
+  useEffect(() => {
+    if (location.state?.selectTab) {
+      setActiveTab(location.state.selectTab);
+      // Clean state
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.state]);
+
+  // Listen to open item custom events
+  useEffect(() => {
+    const handleOpenItem = async (e) => {
+      const { type, id } = e.detail;
+      try {
+        if (type === 'idea') {
+          const list = await TeamHubService.getIdeas();
+          const idea = list.find(i => String(i.id) === String(id));
+          if (idea) setDrawerItem({ type: 'idea', item: idea });
+        } else if (type === 'plan') {
+          const list = await TeamHubService.getPlans();
+          const plan = list.find(p => String(p.id) === String(id));
+          if (plan) setDrawerItem({ type: 'plan', item: plan });
+        }
+      } catch (err) {
+        console.warn('Failed to resolve deep link drawer open event', err);
+      }
+    };
+
+    window.addEventListener('open_team_hub_item', handleOpenItem);
+    return () => window.removeEventListener('open_team_hub_item', handleOpenItem);
   }, []);
 
   // Load Drawer Messages
@@ -141,6 +213,15 @@ const TeamHub = () => {
       setTimeout(() => {
         messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
       }, 100);
+
+      // Trigger mentions alert
+      await parseAndTriggerMentions({
+        text: composerText,
+        senderId: user.id,
+        itemType: 'discussion',
+        itemId: savedMsg.id,
+        taskTitle: 'Team Hub Discussion'
+      });
       
       // Refresh feed activity
       const acts = await TeamHubService.getActivities();
@@ -293,7 +374,6 @@ const TeamHub = () => {
     });
   };
 
-  // DRAWER COMMENT DISCUSSIONS
   const handleSendDrawerMessage = async (e) => {
     if (e) e.preventDefault();
     if (!drawerComposerText.trim()) return;
@@ -304,6 +384,16 @@ const TeamHub = () => {
         drawerItem.item.id,
         drawerComposerText
       );
+      
+      // Trigger mentions alert
+      await parseAndTriggerMentions({
+        text: drawerComposerText,
+        senderId: user.id,
+        itemType: drawerItem.type,
+        itemId: drawerItem.item.id,
+        taskTitle: `Thread: ${drawerItem.item.title}`
+      });
+
       setDrawerMessages((prev) => [...prev, savedMsg]);
       setDrawerComposerText('');
       
@@ -447,7 +537,26 @@ const TeamHub = () => {
                 transition={{ type: 'spring', stiffness: 380, damping: 30 }}
               />
             )}
-            <span>{tab.charAt(0).toUpperCase() + tab.slice(1)}</span>
+            <span>
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              {unreadCounts[tab] > 0 && (
+                <span 
+                  style={{ 
+                    marginLeft: '6px', 
+                    backgroundColor: '#EF4444', 
+                    color: '#FFFFFF', 
+                    borderRadius: '10px', 
+                    padding: '1px 6px', 
+                    fontSize: '10px', 
+                    fontWeight: 'bold',
+                    display: 'inline-block',
+                    lineHeight: 1
+                  }}
+                >
+                  {unreadCounts[tab]}
+                </span>
+              )}
+            </span>
           </button>
         ))}
       </div>
@@ -527,7 +636,7 @@ const TeamHub = () => {
                                 {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                               </span>
                             </div>
-                            <div className={styles.msgContent}>{msg.content}</div>
+                            <div className={styles.msgContent}><MentionRenderer text={msg.content} /></div>
 
                             {/* Attachments */}
                             {msg.attachments && msg.attachments.length > 0 && (
@@ -582,6 +691,7 @@ const TeamHub = () => {
                     <form className={styles.composerForm} onSubmit={handleSendMessage}>
                       <div className={styles.composerInputWrapper}>
                         <textarea
+                          ref={discussionTextareaRef}
                           placeholder="Send message to team..."
                           value={composerText}
                           onChange={(e) => setComposerText(e.target.value)}
@@ -592,6 +702,11 @@ const TeamHub = () => {
                             }
                           }}
                           rows={1}
+                        />
+                        <MentionAutocomplete
+                          textareaRef={discussionTextareaRef}
+                          value={composerText}
+                          onChange={setComposerText}
                         />
                         <input
                           type="file"
@@ -644,7 +759,7 @@ const TeamHub = () => {
                                 {idea.status.replace('_', ' ')}
                               </span>
                             </div>
-                            <p className={styles.ideaDesc}>{idea.description}</p>
+                            <p className={styles.ideaDesc}><MentionRenderer text={idea.description} /></p>
                           </div>
                           
                           <div className={styles.ideaMeta}>
@@ -735,7 +850,7 @@ const TeamHub = () => {
                                 {plan.priority}
                               </span>
                             </div>
-                            {plan.description && <p className={styles.planDesc}>{plan.description}</p>}
+                            {plan.description && <p className={styles.planDesc}><MentionRenderer text={plan.description} /></p>}
                             <div className={styles.planMetaGroup}>
                               <span className="author" style={{ fontSize: '11px', color: '#64748B' }}>
                                 Created by {plan.creator?.name || 'Muhammad Sinan'}
@@ -834,23 +949,46 @@ const TeamHub = () => {
                         {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </span>
                     </div>
-                    <div className={styles.body}>{msg.content}</div>
+                    <div className={styles.body}><MentionRenderer text={msg.content} /></div>
                   </div>
                 ))
               )}
             </div>
 
-            <form className={styles.drawerComposer} onSubmit={handleSendDrawerMessage}>
-              <input
-                type="text"
+            <form className={styles.drawerComposer} onSubmit={handleSendDrawerMessage} style={{ position: 'relative' }}>
+              <textarea
+                ref={drawerTextareaRef}
                 placeholder={`Comment on this ${drawerItem.type}...`}
                 value={drawerComposerText}
                 onChange={(e) => setDrawerComposerText(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSendDrawerMessage();
+                  }
+                }}
+                rows={1}
+                style={{
+                  flex: 1,
+                  padding: '10px 14px',
+                  borderRadius: '10px',
+                  border: '1px solid #E2E8F0',
+                  fontSize: '13px',
+                  outline: 'none',
+                  resize: 'none',
+                  fontFamily: 'inherit',
+                  lineHeight: '1.4'
+                }}
+              />
+              <MentionAutocomplete
+                textareaRef={drawerTextareaRef}
+                value={drawerComposerText}
+                onChange={setDrawerComposerText}
               />
               <button
                 type="submit"
                 className={styles.sendBtn}
-                style={{ width: '32px', height: '32px' }}
+                style={{ width: '32px', height: '32px', flexShrink: 0 }}
                 disabled={!drawerComposerText.trim()}
               >
                 <Send size={13} />

@@ -10,36 +10,60 @@ import SecurityCard from './components/SecurityCard';
 import AboutCard from './components/AboutCard';
 import { useAuth } from '../../auth/hooks/useAuth';
 import { pageVariants } from '../../utils/animations';
+import { NotificationService } from '../../services/notifications/notificationService';
 import styles from './Settings.module.scss';
 
 const Settings = () => {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('notifications');
 
+  // Database-synced notification preferences
+  const [prefs, setPrefs] = useState({
+    push_enabled: true,
+    email_enabled: false,
+    mentions: true,
+    review_requests: true,
+    assignments: true,
+    approvals: true,
+    publishing_updates: true,
+    team_hub_updates: true
+  });
+
+  useEffect(() => {
+    const fetchPrefs = async () => {
+      if (!user) return;
+      try {
+        const p = await NotificationService.getPreferences(user.id);
+        setPrefs(p);
+      } catch (err) {
+        console.warn('Failed to load user preferences from database', err);
+      }
+    };
+    fetchPrefs();
+  }, [user?.id]);
+
+  const handlePrefToggle = async (key) => {
+    if (!user) return;
+    try {
+      const newValue = !prefs[key];
+      const updated = await NotificationService.updatePreferences(user.id, { [key]: newValue });
+      setPrefs(updated);
+    } catch (err) {
+      console.warn('Failed to save preference to database', err);
+    }
+  };
+
   // Preferences state - initialized from localStorage caching
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('mediaflow_theme') || 'system';
   });
 
-  const [notifications, setNotifications] = useState(() => {
-    try {
-      const saved = localStorage.getItem('mediaflow_notifications');
-      return saved ? JSON.parse(saved) : {
-        assigned: true,
-        review: true,
-        approved: false,
-        published: true,
-        comments: true
-      };
-    } catch {
-      return {
-        assigned: true,
-        review: true,
-        approved: false,
-        published: true,
-        comments: true
-      };
-    }
+  const [notifications, setNotifications] = useState({
+    assigned: true,
+    review: true,
+    approved: false,
+    published: true,
+    comments: true
   });
 
   const [workflow, setWorkflow] = useState(() => {
@@ -98,35 +122,56 @@ const Settings = () => {
               <p className={styles.sectionDesc}>Choose when you want to receive system and desktop alerts.</p>
               
               <div className={styles.togglesList}>
+                <h4 style={{ fontSize: '12px', color: '#8B5CF6', margin: '12px 0 8px 0', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: 'bold' }}>Delivery Channels</h4>
+                <SettingToggle
+                  label="Simulated Push Notifications"
+                  description="Receive instant popover alert banners on desktop and native pushes."
+                  checked={prefs.push_enabled}
+                  onChange={() => handlePrefToggle('push_enabled')}
+                />
+                <SettingToggle
+                  label="Email Digests"
+                  description="Receive updates and activity reviews directly to your email address."
+                  checked={prefs.email_enabled}
+                  onChange={() => handlePrefToggle('email_enabled')}
+                />
+
+                <h4 style={{ fontSize: '12px', color: '#8B5CF6', margin: '18px 0 8px 0', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: 'bold' }}>Notification Events</h4>
+                <SettingToggle
+                  label="Mentions (@username)"
+                  description="Receive alerts immediately when someone mentions you in discussion comments."
+                  checked={prefs.mentions}
+                  onChange={() => handlePrefToggle('mentions')}
+                />
                 <SettingToggle
                   label="Task Assigned"
-                  description="Receive an alert when a media workflow task is assigned to you."
-                  checked={notifications.assigned}
-                  onChange={() => handleNotificationToggle('assigned')}
+                  description="Receive alerts when a workflow task is assigned to you."
+                  checked={prefs.assignments}
+                  onChange={() => handlePrefToggle('assignments')}
                 />
                 <SettingToggle
                   label="Review Requested"
-                  description="Receive an alert when a creator submits a draft asset for review."
-                  checked={notifications.review}
-                  onChange={() => handleNotificationToggle('review')}
+                  description="Receive alerts when a task submission is ready for your review."
+                  checked={prefs.review_requests}
+                  onChange={() => handlePrefToggle('review_requests')}
                 />
                 <SettingToggle
                   label="Task Approved"
-                  description="Receive an alert when your submitted media asset is approved."
-                  checked={notifications.approved}
-                  onChange={() => handleNotificationToggle('approved')}
+                  description="Receive alerts when a reviewer approves your submitted deliverables."
+                  checked={prefs.approvals}
+                  onChange={() => handlePrefToggle('approvals')}
                 />
                 <SettingToggle
                   label="Task Published"
-                  description="Receive an alert when a reviewer marks an asset as published."
-                  checked={notifications.published}
-                  onChange={() => handleNotificationToggle('published')}
+                  description="Receive alerts when reviewed content goes live or is marked published."
+                  checked={prefs.publishing_updates}
+                  onChange={() => handlePrefToggle('publishing_updates')}
                 />
                 <SettingToggle
-                  label="New Comments"
-                  description="Receive an alert when a crew member writes a comment on your task thread."
-                  checked={notifications.comments}
-                  onChange={() => handleNotificationToggle('comments')}
+                  label="Team Hub Updates"
+                  description="Receive alerts when new ideas or plans are created (badges still show in hub)."
+                  checked={prefs.team_hub_updates}
+                  onChange={() => handlePrefToggle('team_hub_updates')}
                 />
               </div>
             </Card>

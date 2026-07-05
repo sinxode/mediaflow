@@ -1,0 +1,12 @@
+@import '../../styles/shared';
+
+.mention {
+  color: $color-primary;
+  background-color: rgba($color-primary, 0.08);
+  font-weight: $font-weight-semibold;
+  padding: 1px 6px;
+  border-radius: 4px;
+  display: inline-block;
+  font-size: 13px;
+  border: 1px solid rgba($color-primary, 0.15);
+}

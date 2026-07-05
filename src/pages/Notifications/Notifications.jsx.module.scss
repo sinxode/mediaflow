@@ -6,16 +6,71 @@
 }
 
 .workspace {
-  @include flex-col(flex-start, stretch, $spacing-sm);
+  @include flex-col(flex-start, stretch, $spacing-md);
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
 }
 
+.searchActionsRow {
+  @include flex-col(stretch, stretch, $spacing-sm);
+  width: 100%;
+  
+  @media (min-width: 576px) {
+    @include flex-row(space-between, center, $spacing-md);
+  }
+}
+
+.searchWrapper {
+  position: relative;
+  flex: 1;
+  max-width: 320px;
+  
+  input {
+    width: 100%;
+    padding: 10px 14px 10px 38px;
+    border-radius: 10px;
+    border: 1px solid $color-border;
+    background-color: $color-surface;
+    font-size: 13.5px;
+    color: $color-text;
+    outline: none;
+    transition: border-color $transition-fast;
+    
+    &:focus {
+      border-color: $color-primary;
+    }
+  }
+  
+  .searchIcon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $color-text-secondary;
+    pointer-events: none;
+  }
+}
+
+.bulkActions {
+  @include flex-row(flex-start, center, $spacing-xs);
+  flex-wrap: wrap;
+}
+
 .tabsRow {
-  @include flex-row(flex-start, center, $spacing-xxs);
+  display: flex;
+  gap: 8px;
   border-bottom: 1px solid $color-border;
   width: 100%;
+  padding-bottom: 1px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .tabBtn {
@@ -29,6 +84,8 @@
   padding: $spacing-sm $spacing-md;
   position: relative;
   transition: color $transition-fast;
+  white-space: nowrap;
+  @include flex-row(center, center, 6px);
   
   &:hover {
     color: $color-text;
@@ -50,14 +107,161 @@
   }
 }
 
+.badge {
+  font-size: 10.5px;
+  font-weight: $font-weight-bold;
+  background-color: $color-primary;
+  color: $color-surface;
+  padding: 1px 6px;
+  border-radius: 10px;
+  margin-left: 2px;
+}
+
 .feedCard {
-  background-color: $color-background;
+  background-color: $color-surface;
   border: 1px solid $color-border;
-  border-radius: $radius-card !important;
+  border-radius: 18px !important;
   overflow: hidden;
+  box-shadow: $shadow-sm;
 }
 
 .alertsList {
   @include flex-col(flex-start, stretch, 0);
   width: 100%;
+}
+
+.alertCard {
+  @include flex-row(flex-start, flex-start, $spacing-md);
+  padding: $spacing-md;
+  border-bottom: 1px solid $color-border;
+  transition: background-color $transition-fast;
+  cursor: pointer;
+  position: relative;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background-color: rgba($color-primary, 0.01);
+  }
+
+  &.unread {
+    background-color: rgba($color-primary, 0.03);
+    
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3.5px;
+      background-color: $color-primary;
+    }
+  }
+
+  // Treatment classes for categories
+  &.action_required {
+    .iconWrapper {
+      background-color: rgba($color-danger, 0.08);
+      color: $color-danger;
+    }
+  }
+
+  &.workflow_update {
+    .iconWrapper {
+      background-color: rgba($color-success, 0.08);
+      color: $color-success;
+    }
+  }
+
+  &.team_hub {
+    .iconWrapper {
+      background-color: rgba($color-warning, 0.08);
+      color: $color-warning;
+    }
+  }
+
+  &.mention {
+    .iconWrapper {
+      background-color: rgba($color-primary, 0.08);
+      color: $color-primary;
+    }
+  }
+
+  &.system {
+    .iconWrapper {
+      background-color: rgba($color-text-secondary, 0.08);
+      color: $color-text-secondary;
+    }
+  }
+}
+
+.iconWrapper {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  @include flex-row(center, center);
+  flex-shrink: 0;
+  color: $color-text-secondary;
+  background-color: $color-background;
+}
+
+.content {
+  flex: 1;
+  @include flex-col(stretch, stretch, 2px);
+}
+
+.title {
+  font-size: 13.5px;
+  font-weight: $font-weight-semibold;
+  color: $color-text;
+  margin: 0;
+}
+
+.message {
+  font-size: 12.5px;
+  color: $color-text-secondary;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.meta {
+  @include flex-row(space-between, center);
+  margin-top: 6px;
+  
+  .time {
+    font-size: 10.5px;
+    color: $color-text-secondary;
+  }
+}
+
+.actions {
+  @include flex-row(flex-end, center, 4px);
+  opacity: 0.8;
+  
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.actionBtn {
+  background: none;
+  border: none;
+  padding: 4px;
+  color: $color-text-secondary;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all $transition-fast;
+  
+  &:hover {
+    background-color: $color-border;
+    color: $color-text;
+  }
+
+  &.archive {
+    &:hover {
+      color: $color-warning;
+    }
+  }
 }

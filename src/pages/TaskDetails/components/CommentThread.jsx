@@ -8,6 +8,8 @@ import CommentItem from './CommentItem';
 import CommentComposer from './CommentComposer';
 import CommentEmptyState from './CommentEmptyState';
 import CommentSkeleton from './CommentSkeleton';
+import { ActivityService } from '../../../services/activity/activityService';
+import { parseAndTriggerMentions } from '../../../services/notifications/notificationService';
 import styles from './CommentThread.module.scss';
 
 const CommentThread = ({ taskId, onCountChange }) => {
@@ -121,6 +123,37 @@ const CommentThread = ({ taskId, onCountChange }) => {
         if (prev.some((c) => c.id === newComment.id)) return prev;
         return [newComment, ...prev];
       });
+
+      // Log the activity to trigger notifications!
+      try {
+        const { data: task } = await supabase
+          .from('tasks')
+          .select('title')
+          .eq('id', taskId)
+          .single();
+        
+        await ActivityService.logActivity(
+          'comment_added',
+          taskId,
+          user.id,
+          { 
+            taskTitle: task?.title || 'Task', 
+            commentSnippet: messageText.slice(0, 60) + (messageText.length > 60 ? '...' : '') 
+          }
+        );
+
+        // Also check if user typed mentions in the comment and dispatch mention alerts!
+        await parseAndTriggerMentions({
+          text: messageText,
+          senderId: user.id,
+          itemType: 'comment',
+          itemId: newComment.id,
+          taskTitle: task?.title || 'Task',
+          relatedTaskId: taskId
+        });
+      } catch (activityErr) {
+        console.warn('Failed to log comment activity or parse mentions', activityErr);
+      }
     } catch (err) {
       console.error('Failed to post comment', err);
       setError('Could not post comment. Try again.');

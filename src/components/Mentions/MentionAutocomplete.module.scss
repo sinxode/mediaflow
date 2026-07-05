@@ -1,0 +1,54 @@
+@import '../../styles/shared';
+
+.mentionList {
+  position: absolute;
+  background-color: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: 12px;
+  box-shadow: $shadow-lg;
+  width: 220px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  padding: 6px;
+  @include flex-col(flex-start, stretch, 2px);
+  @include custom-scrollbar;
+}
+
+.mentionItem {
+  @include flex-row(flex-start, center, 8px);
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color $transition-fast;
+
+  &:hover, &.active {
+    background-color: rgba($color-primary, 0.08);
+    
+    .name {
+      color: $color-primary;
+    }
+  }
+
+  .meta {
+    @include flex-col(center, flex-start, 0);
+    overflow: hidden;
+  }
+
+  .name {
+    font-size: 12.5px;
+    font-weight: $font-weight-medium;
+    color: $color-text;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .role {
+    font-size: 10.5px;
+    color: $color-text-secondary;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+}
