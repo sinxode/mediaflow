@@ -36,6 +36,16 @@
   }
 }
 
+.brandWrapper {
+  @include flex-row(flex-start, center, 8px);
+}
+
+.logoImg {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
 .logo {
   font-family: $font-family;
   font-size: 20px;

@@ -38,16 +38,26 @@
   }
 }
 
+.brandWrapper {
+  @include flex-row(center, center, 6px);
+  
+  @include tablet-and-up {
+    display: none;
+  }
+}
+
+.logoImg {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
 .brandTitle {
   font-family: $font-family;
   font-size: 18px;
   font-weight: $font-weight-bold;
   color: $color-text;
   letter-spacing: -0.02em;
-  
-  @include tablet-and-up {
-    display: none; // Sidebar brand is shown on desktop
-  }
 }
 
 .searchContainer {

@@ -35,7 +35,10 @@ const Sidebar = ({ isOpen, onClose, onLogoutClick }) => {
     <aside className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}>
       {/* Sidebar Header */}
       <div className={styles.header}>
-        <span className={styles.logo}>MediaFlow</span>
+        <div className={styles.brandWrapper}>
+          <img src="/logo.png" alt="MediaFlow Logo" className={styles.logoImg} />
+          <span className={styles.logo}>MediaFlow</span>
+        </div>
         <Button
           variant="ghost"
           size="sm"

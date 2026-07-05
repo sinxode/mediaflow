@@ -27,7 +27,10 @@ const Header = ({ onMenuClick }) => {
       </Button>
 
       {/* Brand title on Mobile */}
-      <span className={styles.brandTitle}>MediaFlow</span>
+      <div className={styles.brandWrapper}>
+        <img src="/logo.png" alt="MediaFlow Logo" className={styles.logoImg} />
+        <span className={styles.brandTitle}>MediaFlow</span>
+      </div>
 
       {/* Search Input Container */}
       <div className={styles.searchContainer}>
