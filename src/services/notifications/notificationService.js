@@ -2,6 +2,7 @@
 // Manages alert listings, read/archived states, user preferences, and automatic notifications generation.
 
 import { supabase } from '../../lib/supabaseClient';
+import { PushNotificationManager } from './PushNotificationManager';
 
 const STORAGE_KEYS = {
   NOTIFICATIONS: 'mediaflow_notifications',
@@ -134,9 +135,7 @@ export const createCustomNotification = async ({
       if (error) throw error;
       
       if (prefs.push_enabled && (category === 'mention' || category === 'action_required')) {
-        import('./PushNotificationManager').then(({ PushNotificationManager }) => {
-          PushNotificationManager.showSimulatedBanner(data);
-        });
+        PushNotificationManager.showSimulatedBanner(data);
       }
       
       window.dispatchEvent(new Event('notifications_updated'));
@@ -150,9 +149,7 @@ export const createCustomNotification = async ({
       NotificationService.setLocal(STORAGE_KEYS.NOTIFICATIONS, list);
       
       if (prefs.push_enabled && (category === 'mention' || category === 'action_required')) {
-        import('./PushNotificationManager').then(({ PushNotificationManager }) => {
-          PushNotificationManager.showSimulatedBanner(saved);
-        });
+        PushNotificationManager.showSimulatedBanner(saved);
       }
 
       window.dispatchEvent(new Event('notifications_updated'));
