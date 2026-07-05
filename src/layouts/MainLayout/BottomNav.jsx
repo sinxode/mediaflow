@@ -6,7 +6,8 @@ import {
   CheckSquare,
   PlusSquare,
   Eye,
-  Settings
+  Settings,
+  MessageSquare
 } from 'lucide-react';
 import { usePermissions } from '../../auth/hooks/usePermissions';
 import styles from './BottomNav.module.scss';
@@ -18,7 +19,7 @@ const BottomNav = () => {
   const navItems = [
     { label: 'Dashboard', path: '/dashboard', icon: <LayoutDashboard /> },
     { label: 'Tasks', path: '/tasks', icon: <CheckSquare /> },
-    permissions.canCreateTask && { label: 'Create', path: '/tasks/create', icon: <PlusSquare /> },
+    { label: 'Hub', path: '/team-hub', icon: <MessageSquare /> },
     permissions.canReviewTask && { label: 'Review', path: '/review', icon: <Eye /> },
     { label: 'Settings', path: '/settings', icon: <Settings /> },
   ].filter(Boolean);

@@ -10,7 +10,9 @@ import {
   Settings,
   BarChart3,
   LogOut,
-  X
+  X,
+  MessageSquare,
+  Bell
 } from 'lucide-react';
 import Button from '../../components/Button/Button';
 import ConnectionStatus from '../../components/ConnectionStatus/ConnectionStatus';
@@ -25,9 +27,12 @@ const Sidebar = ({ isOpen, onClose, onLogoutClick }) => {
     { label: 'Tasks', path: '/tasks', icon: <CheckSquare /> },
     permissions.canCreateTask && { label: 'Create Task', path: '/tasks/create', icon: <PlusSquare /> },
     permissions.canReviewTask && { label: 'Review Queue', path: '/review', icon: <Eye /> },
-    { label: 'Published', path: '/published', icon: <CheckCircle2 /> },
+    { label: 'Archive', path: '/published', icon: <CheckCircle2 /> },
+    { type: 'separator' },
+    { label: 'Team Hub', path: '/team-hub', icon: <MessageSquare /> },
+    { type: 'separator' },
+    { label: 'Notifications', path: '/notifications', icon: <Bell /> },
     { label: 'Analytics', path: '/analytics', icon: <BarChart3 /> },
-    { label: 'Profile', path: '/profile', icon: <User /> },
     { label: 'Settings', path: '/settings', icon: <Settings /> },
   ].filter(Boolean);
 
@@ -53,19 +58,24 @@ const Sidebar = ({ isOpen, onClose, onLogoutClick }) => {
       {/* Nav Menu */}
       <nav className={styles.nav}>
         <div className={styles.linksGroup}>
-          {menuItems.map((item) => (
-            <NavLink
-              key={item.label}
-              to={item.path}
-              onClick={onClose}
-              className={({ isActive }) =>
-                `${styles.navLink} ${isActive ? styles.active : ''}`
-              }
-            >
-              <span className={styles.icon}>{item.icon}</span>
-              <span className={styles.label}>{item.label}</span>
-            </NavLink>
-          ))}
+          {menuItems.map((item, index) => {
+            if (item.type === 'separator') {
+              return <div key={`sep-${index}`} className={styles.separator} />;
+            }
+            return (
+              <NavLink
+                key={item.label}
+                to={item.path}
+                onClick={onClose}
+                className={({ isActive }) =>
+                  `${styles.navLink} ${isActive ? styles.active : ''}`
+                }
+              >
+                <span className={styles.icon}>{item.icon}</span>
+                <span className={styles.label}>{item.label}</span>
+              </NavLink>
+            );
+          })}
         </div>
 
         {/* Footer Actions */}

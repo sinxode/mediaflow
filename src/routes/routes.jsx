@@ -16,6 +16,7 @@ const Profile = lazy(() => import('../pages/Profile/Profile'));
 const Settings = lazy(() => import('../pages/Settings/Settings'));
 const Notifications = lazy(() => import('../pages/Notifications/Notifications'));
 const Analytics = lazy(() => import('../pages/Analytics/Analytics'));
+const TeamHub = lazy(() => import('../pages/TeamHub/TeamHub'));
 
 const SuspenseWrapper = ({ children }) => (
   <Suspense fallback={
@@ -117,6 +118,14 @@ export const router = createBrowserRouter([
         element: (
           <SuspenseWrapper>
             <Analytics />
+          </SuspenseWrapper>
+        )
+      },
+      {
+        path: 'team-hub',
+        element: (
+          <SuspenseWrapper>
+            <TeamHub />
           </SuspenseWrapper>
         )
       },
