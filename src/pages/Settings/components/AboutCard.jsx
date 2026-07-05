@@ -9,7 +9,9 @@ const AboutCard = () => {
       <h3 className={styles.sectionTitle}>About Application</h3>
       
       <div className={styles.heroRow}>
-        <div className={styles.logoBox}>MF</div>
+        <div className={styles.logoBox}>
+          <img src="/logo.png" alt="MediaFlow Logo" className={styles.logoImg} />
+        </div>
         <div className={styles.heroText}>
           <span className={styles.appName}>MediaFlow Platform</span>
           <span className={styles.subtitle}>Phase 1 Content Release Candidate</span>

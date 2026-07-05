@@ -59,7 +59,9 @@ const Login = () => {
         <Card padding={true} className={styles.loginCard}>
           {/* Logo Section */}
           <div className={styles.logoHeader}>
-            <div className={styles.logoBadge}>MF</div>
+            <div className={styles.logoBadge}>
+              <img src="/logo.png" alt="MediaFlow Logo" className={styles.logoImg} />
+            </div>
             <h1 className={styles.title}>Welcome to MediaFlow</h1>
             <p className={styles.subtitle}>Enter credentials to access your workspace.</p>
           </div>

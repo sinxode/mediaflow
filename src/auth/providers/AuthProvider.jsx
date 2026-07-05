@@ -8,7 +8,9 @@ export const AuthContext = createContext(null);
 const AuthLoadingScreen = () => (
   <div className={styles.loadingScreen}>
     <div className={styles.loaderContainer}>
-      <div className={styles.logoBadge}>MF</div>
+      <div className={styles.logoBadge}>
+        <img src="/logo.png" alt="MediaFlow Logo" className={styles.logoImg} />
+      </div>
       <div className={styles.spinner} />
       <span className={styles.loadingText}>Initializing MediaFlow Workspace...</span>
     </div>

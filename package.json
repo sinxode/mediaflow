@@ -14,6 +14,7 @@
   "dependencies": {
     "@capacitor/android": "^6.0.0",
     "@capacitor/core": "^6.0.0",
+    "@capacitor/ios": "^6.2.1",
     "@supabase/supabase-js": "^2.110.0",
     "framer-motion": "^12.42.2",
     "lucide-react": "^1.23.0",
@@ -32,6 +33,7 @@
     "eslint-plugin-react-refresh": "^0.5.3",
     "globals": "^17.7.0",
     "sass": "^1.101.0",
+    "typescript": "^6.0.3",
     "vite": "^8.1.1"
   }
 }
