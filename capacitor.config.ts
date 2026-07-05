@@ -5,8 +5,8 @@ const config: CapacitorConfig = {
   appName: 'MediaFlow',
   webDir: 'dist',
   server: {
-    url: 'https://workflow.zainussunnaacademy.com',
-    cleartext: true
+    url: 'https://mediaflow.zainussunnaacademy.com',
+    cleartext: false
   }
 };
 
