@@ -34,6 +34,7 @@ const TeamHub = () => {
   const { user } = useAuth();
   const fileInputRef = useRef(null);
   const messageEndRef = useRef(null);
+  const initialLoadRef = useRef(true);
 
   // Active Tab: 'discussion' | 'ideas' | 'plans'
   const [activeTab, setActiveTab] = useState('discussion');
@@ -103,7 +104,11 @@ const TeamHub = () => {
 
   // Scroll to bottom on new messages
   useEffect(() => {
-    if (activeTab === 'discussion') {
+    if (activeTab === 'discussion' && messages.length > 0) {
+      if (initialLoadRef.current) {
+        initialLoadRef.current = false;
+        return;
+      }
       messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages, activeTab]);
@@ -616,23 +621,12 @@ const TeamHub = () => {
               {activeTab === 'ideas' && (
                 <div className={styles.ideasContainer}>
                   {/* Status Filter */}
-                  <div className="filter-bar" style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+                  <div className={styles.filterBar}>
                     {['all', 'open', 'under_discussion', 'approved', 'archived'].map((status) => (
                       <button
                         key={status}
                         onClick={() => setIdeaStatusFilter(status)}
-                        className={`filter-chip ${ideaStatusFilter === status ? 'active' : ''}`}
-                        style={{
-                          padding: '6px 12px',
-                          borderRadius: '20px',
-                          border: '1px solid #E2E8F0',
-                          backgroundColor: ideaStatusFilter === status ? '#8B5CF6' : '#FFFFFF',
-                          color: ideaStatusFilter === status ? '#FFFFFF' : '#64748B',
-                          fontSize: '12px',
-                          fontWeight: 500,
-                          cursor: 'pointer',
-                          textTransform: 'capitalize'
-                        }}
+                        className={`${styles.filterChip} ${ideaStatusFilter === status ? styles.active : ''}`}
                       >
                         {status.replace('_', ' ')}
                       </button>
@@ -708,53 +702,17 @@ const TeamHub = () => {
               {/* TAB 3: PLANS (Apple Reminders Design) */}
               {activeTab === 'plans' && (
                 <div className={styles.plansContainer}>
-                  {/* Status & Priority Filters */}
-                  <div className="filter-bar" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '16px' }}>
-                    <div style={{ display: 'flex', gap: '4px', borderRight: '1px solid #E2E8F0', paddingRight: '8px' }}>
-                      {['all', 'not_started', 'in_progress', 'completed'].map((status) => (
-                        <button
-                          key={status}
-                          onClick={() => setPlanStatusFilter(status)}
-                          className={`filter-chip ${planStatusFilter === status ? 'active' : ''}`}
-                          style={{
-                            padding: '4px 10px',
-                            borderRadius: '20px',
-                            border: '1px solid #E2E8F0',
-                            backgroundColor: planStatusFilter === status ? '#8B5CF6' : '#FFFFFF',
-                            color: planStatusFilter === status ? '#FFFFFF' : '#64748B',
-                            fontSize: '11px',
-                            fontWeight: 500,
-                            cursor: 'pointer',
-                            textTransform: 'capitalize'
-                          }}
-                        >
-                          {status.replace('_', ' ')}
-                        </button>
-                      ))}
-                    </div>
-
-                    <div style={{ display: 'flex', gap: '4px' }}>
-                      {['all', 'high', 'medium', 'low'].map((prio) => (
-                        <button
-                          key={prio}
-                          onClick={() => setPlanPriorityFilter(prio)}
-                          className={`filter-chip ${planPriorityFilter === prio ? 'active' : ''}`}
-                          style={{
-                            padding: '4px 10px',
-                            borderRadius: '20px',
-                            border: '1px solid #E2E8F0',
-                            backgroundColor: planPriorityFilter === prio ? '#1E1B4B' : '#FFFFFF',
-                            color: planPriorityFilter === prio ? '#FFFFFF' : '#64748B',
-                            fontSize: '11px',
-                            fontWeight: 500,
-                            cursor: 'pointer',
-                            textTransform: 'capitalize'
-                          }}
-                        >
-                          {prio} Priority
-                        </button>
-                      ))}
-                    </div>
+                  {/* Status Filter */}
+                  <div className={styles.filterBar}>
+                    {['all', 'not_started', 'in_progress', 'completed'].map((status) => (
+                      <button
+                        key={status}
+                        onClick={() => setPlanStatusFilter(status)}
+                        className={`${styles.filterChip} ${planStatusFilter === status ? styles.active : ''}`}
+                      >
+                        {status.replace('_', ' ')}
+                      </button>
+                    ))}
                   </div>
 
                   {filteredPlans.length === 0 ? (

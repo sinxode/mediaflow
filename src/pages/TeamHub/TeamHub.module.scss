@@ -892,3 +892,49 @@
     max-width: 280px;
   }
 }
+
+.filterBar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  width: 100%;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.filterChip {
+  flex-shrink: 0;
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid $color-border;
+  background-color: $color-surface;
+  color: $color-text-secondary;
+  font-size: 12px;
+  font-weight: $font-weight-medium;
+  cursor: pointer;
+  transition: all $transition-fast;
+  text-transform: capitalize;
+  
+  &.active {
+    background-color: $color-primary;
+    color: $color-surface;
+    border-color: $color-primary;
+  }
+  
+  &:hover {
+    border-color: $color-primary;
+    color: $color-primary;
+    
+    &.active {
+      color: $color-surface;
+    }
+  }
+}
