@@ -9,7 +9,13 @@ const STORAGE_KEYS = {
   PREFS: 'mediaflow_notification_preferences'
 };
 
-let useFallback = false;
+// Persist the fallback flag across page reloads within the same session.
+// Once Supabase returns a 400 (table missing / RLS blocked), we stop
+// hammering it with failing requests until the user starts a fresh session.
+const FALLBACK_SESSION_KEY = 'mf_notify_use_fallback';
+const getFallback = () => sessionStorage.getItem(FALLBACK_SESSION_KEY) === '1';
+const setFallback = () => sessionStorage.setItem(FALLBACK_SESSION_KEY, '1');
+let useFallback = getFallback();
 
 // Mock Seed Data for Notifications
 const SEED_NOTIFICATIONS = [
@@ -142,7 +148,7 @@ export const createCustomNotification = async ({
       return data;
     } catch (err) {
       console.warn('Supabase notification insert failed, falling back to LocalStorage', err);
-      useFallback = true;
+      useFallback = true; setFallback();
       const list = NotificationService.getLocal(STORAGE_KEYS.NOTIFICATIONS);
       const saved = { ...newNotification, id: `notify-${Date.now()}` };
       list.unshift(saved);
@@ -463,7 +469,7 @@ export const NotificationService = {
       return data;
     } catch (err) {
       console.warn('Supabase query failed, falling back to LocalStorage', err);
-      useFallback = true;
+      useFallback = true; setFallback();
       return NotificationService.getNotifications(userId, filters);
     }
   },
@@ -494,7 +500,7 @@ export const NotificationService = {
       return data;
     } catch (err) {
       console.warn('Supabase mark read failed, falling back to LocalStorage', err);
-      useFallback = true;
+      useFallback = true; setFallback();
       return NotificationService.markAsRead(id);
     }
   },
@@ -525,7 +531,7 @@ export const NotificationService = {
       return data;
     } catch (err) {
       console.warn('Supabase archive failed, falling back to LocalStorage', err);
-      useFallback = true;
+      useFallback = true; setFallback();
       return NotificationService.archiveNotification(id);
     }
   },
@@ -555,7 +561,7 @@ export const NotificationService = {
       return true;
     } catch (err) {
       console.warn('Supabase mark all read failed, falling back to LocalStorage', err);
-      useFallback = true;
+      useFallback = true; setFallback();
       return NotificationService.markAllAsRead(userId);
     }
   },
@@ -586,7 +592,7 @@ export const NotificationService = {
       return true;
     } catch (err) {
       console.warn('Supabase archive all read failed, falling back to LocalStorage', err);
-      useFallback = true;
+      useFallback = true; setFallback();
       return NotificationService.archiveAllRead(userId);
     }
   },
@@ -614,7 +620,7 @@ export const NotificationService = {
       return count || 0;
     } catch (err) {
       console.warn('Supabase unread count failed, falling back to LocalStorage', err);
-      useFallback = true;
+      useFallback = true; setFallback();
       return getLocalCount();
     }
   },
@@ -656,7 +662,7 @@ export const NotificationService = {
       return counts;
     } catch (err) {
       console.warn('Supabase category count failed, falling back to LocalStorage', err);
-      useFallback = true;
+      useFallback = true; setFallback();
       return getLocalCounts();
     }
   },
@@ -690,7 +696,7 @@ export const NotificationService = {
       return data;
     } catch (err) {
       console.warn('Supabase preferences query failed, falling back to LocalStorage', err);
-      useFallback = true;
+      useFallback = true; setFallback();
       return NotificationService.getPreferences(userId);
     }
   },
@@ -713,7 +719,7 @@ export const NotificationService = {
       return data;
     } catch (err) {
       console.warn('Supabase preferences update failed, falling back to LocalStorage', err);
-      useFallback = true;
+      useFallback = true; setFallback();
       return NotificationService.updatePreferences(userId, profileData);
     }
   }
