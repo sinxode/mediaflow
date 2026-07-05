@@ -58,14 +58,6 @@ const Settings = () => {
     return localStorage.getItem('mediaflow_theme') || 'system';
   });
 
-  const [notifications, setNotifications] = useState({
-    assigned: true,
-    review: true,
-    approved: false,
-    published: true,
-    comments: true
-  });
-
   const [workflow, setWorkflow] = useState(() => {
     try {
       const saved = localStorage.getItem('mediaflow_workflow');
@@ -89,16 +81,8 @@ const Settings = () => {
   }, [theme]);
 
   useEffect(() => {
-    localStorage.setItem('mediaflow_notifications', JSON.stringify(notifications));
-  }, [notifications]);
-
-  useEffect(() => {
     localStorage.setItem('mediaflow_workflow', JSON.stringify(workflow));
   }, [workflow]);
-
-  const handleNotificationToggle = (key) => {
-    setNotifications((prev) => ({ ...prev, [key]: !prev[key] }));
-  };
 
   const handleWorkflowChange = (key, val) => {
     setWorkflow((prev) => ({ ...prev, [key]: val }));

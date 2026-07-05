@@ -376,7 +376,13 @@ export const NotificationService = {
         }
         return [];
       }
-      return JSON.parse(v);
+      const parsed = JSON.parse(v);
+      if (key === STORAGE_KEYS.NOTIFICATIONS && !Array.isArray(parsed)) {
+        console.warn('LocalStorage key conflict detected on mediaflow_notifications, resetting to SEED_NOTIFICATIONS');
+        localStorage.setItem(key, JSON.stringify(SEED_NOTIFICATIONS));
+        return SEED_NOTIFICATIONS;
+      }
+      return parsed;
     } catch {
       return [];
     }
