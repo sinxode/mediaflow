@@ -51,75 +51,6 @@
   }
 }
 
-.tabNav {
-  @include flex-row(flex-start, center, 4px);
-  background-color: darken($color-surface, 2%);
-  padding: 4px;
-  border-radius: 12px;
-  align-self: flex-start;
-  margin-bottom: $spacing-xs;
-  border: 1px solid $color-border;
-}
-
-.tabButton {
-  position: relative;
-  padding: 8px 16px;
-  border-radius: 9px;
-  font-size: 13.5px;
-  font-weight: $font-weight-medium;
-  color: $color-text-secondary;
-  border: none;
-  background: none;
-  cursor: pointer;
-  transition: color $transition-fast;
-  
-  &.active {
-    color: $color-primary;
-  }
-  
-  .activeIndicator {
-    position: absolute;
-    inset: 0;
-    background-color: $color-surface;
-    border-radius: 9px;
-    z-index: 0;
-    box-shadow: $shadow-sm;
-  }
-
-  span {
-    position: relative;
-    z-index: 1;
-  }
-}
-
-.workspaceGrid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: $spacing-md;
-  align-items: start;
-
-  @include desktop-and-up {
-    grid-template-columns: 1fr 320px;
-  }
-}
-
-.mainPanel {
-  background-color: $color-surface;
-  border-radius: 18px;
-  border: 1px solid $color-border;
-  overflow: hidden;
-  box-shadow: $shadow-sm;
-  min-height: 580px;
-  @include flex-col(stretch, stretch, 0);
-}
-
-// ----------------------------------------------------
-// TAB 1: DISCUSSION DESIGN
-// ----------------------------------------------------
-.discussionContainer {
-  @include flex-col(stretch, stretch, 0);
-  height: 580px;
-}
 
 .messageArea {
   flex: 1;
@@ -302,12 +233,13 @@
 }
 
 .composerForm {
-  @include flex-row(stretch, center, 8px);
+  @include flex-row(stretch, flex-end, 8px);
 }
 
 .composerInputWrapper {
   flex: 1;
   position: relative;
+  display: flex;
   
   textarea {
     width: 100%;
@@ -323,6 +255,7 @@
     line-height: 1.4;
     outline: none;
     transition: border-color $transition-fast;
+    display: block;
     
     &:focus {
       border-color: $color-primary;
@@ -333,8 +266,7 @@
 .attachBtn {
   position: absolute;
   right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
+  bottom: 8px;
   color: $color-text-secondary;
   border: none;
   background: none;
@@ -361,7 +293,7 @@
   @include flex-row(center, center);
   cursor: pointer;
   transition: opacity $transition-fast;
-  align-self: flex-end;
+  flex-shrink: 0;
   
   &:hover {
     opacity: 0.9;
@@ -497,14 +429,107 @@
 .plansList {
   @include flex-col(flex-start, stretch, 10px);
 }
+.tabNav {
+  @include flex-row(stretch, center, 4px);
+  background-color: darken($color-surface, 2%);
+  padding: 4px;
+  border-radius: 12px;
+  align-self: stretch;
+  margin-bottom: $spacing-xs;
+  border: 1px solid $color-border;
+  display: flex;
+  
+  @include tablet-and-up {
+    align-self: flex-start;
+  }
+}
+
+.tabButton {
+  position: relative;
+  padding: 8px 16px;
+  border-radius: 9px;
+  font-size: 13.5px;
+  font-weight: $font-weight-medium;
+  color: $color-text-secondary;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: color $transition-fast;
+  flex: 1;
+  text-align: center;
+  
+  @include tablet-and-up {
+    flex: none;
+  }
+  
+  &.active {
+    color: $color-primary;
+  }
+  
+  .activeIndicator {
+    position: absolute;
+    inset: 0;
+    background-color: $color-surface;
+    border-radius: 9px;
+    z-index: 0;
+    box-shadow: $shadow-sm;
+  }
+
+  span {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.workspaceGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-md;
+  align-items: start;
+
+  @include desktop-and-up {
+    grid-template-columns: 1fr 320px;
+  }
+}
+
+.mainPanel {
+  background-color: $color-surface;
+  border-radius: 18px;
+  border: 1px solid $color-border;
+  overflow: hidden;
+  box-shadow: $shadow-sm;
+  min-height: 580px;
+  @include flex-col(stretch, stretch, 0);
+}
+
+// ----------------------------------------------------
+// TAB 1: DISCUSSION DESIGN
+// ----------------------------------------------------
+.discussionContainer {
+  @include flex-col(stretch, stretch, 0);
+  height: 500px;
+  
+  @include tablet-and-up {
+    height: 580px;
+  }
+}
 
 .planCard {
   border: 1px solid $color-border;
   background-color: $color-surface;
   border-radius: 12px;
   padding: 12px $spacing-md;
-  @include flex-row(flex-start, center, $spacing-md);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: $spacing-sm $spacing-md;
   transition: border-color $transition-fast, box-shadow $transition-fast;
+  
+  @include tablet-and-up {
+    flex-wrap: nowrap;
+    align-items: center;
+  }
   
   &:hover {
     border-color: rgba($color-primary, 0.4);
@@ -551,6 +576,7 @@
 
 .planContent {
   flex: 1;
+  min-width: 200px;
   @include flex-col(stretch, stretch, 2px);
 }
 
@@ -597,6 +623,16 @@
 
 .planActions {
   @include flex-row(flex-end, center, 6px);
+  width: 100%;
+  border-top: 1px solid rgba($color-border, 0.4);
+  padding-top: $spacing-xs;
+  
+  @include tablet-and-up {
+    width: auto;
+    border-top: none;
+    padding-top: 0;
+    margin-left: auto;
+  }
   
   .planActionBtn {
     padding: 6px 12px;
