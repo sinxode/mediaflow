@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from 'react';
-import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { createHashRouter, Navigate } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout/MainLayout';
 import Login from '../pages/Login/Login';
 import ProtectedRoute from '../auth/guards/ProtectedRoute';
@@ -28,7 +28,7 @@ const SuspenseWrapper = ({ children }) => (
   </Suspense>
 );
 
-export const router = createBrowserRouter([
+export const router = createHashRouter([
   {
     path: '/login',
     element: <Login />

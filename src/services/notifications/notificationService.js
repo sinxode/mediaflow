@@ -365,25 +365,34 @@ export const NotificationService = {
   getLocal: (key) => {
     try {
       const v = localStorage.getItem(key);
-      if (!v) {
+      if (!v || v === 'undefined' || v === 'null') {
         if (key === STORAGE_KEYS.NOTIFICATIONS) {
           localStorage.setItem(key, JSON.stringify(SEED_NOTIFICATIONS));
-          return SEED_NOTIFICATIONS;
+          return [...SEED_NOTIFICATIONS];
         }
         if (key === STORAGE_KEYS.PREFS) {
           localStorage.setItem(key, JSON.stringify(DEFAULT_PREFS));
-          return DEFAULT_PREFS;
+          return { ...DEFAULT_PREFS };
         }
         return [];
       }
       const parsed = JSON.parse(v);
-      if (key === STORAGE_KEYS.NOTIFICATIONS && !Array.isArray(parsed)) {
-        console.warn('LocalStorage key conflict detected on mediaflow_notifications, resetting to SEED_NOTIFICATIONS');
-        localStorage.setItem(key, JSON.stringify(SEED_NOTIFICATIONS));
-        return SEED_NOTIFICATIONS;
+      // Ensure NOTIFICATIONS always returns an array
+      if (key === STORAGE_KEYS.NOTIFICATIONS) {
+        if (!Array.isArray(parsed)) {
+          console.warn('LocalStorage key conflict detected on mediaflow_notifications, resetting to SEED_NOTIFICATIONS');
+          localStorage.setItem(key, JSON.stringify(SEED_NOTIFICATIONS));
+          return [...SEED_NOTIFICATIONS];
+        }
+        return parsed;
       }
-      return parsed;
+      return parsed ?? [];
     } catch {
+      // On any parse error, reset corrupted data and return safe fallback
+      if (key === STORAGE_KEYS.NOTIFICATIONS) {
+        localStorage.setItem(key, JSON.stringify(SEED_NOTIFICATIONS));
+        return [...SEED_NOTIFICATIONS];
+      }
       return [];
     }
   },
@@ -583,10 +592,15 @@ export const NotificationService = {
   },
 
   getUnreadCount: async (userId) => {
-    if (useFallback) {
+    // Inline fallback — no recursion
+    const getLocalCount = () => {
       const list = NotificationService.getLocal(STORAGE_KEYS.NOTIFICATIONS);
-      return list.filter(n => n.user_id === userId && !n.is_read && !n.is_archived).length;
-    }
+      return Array.isArray(list)
+        ? list.filter(n => n.user_id === userId && !n.is_read && !n.is_archived).length
+        : 0;
+    };
+
+    if (useFallback) return getLocalCount();
 
     try {
       const { count, error } = await supabase
@@ -601,20 +615,26 @@ export const NotificationService = {
     } catch (err) {
       console.warn('Supabase unread count failed, falling back to LocalStorage', err);
       useFallback = true;
-      return NotificationService.getUnreadCount(userId);
+      return getLocalCount();
     }
   },
 
   getUnreadCountByCategory: async (userId) => {
-    if (useFallback) {
+    const EMPTY = { action_required: 0, workflow_update: 0, team_hub: 0 };
+
+    // Inline fallback — no recursion
+    const getLocalCounts = () => {
       const list = NotificationService.getLocal(STORAGE_KEYS.NOTIFICATIONS);
+      if (!Array.isArray(list)) return { ...EMPTY };
       const unread = list.filter(n => n.user_id === userId && !n.is_read && !n.is_archived);
       return {
         action_required: unread.filter(n => n.category === 'action_required' || n.category === 'mention').length,
         workflow_update: unread.filter(n => n.category === 'workflow_update').length,
         team_hub: unread.filter(n => n.category === 'team_hub').length
       };
-    }
+    };
+
+    if (useFallback) return getLocalCounts();
 
     try {
       const { data, error } = await supabase
@@ -626,7 +646,7 @@ export const NotificationService = {
 
       if (error) throw error;
 
-      const counts = { action_required: 0, workflow_update: 0, team_hub: 0 };
+      const counts = { ...EMPTY };
       data.forEach(n => {
         const cat = n.category === 'mention' ? 'action_required' : n.category;
         if (counts[cat] !== undefined) {
@@ -637,7 +657,7 @@ export const NotificationService = {
     } catch (err) {
       console.warn('Supabase category count failed, falling back to LocalStorage', err);
       useFallback = true;
-      return NotificationService.getUnreadCountByCategory(userId);
+      return getLocalCounts();
     }
   },
 
