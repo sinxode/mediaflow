@@ -697,7 +697,8 @@ export const NotificationService = {
     } catch (err) {
       console.warn('Supabase preferences query failed, falling back to LocalStorage', err);
       useFallback = true; setFallback();
-      return NotificationService.getPreferences(userId);
+      const prefs = localStorage.getItem(STORAGE_KEYS.PREFS);
+      return prefs ? JSON.parse(prefs) : { ...DEFAULT_PREFS };
     }
   },
 
