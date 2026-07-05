@@ -327,7 +327,11 @@ const CreateTask = () => {
         isOpen={isSuccessOpen}
         onClose={() => {
           setIsSuccessOpen(false);
-          navigate('/tasks');
+          if (location.state?.linkedPlanId) {
+            navigate('/team-hub');
+          } else {
+            navigate('/tasks');
+          }
         }}
         title={mode === 'create' ? 'Task Created' : 'Task Settings Saved'}
         size="sm"
@@ -337,7 +341,11 @@ const CreateTask = () => {
             size="sm"
             onClick={() => {
               setIsSuccessOpen(false);
-              navigate('/tasks');
+              if (location.state?.linkedPlanId) {
+                navigate('/team-hub');
+              } else {
+                navigate('/tasks');
+              }
             }}
           >
             Close

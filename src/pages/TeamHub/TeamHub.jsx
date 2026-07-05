@@ -789,8 +789,8 @@ const TeamHub = () => {
                                 Created by {plan.creator?.name || 'Muhammad Sinan'}
                               </span>
                               {plan.converted_task_id && (
-                                <span className={styles.planLinkText}>
-                                  ✓ Converted to Task
+                                <span className={styles.planLinkText} style={{ color: '#10B981', fontWeight: 600 }}>
+                                  Created Task: {plan.title}
                                 </span>
                               )}
                             </div>
@@ -813,11 +813,11 @@ const TeamHub = () => {
                               </button>
                             ) : (
                               <button
-                                className={styles.planActionBtn}
-                                style={{ color: '#10B981', borderColor: '#10B981' }}
-                                onClick={() => navigate('/tasks')}
+                                className={`${styles.planActionBtn} ${styles.primary}`}
+                                style={{ backgroundColor: '#10B981', borderColor: '#10B981', color: '#FFFFFF' }}
+                                onClick={() => navigate(`/tasks?id=${plan.converted_task_id}`)}
                               >
-                                View Task
+                                Open Task <ArrowRight size={13} />
                               </button>
                             )}
                           </div>
