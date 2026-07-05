@@ -182,11 +182,9 @@ export const TeamHubService = {
       if (error) throw error;
       return data;
     } catch (err) {
-      if (err.code === '42P01') {
-        useFallback = true;
-        return TeamHubService.getLocal(STORAGE_KEYS.MESSAGES);
-      }
-      throw err;
+      console.warn('Supabase query failed, falling back to LocalStorage', err);
+      useFallback = true;
+      return TeamHubService.getLocal(STORAGE_KEYS.MESSAGES);
     }
   },
 
@@ -231,11 +229,9 @@ export const TeamHubService = {
       await TeamHubService.logActivity('message_sent', `Discussion message posted by ${author.name}`);
       return data;
     } catch (err) {
-      if (err.code === '42P01') {
-        useFallback = true;
-        return TeamHubService.sendMessage(content, attachments, parentId);
-      }
-      throw err;
+      console.warn('Supabase query failed, falling back to LocalStorage', err);
+      useFallback = true;
+      return TeamHubService.sendMessage(content, attachments, parentId);
     }
   },
 
@@ -250,11 +246,9 @@ export const TeamHubService = {
       if (error) throw error;
       return data;
     } catch (err) {
-      if (err.code === '42P01') {
-        useFallback = true;
-        return TeamHubService.getLocal(STORAGE_KEYS.IDEAS);
-      }
-      throw err;
+      console.warn('Supabase query failed, falling back to LocalStorage', err);
+      useFallback = true;
+      return TeamHubService.getLocal(STORAGE_KEYS.IDEAS);
     }
   },
 
@@ -297,11 +291,9 @@ export const TeamHubService = {
       await TeamHubService.logActivity('idea_created', `New Idea created: ${title}`);
       return data;
     } catch (err) {
-      if (err.code === '42P01') {
-        useFallback = true;
-        return TeamHubService.createIdea(title, description);
-      }
-      throw err;
+      console.warn('Supabase query failed, falling back to LocalStorage', err);
+      useFallback = true;
+      return TeamHubService.createIdea(title, description);
     }
   },
 
@@ -328,11 +320,9 @@ export const TeamHubService = {
       await TeamHubService.logActivity('idea_status_updated', `Idea status updated to ${status}: ${data.title}`);
       return data;
     } catch (err) {
-      if (err.code === '42P01') {
-        useFallback = true;
-        return TeamHubService.updateIdeaStatus(ideaId, status);
-      }
-      throw err;
+      console.warn('Supabase query failed, falling back to LocalStorage', err);
+      useFallback = true;
+      return TeamHubService.updateIdeaStatus(ideaId, status);
     }
   },
 
@@ -347,11 +337,9 @@ export const TeamHubService = {
       if (error) throw error;
       return data;
     } catch (err) {
-      if (err.code === '42P01') {
-        useFallback = true;
-        return TeamHubService.getLocal(STORAGE_KEYS.PLANS);
-      }
-      throw err;
+      console.warn('Supabase query failed, falling back to LocalStorage', err);
+      useFallback = true;
+      return TeamHubService.getLocal(STORAGE_KEYS.PLANS);
     }
   },
 
@@ -397,11 +385,9 @@ export const TeamHubService = {
       await TeamHubService.logActivity('plan_created', `New Plan created: ${title}`);
       return data;
     } catch (err) {
-      if (err.code === '42P01') {
-        useFallback = true;
-        return TeamHubService.createPlan(title, description, priority, linkedIdeaId);
-      }
-      throw err;
+      console.warn('Supabase query failed, falling back to LocalStorage', err);
+      useFallback = true;
+      return TeamHubService.createPlan(title, description, priority, linkedIdeaId);
     }
   },
 
@@ -428,11 +414,9 @@ export const TeamHubService = {
       await TeamHubService.logActivity('plan_status_updated', `Plan marked as ${status}: ${data.title}`);
       return data;
     } catch (err) {
-      if (err.code === '42P01') {
-        useFallback = true;
-        return TeamHubService.updatePlanStatus(planId, status);
-      }
-      throw err;
+      console.warn('Supabase query failed, falling back to LocalStorage', err);
+      useFallback = true;
+      return TeamHubService.updatePlanStatus(planId, status);
     }
   },
 
@@ -459,11 +443,9 @@ export const TeamHubService = {
       await TeamHubService.logActivity('plan_converted', `Plan converted to Task: ${data.title}`);
       return data;
     } catch (err) {
-      if (err.code === '42P01') {
-        useFallback = true;
-        return TeamHubService.linkPlanToTask(planId, taskId);
-      }
-      throw err;
+      console.warn('Supabase query failed, falling back to LocalStorage', err);
+      useFallback = true;
+      return TeamHubService.linkPlanToTask(planId, taskId);
     }
   },
 
@@ -483,11 +465,9 @@ export const TeamHubService = {
       if (error) throw error;
       return data;
     } catch (err) {
-      if (err.code === '42P01') {
-        useFallback = true;
-        return TeamHubService.getItemMessages(itemType, itemId);
-      }
-      throw err;
+      console.warn('Supabase query failed, falling back to LocalStorage', err);
+      useFallback = true;
+      return TeamHubService.getItemMessages(itemType, itemId);
     }
   },
 
@@ -527,11 +507,9 @@ export const TeamHubService = {
       if (error) throw error;
       return data;
     } catch (err) {
-      if (err.code === '42P01') {
-        useFallback = true;
-        return TeamHubService.sendItemMessage(itemType, itemId, content);
-      }
-      throw err;
+      console.warn('Supabase query failed, falling back to LocalStorage', err);
+      useFallback = true;
+      return TeamHubService.sendItemMessage(itemType, itemId, content);
     }
   },
 
@@ -553,11 +531,9 @@ export const TeamHubService = {
         created_at: log.created_at
       }));
     } catch (err) {
-      if (err.code === '42P01') {
-        useFallback = true;
-        return TeamHubService.getLocal(STORAGE_KEYS.ACTIVITIES);
-      }
-      throw err;
+      console.warn('Supabase query failed, falling back to LocalStorage', err);
+      useFallback = true;
+      return TeamHubService.getLocal(STORAGE_KEYS.ACTIVITIES);
     }
   },
 
