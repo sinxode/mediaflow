@@ -491,8 +491,11 @@
   border: 1px solid $color-border;
   overflow: hidden;
   box-shadow: $shadow-sm;
-  min-height: 580px;
   @include flex-col(stretch, stretch, 0);
+  
+  @include tablet-and-up {
+    min-height: 580px;
+  }
 }
 
 // ----------------------------------------------------
