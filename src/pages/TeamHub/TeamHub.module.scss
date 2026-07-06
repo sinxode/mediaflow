@@ -52,6 +52,10 @@
   @include flex-col(flex-start, stretch, $spacing-md);
   background-color: rgba($color-background, 0.2);
   @include custom-scrollbar;
+
+  @media (max-width: 768px) {
+    padding-bottom: 140px;
+  }
 }
 
 .messageCard {
@@ -223,6 +227,17 @@
   padding: $spacing-sm $spacing-md;
   background-color: $color-surface;
   @include flex-col(stretch, stretch, 8px);
+
+  @media (max-width: 768px) {
+    position: fixed;
+    bottom: 74px; // sit perfectly on top of bottom nav (height 54px + bottom 20px)
+    left: 0;
+    right: 0;
+    z-index: 100;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+    border-top: 1px solid $color-border;
+    background-color: $color-surface;
+  }
 }
 
 .composerForm {
@@ -479,10 +494,6 @@
   grid-template-columns: 1fr;
   gap: $spacing-md;
   align-items: start;
-
-  @include desktop-and-up {
-    grid-template-columns: 1fr 320px;
-  }
 }
 
 .mainPanel {

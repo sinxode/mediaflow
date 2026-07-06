@@ -897,25 +897,6 @@ const TeamHub = () => {
             </>
           )}
         </div>
-
-        {/* Right Side: Activity log timeline */}
-        <div className={styles.activityPanel}>
-          <h4 className={styles.panelTitle}>Team Hub Activity</h4>
-          <div className={styles.activityFeed}>
-            {activities.length === 0 ? (
-              <p style={{ fontSize: '12px', color: '#64748B' }}>No activity logged yet.</p>
-            ) : (
-              activities.map((act) => (
-                <div key={act.id} className={styles.activityItem}>
-                  <span>{act.message}</span>
-                  <span className={styles.activityTime}>
-                    {new Date(act.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </span>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
       </div>
 
       {/* DRAWER: DISCUSSION THREAD PANEL FOR IDEAS/PLANS */}
