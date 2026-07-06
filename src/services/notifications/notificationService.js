@@ -18,55 +18,7 @@ const setFallback = () => sessionStorage.setItem(FALLBACK_SESSION_KEY, '1');
 let useFallback = getFallback();
 
 // Mock Seed Data for Notifications
-const SEED_NOTIFICATIONS = [
-  {
-    id: 'notify-1',
-    user_id: 'user-muhammad',
-    type: 'task_assigned',
-    category: 'action_required',
-    title: 'New Task Assigned',
-    message: 'You were assigned to "Friday Program Poster".',
-    related_task_id: 'task-1',
-    is_read: false,
-    is_archived: false,
-    created_at: new Date(Date.now() - 1000 * 60 * 30).toISOString() // 30 mins ago
-  },
-  {
-    id: 'notify-2',
-    user_id: 'user-muhammad',
-    type: 'review_requested',
-    category: 'action_required',
-    title: 'Review Requested',
-    message: 'Sinan requested review for "Weekly Quran Circle Flyer".',
-    related_task_id: 'task-2',
-    is_read: false,
-    is_archived: false,
-    created_at: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString() // 2 hours ago
-  },
-  {
-    id: 'notify-3',
-    user_id: 'user-muhammad',
-    type: 'approved',
-    category: 'workflow_update',
-    title: 'Task Approved',
-    message: '"Hadith Slides Set" has been approved.',
-    related_task_id: 'task-3',
-    is_read: true,
-    is_archived: false,
-    created_at: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString() // 1 day ago
-  },
-  {
-    id: 'notify-4',
-    user_id: 'user-muhammad',
-    type: 'new_idea',
-    category: 'team_hub',
-    title: 'New Idea Pitched',
-    message: 'Sinan pitched a new concept: "Dawah Street Video Series".',
-    is_read: false,
-    is_archived: false,
-    created_at: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString() // 5 hours ago
-  }
-];
+const SEED_NOTIFICATIONS = [];
 
 const DEFAULT_PREFS = {
   push_enabled: true,
@@ -237,6 +189,7 @@ export const parseAndTriggerMentions = async ({
 };
 
 // Upgrade existing activity logger notification generator
+// Upgrade existing activity logger notification generator
 export const createNotificationsForActivity = async (activity) => {
   const { action, task_id, user_id, metadata } = activity;
   const meta = metadata || {};
@@ -244,69 +197,101 @@ export const createNotificationsForActivity = async (activity) => {
   try {
     const { data: task, error } = await supabase
       .from('tasks')
-      .select('title, assigned_to, created_by')
+      .select('title, assigned_to, created_by, creator:users!created_by(role)')
       .eq('id', task_id)
       .single();
 
     if (error || !task) return;
 
+    // Helper to fetch all reviewers
+    const getAllReviewers = async () => {
+      try {
+        const { data: reviewers } = await supabase
+          .from('users')
+          .select('id')
+          .eq('role', 'reviewer');
+        return reviewers || [];
+      } catch (err) {
+        console.error('Failed to fetch reviewers', err);
+        return [];
+      }
+    };
+
     switch (action) {
       case 'task_assigned':
-        await createCustomNotification({
-          userId: task.assigned_to,
-          type: 'task_assigned',
-          category: 'action_required',
-          title: 'New Task Assigned',
-          message: `You were assigned to "${task.title}".`,
-          relatedTaskId: task_id,
-          metadata: { item_type: 'task', item_id: task_id }
-        });
+        if (task.assigned_to) {
+          await createCustomNotification({
+            userId: task.assigned_to,
+            type: 'task_assigned',
+            category: 'action_required',
+            title: 'New Task Assigned',
+            message: `You were assigned to "${task.title}".`,
+            relatedTaskId: task_id,
+            metadata: { item_type: 'task', item_id: task_id }
+          });
+        }
         break;
 
       case 'status_changed':
         if (meta.newStatus === 'ready_for_review') {
-          await createCustomNotification({
-            userId: task.created_by,
-            type: 'review_requested',
-            category: 'action_required',
-            title: 'Review Requested',
-            message: `Task "${task.title}" is ready for review.`,
-            relatedTaskId: task_id,
-            metadata: { item_type: 'task', item_id: task_id }
-          });
+          // "all reviewers notified for every reviews."
+          const reviewers = await getAllReviewers();
+          await Promise.all(
+            reviewers.map(r => 
+              createCustomNotification({
+                userId: r.id,
+                type: 'review_requested',
+                category: 'action_required',
+                title: 'Review Requested',
+                message: `Task "${task.title}" is ready for review.`,
+                relatedTaskId: task_id,
+                metadata: { item_type: 'task', item_id: task_id }
+              })
+            )
+          );
         } else if (meta.newStatus === 'working' && meta.previousStatus === 'reviewing') {
-          await createCustomNotification({
-            userId: task.assigned_to,
-            type: 'changes_requested',
-            category: 'action_required',
-            title: 'Changes Requested',
-            message: `Changes were requested on "${task.title}".`,
-            relatedTaskId: task_id,
-            metadata: { item_type: 'task', item_id: task_id }
-          });
+          // Changes requested - notify assignee (if any)
+          if (task.assigned_to) {
+            await createCustomNotification({
+              userId: task.assigned_to,
+              type: 'changes_requested',
+              category: 'action_required',
+              title: 'Changes Requested',
+              message: `Changes were requested on "${task.title}".`,
+              relatedTaskId: task_id,
+              metadata: { item_type: 'task', item_id: task_id }
+            });
+          }
         } else if (meta.newStatus === 'approved') {
-          await createCustomNotification({
-            userId: task.assigned_to,
-            type: 'approved',
-            category: 'workflow_update',
-            title: 'Task Approved',
-            message: `"${task.title}" has been approved.`,
-            relatedTaskId: task_id,
-            metadata: { item_type: 'task', item_id: task_id }
-          });
+          // Approved - notify assignee (if any)
+          if (task.assigned_to) {
+            await createCustomNotification({
+              userId: task.assigned_to,
+              type: 'approved',
+              category: 'workflow_update',
+              title: 'Task Approved',
+              message: `"${task.title}" has been approved.`,
+              relatedTaskId: task_id,
+              metadata: { item_type: 'task', item_id: task_id }
+            });
+          }
         } else if (meta.newStatus === 'published') {
-          await createCustomNotification({
-            userId: task.assigned_to,
-            type: 'published',
-            category: 'workflow_update',
-            title: 'Task Published',
-            message: `"${task.title}" has been published.`,
-            relatedTaskId: task_id,
-            metadata: { item_type: 'task', item_id: task_id }
-          });
+          // Published - notify assignee (if any)
+          if (task.assigned_to) {
+            await createCustomNotification({
+              userId: task.assigned_to,
+              type: 'published',
+              category: 'workflow_update',
+              title: 'Task Published',
+              message: `"${task.title}" has been published.`,
+              relatedTaskId: task_id,
+              metadata: { item_type: 'task', item_id: task_id }
+            });
+          }
         } else if (meta.newStatus === 'completed') {
-          await Promise.all([
-            createCustomNotification({
+          // Completed - notify assignee (if any)
+          if (task.assigned_to) {
+            await createCustomNotification({
               userId: task.assigned_to,
               type: 'completed',
               category: 'workflow_update',
@@ -314,8 +299,11 @@ export const createNotificationsForActivity = async (activity) => {
               message: `"${task.title}" is marked as completed.`,
               relatedTaskId: task_id,
               metadata: { item_type: 'task', item_id: task_id }
-            }),
-            createCustomNotification({
+            });
+          }
+          // Also notify task creator only if they are a reviewer
+          if (task.created_by && task.creator?.role === 'reviewer' && task.created_by !== task.assigned_to) {
+            await createCustomNotification({
               userId: task.created_by,
               type: 'completed',
               category: 'workflow_update',
@@ -323,17 +311,28 @@ export const createNotificationsForActivity = async (activity) => {
               message: `"${task.title}" is marked as completed.`,
               relatedTaskId: task_id,
               metadata: { item_type: 'task', item_id: task_id }
-            })
-          ]);
+            });
+          }
         }
         break;
 
       case 'comment_added':
-        const notifyTarget = user_id === task.assigned_to ? task.created_by : task.assigned_to;
-        // Only trigger if not a self-comment
-        if (notifyTarget && notifyTarget !== user_id) {
+        // Notify assignee if not commenter
+        if (task.assigned_to && task.assigned_to !== user_id) {
           await createCustomNotification({
-            userId: notifyTarget,
+            userId: task.assigned_to,
+            type: 'comment_added',
+            category: 'workflow_update',
+            title: 'New Comment Added',
+            message: `New comment on "${task.title}": "${meta.commentSnippet || ''}"`,
+            relatedTaskId: task_id,
+            metadata: { item_type: 'task', item_id: task_id }
+          });
+        }
+        // Notify creator only if they are a reviewer and not commenter
+        if (task.created_by && task.created_by !== user_id && task.creator?.role === 'reviewer') {
+          await createCustomNotification({
+            userId: task.created_by,
             type: 'comment_added',
             category: 'workflow_update',
             title: 'New Comment Added',
@@ -345,19 +344,23 @@ export const createNotificationsForActivity = async (activity) => {
         break;
 
       case 'file_uploaded':
-        await createCustomNotification({
-          userId: task.created_by,
-          type: 'file_uploaded',
-          category: 'workflow_update',
-          title: 'Deliverable Uploaded',
-          message: `A file was uploaded for "${task.title}".`,
-          relatedTaskId: task_id,
-          metadata: { item_type: 'task', item_id: task_id }
-        });
+        // A deliverable was uploaded - notify all reviewers
+        const reviewers = await getAllReviewers();
+        await Promise.all(
+          reviewers.map(r => 
+            createCustomNotification({
+              userId: r.id,
+              type: 'file_uploaded',
+              category: 'workflow_update',
+              title: 'Deliverable Uploaded',
+              message: `A file was uploaded for "${task.title}".`,
+              relatedTaskId: task_id,
+              metadata: { item_type: 'task', item_id: task_id }
+            })
+          )
+        );
         break;
 
-      default:
-        break;
     }
   } catch (err) {
     console.warn('Failed to generate categorized notifications from activity trigger', err);
