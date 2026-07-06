@@ -109,11 +109,15 @@ CREATE TABLE public.notifications (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES public.users(id) ON DELETE CASCADE NOT NULL,
   type TEXT NOT NULL,
+  category TEXT DEFAULT 'workflow_update' NOT NULL,
   title TEXT NOT NULL,
   message TEXT NOT NULL,
   related_task_id UUID REFERENCES public.tasks(id) ON DELETE CASCADE,
   related_activity_id UUID REFERENCES public.activity_logs(id) ON DELETE CASCADE,
   is_read BOOLEAN DEFAULT false NOT NULL,
+  is_archived BOOLEAN DEFAULT false NOT NULL,
+  archived_at TIMESTAMP WITH TIME ZONE,
+  metadata JSONB DEFAULT '{}'::jsonb NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
   read_at TIMESTAMP WITH TIME ZONE
 );
@@ -225,6 +229,10 @@ CREATE POLICY "Users can update own notifications"
   ON public.notifications FOR UPDATE 
   USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Authenticated users can insert notifications"
+  ON public.notifications FOR INSERT
+  with check (true);
 
 -- --------------------------------------------------
 -- 5. AUTOMATED AUTH SYNCHRONIZATION TRIGGER

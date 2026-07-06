@@ -17,6 +17,17 @@ class ErrorBoundary extends Component {
 
   componentDidCatch(error, errorInfo) {
     logger.error('ErrorBoundary caught unhandled render crash', error, errorInfo);
+    
+    // Auto-reload on lazy chunk load failure (stale index hashes on deployment updates)
+    const isChunkError = 
+      /failed to fetch dynamically imported module/i.test(error?.message) ||
+      /importing a module script failed/i.test(error?.message) ||
+      /loading chunk/i.test(error?.message);
+
+    if (isChunkError) {
+      console.warn('Dynamic asset/chunk 404 detected. Force-refreshing page to load latest build...');
+      window.location.reload();
+    }
   }
 
   handleReload = () => {
