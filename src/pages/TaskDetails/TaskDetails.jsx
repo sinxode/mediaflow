@@ -19,7 +19,7 @@ import styles from './TaskDetails.module.scss';
 
 const TaskDetails = ({ task, taskId, onBack }) => {
   const navigate = useNavigate();
-  const { role } = useAuth(); // Connect directly to real authenticated role
+  const { role, user } = useAuth(); // Connect directly to real authenticated role and profile
   const [commentsCount, setCommentsCount] = useState(0);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   
@@ -72,7 +72,11 @@ const TaskDetails = ({ task, taskId, onBack }) => {
     if (!currentTask?.id) return;
     try {
       setLoading(true);
-      const updated = await TaskService.updateTask(currentTask.id, { status: targetStatus });
+      const payload = { status: targetStatus };
+      if (targetStatus === 'assigned') {
+        payload.assigned_to = user?.id;
+      }
+      const updated = await TaskService.updateTask(currentTask.id, payload);
       setCurrentTask(updated);
     } catch (err) {
       console.error('Failed to update status', err);
@@ -117,7 +121,15 @@ const TaskDetails = ({ task, taskId, onBack }) => {
   };
 
   // Generate dynamic actions based on workflow config & deliverable presence
-  const dynamicActions = getStatusActions(currentTask.status, role, !!currentTask.file_url);
+  const isAssignee = currentTask.assigned_to === user?.id;
+  const isUnassigned = !currentTask.assigned_to;
+  const dynamicActions = getStatusActions(
+    currentTask.status,
+    role,
+    !!currentTask.file_url,
+    isAssignee,
+    isUnassigned
+  );
 
   return (
     <motion.div
@@ -152,6 +164,7 @@ const TaskDetails = ({ task, taskId, onBack }) => {
                 uploaded_at: currentTask.file_uploaded_at
               }}
               role={role}
+              isAssignee={isAssignee}
               onFileUpdated={(newUrl, meta) => {
                 setCurrentTask((prev) => ({
                   ...prev,

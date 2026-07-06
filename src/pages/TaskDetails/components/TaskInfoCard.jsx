@@ -11,7 +11,7 @@ import { StorageService, getFileMetadata } from '../../../services/storage/stora
 import { TaskService } from '../../../services/tasks/taskService';
 import styles from './TaskInfoCard.module.scss';
 
-const TaskInfoCard = ({ taskId, description, fileUrl, fileMeta, role = 'creator', onFileUpdated }) => {
+const TaskInfoCard = ({ taskId, description, fileUrl, fileMeta, role = 'creator', isAssignee = false, onFileUpdated }) => {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState('');
@@ -21,6 +21,7 @@ const TaskInfoCard = ({ taskId, description, fileUrl, fileMeta, role = 'creator'
   const [showUploadZone, setShowUploadZone] = useState(false);
 
   const isCreator = role === 'creator';
+  const canUploadOrReplace = isCreator && isAssignee;
 
   const handleFileSelected = async (file) => {
     if (!taskId) return;
@@ -116,7 +117,7 @@ const TaskInfoCard = ({ taskId, description, fileUrl, fileMeta, role = 'creator'
             onDownload={handleDownload}
             canAction={true}
           />
-          {isCreator && (
+          {canUploadOrReplace && (
             <div className={styles.replaceActionRow}>
               <Button
                 variant="secondary"
@@ -133,7 +134,7 @@ const TaskInfoCard = ({ taskId, description, fileUrl, fileMeta, role = 'creator'
       );
     }
 
-    if (showUploadZone || (!fileUrl && isCreator)) {
+    if (showUploadZone || (!fileUrl && canUploadOrReplace)) {
       return (
         <FileUploadZone
           onFileSelected={handleFileSelected}

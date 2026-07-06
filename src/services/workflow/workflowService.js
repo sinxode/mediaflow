@@ -38,7 +38,7 @@ export const isValidTransition = (currentStatus, targetStatus) => {
  * @param {boolean} hasDeliverable - Is a deliverable uploaded?
  * @returns {Array<{ id: string, label: string, targetStatus: string, variant: string, enabled: boolean }>}
  */
-export const getStatusActions = (status, role, hasDeliverable = false) => {
+export const getStatusActions = (status, role, hasDeliverable = false, isAssignee = false, isUnassigned = false) => {
   if (!status || !role) return [];
   
   const normStatus = status.toLowerCase().replace(/\s+/g, '_');
@@ -48,40 +48,46 @@ export const getStatusActions = (status, role, hasDeliverable = false) => {
   if (normRole === ROLES.CREATOR) {
     // Creator Actions
     if (normStatus === STATUSES.CREATED) {
-      actions.push({
-        id: 'assign-task',
-        label: 'Accept & Assign',
-        targetStatus: STATUSES.ASSIGNED,
-        variant: 'primary',
-        enabled: true
-      });
+      if (isAssignee || isUnassigned) {
+        actions.push({
+          id: 'assign-task',
+          label: 'Accept & Assign',
+          targetStatus: STATUSES.ASSIGNED,
+          variant: 'primary',
+          enabled: true
+        });
+      }
     }
-    if (normStatus === STATUSES.ASSIGNED) {
-      actions.push({
-        id: 'start-working',
-        label: 'Start Working',
-        targetStatus: STATUSES.WORKING,
-        variant: 'primary',
-        enabled: true
-      });
-    }
-    if (normStatus === STATUSES.WORKING) {
-      actions.push({
-        id: 'submit-review',
-        label: 'Submit For Review',
-        targetStatus: STATUSES.READY_FOR_REVIEW,
-        variant: 'primary',
-        enabled: hasDeliverable // Requires deliverable file uploaded
-      });
-    }
-    if (normStatus === STATUSES.READY_FOR_REVIEW) {
-      actions.push({
-        id: 'undo-submit',
-        label: 'Undo Submit',
-        targetStatus: STATUSES.WORKING,
-        variant: 'secondary',
-        enabled: true
-      });
+    
+    // For all other statuses, creator must be the assignee
+    if (isAssignee) {
+      if (normStatus === STATUSES.ASSIGNED) {
+        actions.push({
+          id: 'start-working',
+          label: 'Start Working',
+          targetStatus: STATUSES.WORKING,
+          variant: 'primary',
+          enabled: true
+        });
+      }
+      if (normStatus === STATUSES.WORKING) {
+        actions.push({
+          id: 'submit-review',
+          label: 'Submit For Review',
+          targetStatus: STATUSES.READY_FOR_REVIEW,
+          variant: 'primary',
+          enabled: hasDeliverable // Requires deliverable file uploaded
+        });
+      }
+      if (normStatus === STATUSES.READY_FOR_REVIEW) {
+        actions.push({
+          id: 'undo-submit',
+          label: 'Undo Submit',
+          targetStatus: STATUSES.WORKING,
+          variant: 'secondary',
+          enabled: true
+        });
+      }
     }
   } else if (normRole === ROLES.REVIEWER) {
     // Reviewer Actions

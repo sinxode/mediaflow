@@ -162,13 +162,13 @@ CREATE POLICY "Authenticated users can select all tasks"
   ON public.tasks FOR SELECT 
   USING (auth.role() = 'authenticated');
 
-CREATE POLICY "Creators can create tasks" 
+CREATE POLICY "Creators and Reviewers can create tasks" 
   ON public.tasks FOR INSERT 
   WITH CHECK (
     auth.role() = 'authenticated' AND 
     EXISTS (
       SELECT 1 FROM public.users 
-      WHERE id = auth.uid() AND role = 'creator'
+      WHERE id = auth.uid() AND role IN ('creator', 'reviewer')
     )
   );
 
@@ -179,13 +179,13 @@ CREATE POLICY "Permitted users can update tasks"
     auth.role() = 'authenticated'
   );
 
-CREATE POLICY "Creators can delete tasks" 
+CREATE POLICY "Creators and Reviewers can delete tasks" 
   ON public.tasks FOR DELETE 
   USING (
     auth.role() = 'authenticated' AND 
     EXISTS (
       SELECT 1 FROM public.users 
-      WHERE id = auth.uid() AND role = 'creator'
+      WHERE id = auth.uid() AND role IN ('creator', 'reviewer')
     )
   );
 
