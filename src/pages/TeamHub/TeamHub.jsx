@@ -202,6 +202,11 @@ const TeamHub = () => {
     if (e) e.preventDefault();
     if (!composerText.trim() && !attachedFile) return;
 
+    if (!navigator.onLine) {
+      alert('Network Offline: Please reconnect to the internet to send messages.');
+      return;
+    }
+
     try {
       const attachments = attachedFile ? [attachedFile] : [];
       const savedMsg = await TeamHubService.sendMessage(composerText, attachments);

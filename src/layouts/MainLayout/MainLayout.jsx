@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import Header from './Header';
 import Sidebar from './Sidebar';
@@ -11,8 +11,22 @@ import styles from './MainLayout.module.scss';
 const MainLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
   const { logout } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   const handleLogout = async () => {
     setIsLogoutModalOpen(false);
@@ -26,6 +40,32 @@ const MainLayout = () => {
 
   return (
     <div className={styles.appContainer}>
+      {/* Offline Status Warning Bar */}
+      {isOffline && (
+        <div
+          style={{
+            position: 'fixed',
+            top: '0',
+            left: '0',
+            right: '0',
+            backgroundColor: '#EA580C',
+            color: '#FFFFFF',
+            textAlign: 'center',
+            padding: '6px 12px',
+            fontSize: '11.5px',
+            fontWeight: '600',
+            zIndex: 99999,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
+          }}
+        >
+          <span style={{ fontSize: '13px' }}>⚠️</span>
+          <span>You are currently offline. Actions and database writes will be blocked until connection is restored.</span>
+        </div>
+      )}
       {/* Mobile Sidebar Overlay Backdrop */}
       {isSidebarOpen && (
         <div

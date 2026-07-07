@@ -86,6 +86,11 @@ const CreateTask = () => {
   const handleSubmit = async (e) => {
     if (e) e.preventDefault();
     
+    if (!navigator.onLine) {
+      alert('Network Offline: Please reconnect to the internet to save or create tasks.');
+      return;
+    }
+    
     if (formData.title.trim().length < 3) {
       alert('Please enter a task title with at least 3 characters.');
       return;

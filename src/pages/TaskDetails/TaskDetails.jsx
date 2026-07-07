@@ -70,6 +70,12 @@ const TaskDetails = ({ task, taskId, onBack }) => {
 
   const handleWorkflowAction = async (targetStatus) => {
     if (!currentTask?.id) return;
+    
+    if (!navigator.onLine) {
+      alert('Network Offline: Please reconnect to the internet to perform status updates.');
+      return;
+    }
+    
     try {
       setLoading(true);
       const payload = { status: targetStatus };

@@ -106,6 +106,12 @@ const CommentThread = ({ taskId, onCountChange }) => {
 
   const handleAddComment = async (messageText) => {
     if (!user || !taskId) return;
+    
+    if (!navigator.onLine) {
+      alert('Network Offline: Please reconnect to the internet to post comments.');
+      return;
+    }
+    
     try {
       setActionLoading(true);
       setError('');
