@@ -28,6 +28,24 @@ const CreateTask = () => {
   const [saveState, setSaveState] = useState('Saved');
   const [loading, setLoading] = useState(false);
   
+  // Date Helper Functions
+  const getTodayString = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const getFutureDateString = (offsetDays) => {
+    const date = new Date();
+    date.setDate(date.getDate() + offsetDays);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
   // Form Fields State
   const [formData, setFormData] = useState({
     title: location.state?.prefillTitle || '',
@@ -35,7 +53,7 @@ const CreateTask = () => {
     category: 'Poster Design',
     priority: 'medium',
     assignedUser: location.state?.prefilledAssigneeId || '',
-    deadline: ''
+    deadline: location.state?.prefillDeadline || getTodayString()
   });
 
   // Load task detail if editing
@@ -245,7 +263,25 @@ const CreateTask = () => {
 
               {/* Deadline custom picker */}
               <div className={styles.fieldBlock}>
-                <label className={styles.inputLabel}>Deadline Date</label>
+                <div className={styles.deadlineHeader}>
+                  <label className={styles.inputLabel}>Deadline Date</label>
+                  <div className={styles.quickDateButtons}>
+                    <button
+                      type="button"
+                      className={styles.quickDateBtn}
+                      onClick={() => handleFieldChange('deadline', getFutureDateString(1))}
+                    >
+                      Tomorrow
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.quickDateBtn}
+                      onClick={() => handleFieldChange('deadline', getFutureDateString(2))}
+                    >
+                      2 Days
+                    </button>
+                  </div>
+                </div>
                 <div className={styles.customDateWrapper}>
                   <input
                     type="date"
