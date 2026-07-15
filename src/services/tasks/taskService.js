@@ -57,7 +57,7 @@ export const TaskService = {
       .single();
 
     if (previous && updateData.status && updateData.status !== previous.status) {
-      const allowed = isValidTransition(previous.status, updateData.status);
+      const allowed = isValidTransition(previous.status, updateData.status, updateData.description || previous.description);
       if (!allowed) {
         throw new Error(`Unauthorized status transition from ${previous.status} to ${updateData.status}.`);
       }

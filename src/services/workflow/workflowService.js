@@ -2,37 +2,69 @@
 // Manages task status flows, transition validation, and action buttons mapping.
 
 import { STATUSES, ROLES } from '../../constants';
+import { parseTaskMetadata } from '../../utils/workflowMeta';
 
-// Allowed task transition pathways (including backwards/undo steps)
-export const WORKFLOW_TRANSITIONS = {
-  [STATUSES.CREATED]: [STATUSES.ASSIGNED],
-  [STATUSES.ASSIGNED]: [STATUSES.WORKING],
-  [STATUSES.WORKING]: [STATUSES.READY_FOR_REVIEW],
-  [STATUSES.READY_FOR_REVIEW]: [STATUSES.REVIEWING, STATUSES.WORKING], // 'working' = Creator Undo
-  [STATUSES.REVIEWING]: [STATUSES.APPROVED, STATUSES.WORKING, STATUSES.READY_FOR_REVIEW], // 'ready_for_review' = Reviewer Undo Start
-  [STATUSES.APPROVED]: [STATUSES.PUBLISHED, STATUSES.REVIEWING], // 'reviewing' = Reviewer Undo Approve
-  [STATUSES.PUBLISHED]: [STATUSES.COMPLETED, STATUSES.APPROVED], // 'approved' = Reviewer Undo Publish
-  [STATUSES.COMPLETED]: [STATUSES.PUBLISHED] // 'published' = Reopen
+// Dynamic workflow transitions generator based on task configuration settings
+export const getTransitions = (metadata) => {
+  const { requiresReview = true, requiresPublishing = true } = metadata || {};
+  
+  const transitions = {
+    [STATUSES.CREATED]: [STATUSES.ASSIGNED],
+    [STATUSES.ASSIGNED]: [STATUSES.WORKING]
+  };
+
+  if (requiresReview) {
+    transitions[STATUSES.WORKING] = [STATUSES.READY_FOR_REVIEW];
+    transitions[STATUSES.READY_FOR_REVIEW] = [STATUSES.REVIEWING, STATUSES.WORKING];
+    
+    if (requiresPublishing) {
+      transitions[STATUSES.REVIEWING] = [STATUSES.APPROVED, STATUSES.WORKING, STATUSES.READY_FOR_REVIEW];
+      transitions[STATUSES.APPROVED] = [STATUSES.PUBLISHED, STATUSES.REVIEWING];
+      transitions[STATUSES.PUBLISHED] = [STATUSES.COMPLETED, STATUSES.APPROVED];
+      transitions[STATUSES.COMPLETED] = [STATUSES.PUBLISHED];
+    } else {
+      // Direct completed flow without publishing steps
+      transitions[STATUSES.REVIEWING] = [STATUSES.COMPLETED, STATUSES.WORKING, STATUSES.READY_FOR_REVIEW];
+      transitions[STATUSES.COMPLETED] = [STATUSES.REVIEWING];
+    }
+  } else {
+    // Direct completed flow without review steps
+    transitions[STATUSES.WORKING] = [STATUSES.COMPLETED];
+    transitions[STATUSES.COMPLETED] = [STATUSES.WORKING];
+  }
+
+  return transitions;
 };
 
 /**
  * Validates if a task status transition is permitted by workflow rules
  * @param {string} currentStatus 
  * @param {string} targetStatus 
+ * @param {string|object} taskDescriptionOrMetadata
  * @returns {boolean}
  */
-export const isValidTransition = (currentStatus, targetStatus) => {
+export const isValidTransition = (currentStatus, targetStatus, taskDescriptionOrMetadata = null) => {
   if (!currentStatus || !targetStatus) return false;
   
   const normCurrent = currentStatus.toLowerCase().replace(/\s+/g, '_');
   const normTarget = targetStatus.toLowerCase().replace(/\s+/g, '_');
   
-  // Direct bypass to completed is always valid
+  // Direct bypass to completed is always valid fallback
   if (normTarget === 'completed') {
     return true;
   }
   
-  const allowed = WORKFLOW_TRANSITIONS[normCurrent];
+  let metadata = { requiresReview: true, requiresPublishing: true };
+  if (taskDescriptionOrMetadata) {
+    if (typeof taskDescriptionOrMetadata === 'string') {
+      metadata = parseTaskMetadata(taskDescriptionOrMetadata);
+    } else {
+      metadata = taskDescriptionOrMetadata;
+    }
+  }
+  
+  const transitions = getTransitions(metadata);
+  const allowed = transitions[normCurrent];
   return allowed ? allowed.includes(normTarget) : false;
 };
 
