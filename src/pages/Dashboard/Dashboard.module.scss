@@ -413,7 +413,11 @@
 // Top sub-row — always visible, horizontal on all sizes
 .creatorRowTop {
   @include flex-row(space-between, center, $spacing-md);
-  padding: 14px $spacing-sm;
+  padding: 8px $spacing-sm;
+
+  @media (max-width: 767px) {
+    padding: 14px $spacing-sm;
+  }
 }
 
 // Bottom sub-row — only shown on mobile below the top row
