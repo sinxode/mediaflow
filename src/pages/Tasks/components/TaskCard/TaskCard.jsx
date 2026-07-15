@@ -10,6 +10,7 @@ import {
   Calendar
 } from 'lucide-react';
 import styles from './TaskCard.module.scss';
+import { parseTaskMetadata } from '../../../../utils/workflowMeta';
 
 // Category Icon Mapper
 const getCategoryIcon = (category) => {
@@ -45,6 +46,7 @@ const StatusBadge = React.memo(({ status }) => {
 
 const TaskCard = ({ task, onClick }) => {
   const { title, description, category, status, priority, deadline, assignedUser, createdBy } = task;
+  const cleanDescription = parseTaskMetadata(description).cleanDescription;
 
   return (
     <div
@@ -60,7 +62,7 @@ const TaskCard = ({ task, onClick }) => {
       <div className={styles.mainInfo}>
         <div className={styles.titleWrapper}>
           <h4 className={styles.title}>{title}</h4>
-          <span className={styles.descriptionPreview}>{description}</span>
+          <span className={styles.descriptionPreview}>{cleanDescription}</span>
         </div>
         
         {/* Bottom Metadata row */}
