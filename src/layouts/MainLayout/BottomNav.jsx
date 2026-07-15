@@ -5,6 +5,7 @@ import {
   LayoutDashboard,
   CheckSquare,
   Eye,
+  BarChart2,
   Settings,
   Plus,
 } from 'lucide-react';
@@ -25,6 +26,7 @@ const BottomNav = () => {
   // Right nav items
   const rightItems = [
     permissions.canReviewTask && { label: 'Review', path: '/review', icon: <Eye /> },
+    { label: 'Analytics', path: '/analytics', icon: <BarChart2 /> },
     { label: 'Settings', path: '/settings', icon: <Settings /> },
   ].filter(Boolean);
 
