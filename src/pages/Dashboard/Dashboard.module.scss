@@ -2,9 +2,6 @@
 
 .dashboard {
   @include flex-col(flex-start, stretch, $spacing-md);
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
   
   @include tablet-and-up {
     gap: $spacing-xl;
@@ -46,6 +43,8 @@
 
 .leftCol {
   @include flex-col(flex-start, stretch, $spacing-xl);
+  width: 100%;
+  max-width: 760px;
 }
 
 .rightCol {

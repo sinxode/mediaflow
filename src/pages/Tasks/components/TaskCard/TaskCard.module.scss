@@ -13,6 +13,7 @@
   user-select: none;
   min-height: 64px; // Target height for 10-15 cards per screen height
   width: 100%;
+  max-width: 800px;
   
   @include hover-active {
     transform: translateY(-1px);
