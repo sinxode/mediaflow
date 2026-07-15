@@ -1,13 +1,26 @@
 @import '../../styles/shared';
 
 .taskCard {
-  @include flex-col(space-between, stretch, $spacing-xs);
+  background: linear-gradient(135deg, rgba($color-surface, 0.98) 0%, rgba($color-surface, 0.9) 100%);
+  border: 1px solid rgba($color-border, 0.6);
+  border-radius: 16px;
+  transition: all $transition-normal;
+  overflow: hidden;
+  position: relative;
   height: 100%;
-  padding: $spacing-sm !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
   
-  @include tablet-and-up {
-    padding: $spacing-md !important;
+  &:hover {
+    transform: translateY(-4px);
+    border-color: rgba($color-primary, 0.35);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08), 0 0 24px rgba($color-primary, 0.04);
   }
+}
+
+.innerContent {
+  @include flex-col(space-between, stretch, 10px);
+  height: 100%;
+  padding: $spacing-md !important;
 }
 
 .header {
@@ -15,11 +28,15 @@
 }
 
 .category {
-  font-size: 11px;
+  font-size: 10px;
   color: $color-text-secondary;
-  font-weight: $font-weight-medium;
+  font-weight: $font-weight-semibold;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
+  background-color: rgba($color-primary, 0.06);
+  color: $color-primary;
+  padding: 3px 8px;
+  border-radius: 6px;
 }
 
 .badges {
@@ -27,71 +44,113 @@
 }
 
 .title {
-  font-size: 14px;
-  font-weight: $font-weight-semibold;
+  font-size: 15px;
+  font-weight: $font-weight-bold;
   color: $color-text;
-  line-height: 1.35;
+  line-height: 1.4;
+  margin: 4px 0 2px;
   @include line-clamp(2);
   min-height: auto;
-  margin-bottom: 2px;
 }
 
 .descriptionSnippet {
-  font-size: 11.5px;
+  font-size: 12px;
   color: $color-text-secondary;
-  line-height: 1.4;
-  @include line-clamp(1);
+  line-height: 1.45;
+  @include line-clamp(2);
   margin-bottom: $spacing-xs;
 }
 
-.metaInfoRow {
-  @include flex-row(space-between, center, $spacing-xs);
-  margin-bottom: $spacing-xs;
-  background-color: $color-surface;
-  border-radius: 8px;
-  padding: 6px 10px;
+.userSection {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+  padding-bottom: $spacing-xs;
 }
 
-.userMeta {
-  @include flex-col(center, flex-start, 2px);
-  flex: 1;
-  min-width: 0;
+.userBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: rgba($color-primary, 0.03);
+  border: 1px solid rgba($color-primary, 0.06);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 10.5px;
+  color: $color-text-secondary;
+  
+  strong {
+    color: $color-text;
+    font-weight: $font-weight-semibold;
+  }
 }
 
-.metaLabel {
-  font-size: 8.5px;
-  font-weight: $font-weight-bold;
-  color: lighten($color-text-secondary, 15%);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+.unassignedBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: transparent;
+  border: 1px dashed rgba($color-border, 0.8);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 10.5px;
+  color: $color-text-secondary;
 }
 
-.userWrapper {
-  @include flex-row(flex-start, center, 4px);
-  width: 100%;
-}
-
-.userName {
-  font-size: 11px;
-  color: $color-text;
-  font-weight: $font-weight-medium;
-  @include text-truncate;
+.unassignedDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: $color-text-secondary;
+  display: inline-block;
 }
 
 .footer {
   @include flex-row(space-between, center, $spacing-xs);
   padding-top: $spacing-xs;
-  border-top: 1px dashed $color-border;
+  border-top: 1px dashed rgba($color-border, 0.6);
 }
 
 .deadline {
   @include flex-row(flex-start, center, 6px);
-  font-size: 11.5px;
+  font-size: 11px;
   color: $color-text-secondary;
   
   svg {
-    width: 13px;
-    height: 13px;
-    color: lighten($color-text-secondary, 10%);
+    width: 12px;
+    height: 12px;
+    color: $color-text-secondary;
+  }
+}
+
+/* Progress indicator styles */
+.progressTrack {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: rgba($color-border, 0.2);
+}
+
+.progressBar {
+  height: 100%;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: $color-primary; // Default fallback
+  
+  &.in_progress {
+    background-color: #3b82f6; // Blue
+  }
+  &.ready_for_review, &.reviewing {
+    background-color: #f59e0b; // Amber/Orange
+  }
+  &.completed {
+    background-color: #10b981; // Emerald/Green
+  }
+  &.published {
+    background-color: #8b5cf6; // Purple
   }
 }

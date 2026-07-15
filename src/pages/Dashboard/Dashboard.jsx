@@ -72,16 +72,23 @@ const Dashboard = () => {
 
   useRealtimeTasksList(handleRealtimeDashboardUpdate);
 
-  const activeTasks = tasks.filter(
+  const userTasks = tasks.filter((t) => {
+    if (user?.role === 'creator') {
+      return t.assigned_to === user.id || t.created_by === user.id;
+    }
+    return true;
+  });
+
+  const activeTasks = userTasks.filter(
     (t) => t.status !== 'completed' && t.status !== 'published'
   );
-  const reviewQueue = tasks.filter(
+  const reviewQueue = userTasks.filter(
     (t) => t.status === 'ready_for_review' || t.status === 'reviewing'
   );
-  const publishedCount = tasks.filter((t) => t.status === 'published').length;
-  const completedCount = tasks.filter((t) => t.status === 'completed').length;
+  const publishedCount = userTasks.filter((t) => t.status === 'published').length;
+  const completedCount = userTasks.filter((t) => t.status === 'completed').length;
 
-  const overdueTasks = tasks.filter((t) => {
+  const overdueTasks = userTasks.filter((t) => {
     if (t.status === 'completed' || t.status === 'published' || !t.deadline) return false;
     return new Date(t.deadline) < new Date();
   });
