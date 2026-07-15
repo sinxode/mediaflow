@@ -43,7 +43,16 @@ export const isValidTransition = (currentStatus, targetStatus) => {
  * @param {boolean} hasDeliverable - Is a deliverable uploaded?
  * @returns {Array<{ id: string, label: string, targetStatus: string, variant: string, enabled: boolean }>}
  */
-export const getStatusActions = (status, role, hasDeliverable = false, isAssignee = false, isUnassigned = false) => {
+export const getStatusActions = (
+  status, 
+  role, 
+  hasDeliverable = false, 
+  isAssignee = false, 
+  isUnassigned = false,
+  requiresReview = true,
+  requiresPublishing = true,
+  requiresDeliverable = true
+) => {
   if (!status || !role) return [];
   
   const normStatus = status.toLowerCase().replace(/\s+/g, '_');
@@ -76,13 +85,23 @@ export const getStatusActions = (status, role, hasDeliverable = false, isAssigne
         });
       }
       if (normStatus === STATUSES.WORKING) {
-        actions.push({
-          id: 'submit-review',
-          label: 'Submit For Review',
-          targetStatus: STATUSES.READY_FOR_REVIEW,
-          variant: 'primary',
-          enabled: hasDeliverable // Requires deliverable file uploaded
-        });
+        if (requiresReview) {
+          actions.push({
+            id: 'submit-review',
+            label: 'Submit For Review',
+            targetStatus: STATUSES.READY_FOR_REVIEW,
+            variant: 'primary',
+            enabled: !requiresDeliverable || hasDeliverable
+          });
+        } else {
+          actions.push({
+            id: 'complete-task-direct',
+            label: 'Complete Task',
+            targetStatus: STATUSES.COMPLETED,
+            variant: 'primary',
+            enabled: !requiresDeliverable || hasDeliverable
+          });
+        }
       }
       if (normStatus === STATUSES.READY_FOR_REVIEW) {
         actions.push({
@@ -124,13 +143,23 @@ export const getStatusActions = (status, role, hasDeliverable = false, isAssigne
       });
     }
     if (normStatus === STATUSES.REVIEWING) {
-      actions.push({
-        id: 'approve',
-        label: 'Approve Asset',
-        targetStatus: STATUSES.APPROVED,
-        variant: 'success',
-        enabled: true
-      });
+      if (requiresPublishing) {
+        actions.push({
+          id: 'approve',
+          label: 'Approve Asset',
+          targetStatus: STATUSES.APPROVED,
+          variant: 'success',
+          enabled: true
+        });
+      } else {
+        actions.push({
+          id: 'approve-complete',
+          label: 'Approve & Complete',
+          targetStatus: STATUSES.COMPLETED,
+          variant: 'success',
+          enabled: true
+        });
+      }
       actions.push({
         id: 'request-changes',
         label: 'Request Changes',
@@ -147,13 +176,23 @@ export const getStatusActions = (status, role, hasDeliverable = false, isAssigne
       });
     }
     if (normStatus === STATUSES.APPROVED) {
-      actions.push({
-        id: 'publish',
-        label: 'Mark Published',
-        targetStatus: STATUSES.PUBLISHED,
-        variant: 'review',
-        enabled: true
-      });
+      if (requiresPublishing) {
+        actions.push({
+          id: 'publish',
+          label: 'Mark Published',
+          targetStatus: STATUSES.PUBLISHED,
+          variant: 'review',
+          enabled: true
+        });
+      } else {
+        actions.push({
+          id: 'complete',
+          label: 'Complete Task',
+          targetStatus: STATUSES.COMPLETED,
+          variant: 'primary',
+          enabled: true
+        });
+      }
       actions.push({
         id: 'undo-approve',
         label: 'Undo Approval',
@@ -182,7 +221,7 @@ export const getStatusActions = (status, role, hasDeliverable = false, isAssigne
       actions.push({
         id: 'reopen-task',
         label: 'Reopen Task',
-        targetStatus: STATUSES.PUBLISHED,
+        targetStatus: requiresPublishing ? STATUSES.PUBLISHED : STATUSES.REVIEWING,
         variant: 'secondary',
         enabled: true
       });

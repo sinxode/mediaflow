@@ -11,6 +11,7 @@ import Modal from '../../components/Modal/Modal';
 import Button from '../../components/Button/Button';
 import { TaskService } from '../../services/tasks/taskService';
 import { getStatusActions } from '../../services/workflow/workflowService';
+import { parseTaskMetadata } from '../../utils/workflowMeta';
 import { useRealtimeTask } from '../../hooks/useRealtime';
 import { useAuth } from '../../auth/hooks/useAuth';
 import { pageVariants, fadeUpVariants } from '../../utils/animations';
@@ -118,9 +119,12 @@ const TaskDetails = ({ task, taskId, onBack }) => {
     );
   }
 
+  const meta = parseTaskMetadata(currentTask.description);
+
   // Format task for sub-components
   const normalizedTask = {
     ...currentTask,
+    description: meta.cleanDescription,
     status: currentTask.status.charAt(0).toUpperCase() + currentTask.status.slice(1).replace(/_/g, ' '),
     assignedUser: currentTask.assignee?.name || 'Unassigned',
     createdBy: currentTask.creator?.name || 'Workspace Manager'
@@ -136,7 +140,10 @@ const TaskDetails = ({ task, taskId, onBack }) => {
     role,
     !!currentTask.file_url,
     isAssignee,
-    isUnassigned
+    isUnassigned,
+    meta.requiresReview,
+    meta.requiresPublishing,
+    meta.requiresDeliverable
   );
 
   // Allow creator or assignee to force complete task directly if not already finished
@@ -181,7 +188,7 @@ const TaskDetails = ({ task, taskId, onBack }) => {
           <motion.div variants={fadeUpVariants} className={styles.cardWrapper}>
             <TaskInfoCard
               taskId={currentTask.id}
-              description={currentTask.description}
+              description={normalizedTask.description}
               fileUrl={currentTask.file_url}
               fileMeta={{
                 name: currentTask.file_name,

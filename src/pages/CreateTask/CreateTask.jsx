@@ -11,6 +11,7 @@ import UserSelector from './components/UserSelector';
 import TaskPreviewCard from './components/TaskPreviewCard';
 import LoadingSkeleton from '../../components/LoadingSkeleton/LoadingSkeleton';
 import { TaskService } from '../../services/tasks/taskService';
+import { parseTaskMetadata, serializeTaskMetadata } from '../../utils/workflowMeta';
 import { useAuth } from '../../auth/hooks/useAuth';
 import { CATEGORIES, STATUSES } from '../../constants';
 import { pageVariants, fadeUpVariants } from '../../utils/animations';
@@ -53,7 +54,10 @@ const CreateTask = () => {
     category: 'Poster Design',
     priority: 'medium',
     assignedUser: location.state?.prefilledAssigneeId || '',
-    deadline: location.state?.prefillDeadline || getTodayString()
+    deadline: location.state?.prefillDeadline || getTodayString(),
+    requiresReview: true,
+    requiresPublishing: true,
+    requiresDeliverable: true
   });
 
   // Load task detail if editing
@@ -64,13 +68,17 @@ const CreateTask = () => {
           setLoading(true);
           const task = await TaskService.getTaskById(editTaskId);
           if (task) {
+            const meta = parseTaskMetadata(task.description);
             setFormData({
               title: task.title,
-              description: task.description || '',
+              description: meta.cleanDescription,
               category: task.category,
               priority: task.priority || 'medium',
               assignedUser: task.assigned_to || '',
-              deadline: task.deadline || ''
+              deadline: task.deadline || '',
+              requiresReview: meta.requiresReview,
+              requiresPublishing: meta.requiresPublishing,
+              requiresDeliverable: meta.requiresDeliverable
             });
             setMode('edit');
           }
@@ -127,10 +135,17 @@ const CreateTask = () => {
 
     try {
       setLoading(true);
+      const serializedDescription = serializeTaskMetadata(
+        formData.description || '',
+        formData.requiresReview,
+        formData.requiresPublishing,
+        formData.requiresDeliverable
+      );
+
       if (mode === 'create') {
         const payload = {
           title: formData.title.trim(),
-          description: formData.description?.trim() || null,
+          description: serializedDescription,
           category: formData.category,
           priority: formData.priority.toLowerCase(),
           status: STATUSES.CREATED,
@@ -142,7 +157,7 @@ const CreateTask = () => {
       } else if (mode === 'edit' && editTaskId) {
         const payload = {
           title: formData.title.trim(),
-          description: formData.description?.trim() || null,
+          description: serializedDescription,
           category: formData.category,
           priority: formData.priority.toLowerCase(),
           assigned_to: formData.assignedUser || null,
@@ -290,6 +305,54 @@ const CreateTask = () => {
                     className={styles.dateInput}
                     required
                   />
+                </div>
+              </div>
+
+              {/* Custom Workflow Rules Checkboxes */}
+              <div className={styles.workflowRulesBlock}>
+                <label className={styles.inputLabel} style={{ marginBottom: '8px', display: 'block' }}>
+                  Workflow Settings
+                </label>
+                
+                <div className={styles.checkboxesGroup}>
+                  <label className={styles.checkboxLabel}>
+                    <input
+                      type="checkbox"
+                      checked={formData.requiresReview}
+                      onChange={(e) => handleFieldChange('requiresReview', e.target.checked)}
+                      className={styles.checkboxInput}
+                    />
+                    <div className={styles.checkboxTexts}>
+                      <span className={styles.checkTitle}>Requires Review Step</span>
+                      <span className={styles.checkDesc}>Task must be sent to reviewer for sign-off</span>
+                    </div>
+                  </label>
+
+                  <label className={styles.checkboxLabel}>
+                    <input
+                      type="checkbox"
+                      checked={formData.requiresPublishing}
+                      onChange={(e) => handleFieldChange('requiresPublishing', e.target.checked)}
+                      className={styles.checkboxInput}
+                    />
+                    <div className={styles.checkboxTexts}>
+                      <span className={styles.checkTitle}>Requires Publishing Step</span>
+                      <span className={styles.checkDesc}>Task enters a public archive upon completion</span>
+                    </div>
+                  </label>
+
+                  <label className={styles.checkboxLabel}>
+                    <input
+                      type="checkbox"
+                      checked={formData.requiresDeliverable}
+                      onChange={(e) => handleFieldChange('requiresDeliverable', e.target.checked)}
+                      className={styles.checkboxInput}
+                    />
+                    <div className={styles.checkboxTexts}>
+                      <span className={styles.checkTitle}>Requires Deliverable File</span>
+                      <span className={styles.checkDesc}>Assignee must upload files before completing</span>
+                    </div>
+                  </label>
                 </div>
               </div>
 
