@@ -128,7 +128,9 @@ const TaskDetails = ({ task, taskId, onBack }) => {
 
   // Generate dynamic actions based on workflow config & deliverable presence
   const isAssignee = currentTask.assigned_to === user?.id;
+  const isCreator = currentTask.created_by === user?.id;
   const isUnassigned = !currentTask.assigned_to;
+  
   const dynamicActions = getStatusActions(
     currentTask.status,
     role,
@@ -136,6 +138,23 @@ const TaskDetails = ({ task, taskId, onBack }) => {
     isAssignee,
     isUnassigned
   );
+
+  // Allow creator or assignee to force complete task directly if not already finished
+  const canForceComplete = (isCreator || isAssignee) && 
+                           currentTask.status !== 'completed' && 
+                           currentTask.status !== 'published';
+
+  if (canForceComplete) {
+    if (!dynamicActions.some(action => action.id === 'force-complete')) {
+      dynamicActions.push({
+        id: 'force-complete',
+        label: 'Force Complete Task',
+        targetStatus: 'completed',
+        variant: 'success',
+        enabled: true
+      });
+    }
+  }
 
   return (
     <motion.div

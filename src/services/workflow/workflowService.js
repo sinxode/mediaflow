@@ -27,6 +27,11 @@ export const isValidTransition = (currentStatus, targetStatus) => {
   const normCurrent = currentStatus.toLowerCase().replace(/\s+/g, '_');
   const normTarget = targetStatus.toLowerCase().replace(/\s+/g, '_');
   
+  // Direct bypass to completed is always valid
+  if (normTarget === 'completed') {
+    return true;
+  }
+  
   const allowed = WORKFLOW_TRANSITIONS[normCurrent];
   return allowed ? allowed.includes(normTarget) : false;
 };
