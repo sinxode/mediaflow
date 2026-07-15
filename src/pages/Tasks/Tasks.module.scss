@@ -3,6 +3,8 @@
 .tasksPageContainer {
   @include flex-col(flex-start, stretch, $spacing-sm);
   width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
 .statsSection {
