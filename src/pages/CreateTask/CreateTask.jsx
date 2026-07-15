@@ -278,9 +278,18 @@ const CreateTask = () => {
 
               {/* Deadline custom picker */}
               <div className={styles.fieldBlock}>
-                <div className={styles.deadlineHeader}>
-                  <label className={styles.inputLabel}>Deadline Date</label>
-                  <div className={styles.quickDateButtons}>
+                <label className={styles.inputLabel}>Deadline Date</label>
+                <div className={styles.dateInputRow}>
+                  <div className={styles.customDateWrapper}>
+                    <input
+                      type="date"
+                      value={formData.deadline}
+                      onChange={(e) => handleFieldChange('deadline', e.target.value)}
+                      className={styles.dateInput}
+                      required
+                    />
+                  </div>
+                  <div className={styles.quickDateButtonsInline}>
                     <button
                       type="button"
                       className={styles.quickDateBtn}
@@ -296,15 +305,6 @@ const CreateTask = () => {
                       2 Days
                     </button>
                   </div>
-                </div>
-                <div className={styles.customDateWrapper}>
-                  <input
-                    type="date"
-                    value={formData.deadline}
-                    onChange={(e) => handleFieldChange('deadline', e.target.value)}
-                    className={styles.dateInput}
-                    required
-                  />
                 </div>
               </div>
 
