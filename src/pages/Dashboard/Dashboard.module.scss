@@ -552,3 +552,204 @@
   }
 }
 
+// Right Column Widget Stack Styles
+.rightCol {
+  @include flex-col(flex-start, stretch, 16px);
+}
+
+.rightWidgetCard {
+  background-color: $color-surface;
+  border-radius: 16px;
+  border: 1px solid rgba($color-border, 0.6);
+  box-shadow: $shadow-sm;
+  padding: $spacing-md !important;
+}
+
+.widgetHeader {
+  @include flex-row(flex-start, center, 8px);
+  margin-bottom: $spacing-md;
+  border-bottom: 1px solid rgba($color-border, 0.5);
+  padding-bottom: $spacing-xs;
+}
+
+.widgetIcon {
+  color: $color-primary;
+}
+
+.widgetTitle {
+  font-size: 13.5px;
+  font-weight: $font-weight-bold;
+  color: $color-text;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+// Focus Queue list
+.queueList {
+  @include flex-col(stretch, stretch, 8px);
+}
+
+.queueItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  background-color: rgba($color-background, 0.3);
+  border: 1px solid rgba($color-border, 0.4);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all $transition-fast;
+  
+  &:hover {
+    background-color: rgba($color-primary, 0.03);
+    border-color: rgba($color-primary, 0.2);
+    transform: translateX(2px);
+    
+    .queueArrow {
+      color: $color-primary;
+      transform: translateX(1px);
+    }
+  }
+}
+
+.prioIndicator {
+  width: 4px;
+  height: 24px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  
+  &.low { background-color: $color-text-secondary; }
+  &.medium { background-color: $color-primary; }
+  &.high { background-color: $color-warning; }
+  &.urgent { background-color: $color-danger; }
+}
+
+.queueInfo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.queueName {
+  font-size: 12px;
+  font-weight: $font-weight-semibold;
+  color: $color-text;
+  @include text-truncate;
+}
+
+.queueMeta {
+  font-size: 9.5px;
+  color: $color-text-secondary;
+}
+
+.queueArrow {
+  color: $color-border;
+  transition: all $transition-fast;
+}
+
+.queueEmpty {
+  @include flex-col(center, center, 4px);
+  padding: $spacing-md 0;
+  text-align: center;
+}
+
+.emptyTitle {
+  font-weight: $font-weight-bold;
+  color: $color-text;
+  font-size: 12px;
+}
+
+.emptyDesc {
+  color: $color-text-secondary;
+  font-size: 10px;
+}
+
+// Workload Distribution widget
+.distributionList {
+  @include flex-col(stretch, stretch, 10px);
+}
+
+.distRow {
+  @include flex-col(stretch, stretch, 4px);
+}
+
+.distMeta {
+  @include flex-row(flex-start, center, 6px);
+  font-size: 11px;
+}
+
+.distIconWrapper {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  background-color: rgba($color-primary, 0.05);
+  color: $color-primary;
+  @include flex-row(center, center);
+}
+
+.distName {
+  font-weight: $font-weight-medium;
+  color: $color-text;
+  flex: 1;
+  @include text-truncate;
+}
+
+.distCount {
+  color: $color-text-secondary;
+  font-size: 10px;
+}
+
+.distTrack {
+  height: 4px;
+  background-color: rgba($color-border, 0.3);
+  border-radius: 2px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.distBar {
+  height: 100%;
+  background-color: $color-primary;
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+
+// Performance Analytics widget
+.analyticsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.metricPill {
+  @include flex-col(center, flex-start, 2px);
+  background-color: rgba($color-background, 0.3);
+  border: 1px solid rgba($color-border, 0.4);
+  border-radius: 10px;
+  padding: 10px;
+  min-width: 0;
+  
+  .label {
+    font-size: 9px;
+    font-weight: $font-weight-bold;
+    text-transform: uppercase;
+    color: lighten($color-text-secondary, 10%);
+    letter-spacing: 0.02em;
+  }
+  
+  .val {
+    font-size: 18px;
+    font-weight: $font-weight-bold;
+    color: $color-text;
+    margin: 2px 0;
+  }
+  
+  .subtext {
+    font-size: 9.5px;
+    color: $color-text-secondary;
+  }
+}
+
