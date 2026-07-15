@@ -393,6 +393,11 @@
   @include flex-col(stretch, stretch, 0);
   margin-top: 16px;
   border-top: 1px solid $color-border;
+
+  @include desktop-and-up {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .creatorRow {
@@ -408,6 +413,15 @@
   &:hover {
     background-color: rgba($color-primary, 0.015);
   }
+
+  @include desktop-and-up {
+    &:nth-child(odd) {
+      border-right: 1px solid rgba($color-border, 0.5);
+    }
+    &:nth-last-child(-n+2) {
+      border-bottom: none;
+    }
+  }
 }
 
 // Top sub-row — always visible, horizontal on all sizes
@@ -417,6 +431,11 @@
 
   @media (max-width: 767px) {
     padding: 14px $spacing-sm;
+  }
+
+  @include desktop-and-up {
+    flex-wrap: wrap;
+    row-gap: 6px;
   }
 }
 
@@ -437,6 +456,10 @@
   @include flex-row(flex-start, center, $spacing-sm);
   flex: 1;
   min-width: 0;
+
+  @include desktop-and-up {
+    order: 1;
+  }
   
   .meta {
     @include flex-col(center, flex-start, 2px);
@@ -471,6 +494,12 @@
 
   @media (max-width: 767px) {
     display: none;
+  }
+
+  @include desktop-and-up {
+    order: 4;
+    width: 100%;
+    padding-left: 36px;
   }
 }
 
@@ -588,6 +617,12 @@
     width: auto;
     justify-content: flex-end;
   }
+
+  @include desktop-and-up {
+    order: 2;
+    width: auto;
+    justify-content: flex-end;
+  }
 }
 
 .workloadStatus {
@@ -648,6 +683,10 @@
 
   @media (max-width: 767px) {
     display: none; // Hidden on mobile — mobile uses quickAssignBtn in bottom row
+  }
+
+  @include desktop-and-up {
+    order: 3;
   }
 }
 
