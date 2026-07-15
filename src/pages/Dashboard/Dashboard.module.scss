@@ -396,8 +396,8 @@
 }
 
 .creatorRow {
-  @include flex-row(space-between, center, $spacing-md);
-  padding: 14px $spacing-sm;
+  display: flex;
+  flex-direction: column;
   border-bottom: 1px solid rgba($color-border, 0.5);
   transition: background-color $transition-fast;
   
@@ -408,10 +408,24 @@
   &:hover {
     background-color: rgba($color-primary, 0.015);
   }
-  
+}
+
+// Top sub-row — always visible, horizontal on all sizes
+.creatorRowTop {
+  @include flex-row(space-between, center, $spacing-md);
+  padding: 14px $spacing-sm;
+}
+
+// Bottom sub-row — only shown on mobile below the top row
+.creatorRowBottom {
+  display: none;
+
   @media (max-width: 767px) {
-    flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     gap: $spacing-sm;
+    padding: 0 $spacing-sm 12px;
   }
 }
 
@@ -444,14 +458,13 @@
   }
 }
 
-// Desktop breakdown: text-badge chips
+// Desktop breakdown: text-badge chips — hidden on mobile (bottom row handles it)
 .taskBreakdown {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 10px;
 
-  // Hide on mobile — mobile uses taskBreakdownMobile instead
   @media (max-width: 767px) {
     display: none;
   }
@@ -491,17 +504,13 @@
   background-color: #10b981;
 }
 
-// Mobile breakdown: icon badges with coloured circle background
+// Mobile breakdown icon badges — lives in creatorRowBottom, always flex
 .taskBreakdownMobile {
-  display: none; // Hidden on desktop
-
-  @media (max-width: 767px) {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 8px;
-    flex-shrink: 0;
-  }
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
 }
 
 // Shared icon badge base
@@ -570,10 +579,10 @@
   width: 100px;
   display: flex;
   justify-content: center;
-  
-  @media (max-width: 768px) {
-    justify-content: flex-start;
+
+  @media (max-width: 767px) {
     width: auto;
+    justify-content: flex-end;
   }
 }
 
@@ -605,7 +614,8 @@
   }
 }
 
-.quickAssignBtn {
+// Desktop assign button — shown only on desktop (inside creatorRowTop)
+.quickAssignBtnDesktop {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -620,26 +630,48 @@
   cursor: pointer;
   transition: all $transition-fast;
   flex-shrink: 0;
-  
+
   &:hover {
     background-color: $color-primary;
     border-color: $color-primary;
     color: #ffffff;
     transform: translateY(-1px);
   }
-  
+
   &:active {
     transform: translateY(0);
   }
 
-  .btnLabel {
-    @media (max-width: 480px) {
-      display: none;
-    }
+  @media (max-width: 767px) {
+    display: none; // Hidden on mobile — mobile uses quickAssignBtn in bottom row
+  }
+}
+
+// Mobile assign button — shown only on mobile (inside creatorRowBottom)
+.quickAssignBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background-color: rgba($color-primary, 0.06);
+  border: 1px solid rgba($color-primary, 0.12);
+  color: $color-primary;
+  border-radius: $radius-button;
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: $font-weight-semibold;
+  cursor: pointer;
+  transition: all $transition-fast;
+  flex-shrink: 0;
+
+  &:hover {
+    background-color: $color-primary;
+    border-color: $color-primary;
+    color: #ffffff;
   }
 
-  @media (max-width: 480px) {
-    padding: 6px 8px;
+  &:active {
+    transform: translateY(0);
   }
 }
 

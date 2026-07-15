@@ -343,57 +343,73 @@ const Dashboard = () => {
                 
                 return (
                   <div key={c.id} className={styles.creatorRow}>
-                    <div className={styles.creatorInfo}>
-                      <Avatar src={c.avatar_url || c.avatar} name={c.name} size="sm" />
-                      <div className={styles.meta}>
-                        <h4 className={styles.name}>{c.name}</h4>
-                        <span className={styles.email}>{c.email}</span>
+
+                    {/* ── Top sub-row: avatar + name  +  status badge ── */}
+                    <div className={styles.creatorRowTop}>
+                      <div className={styles.creatorInfo}>
+                        <Avatar src={c.avatar_url || c.avatar} name={c.name} size="sm" />
+                        <div className={styles.meta}>
+                          <h4 className={styles.name}>{c.name}</h4>
+                          <span className={styles.email}>{c.email}</span>
+                        </div>
                       </div>
-                    </div>
-                    
-                    {/* Desktop: original text-badge breakdown */}
-                    <div className={styles.taskBreakdown}>
-                      <span className={styles.loadBadge} title="In Progress">
-                        <span className={styles.dotInProgress} /> {inProgress} Active
-                      </span>
-                      <span className={styles.loadBadge} title="In Review">
-                        <span className={styles.dotInReview} /> {review} Review
-                      </span>
-                      <span className={styles.loadBadge} title="Completed">
-                        <span className={styles.dotCompleted} /> {completed} Done
-                      </span>
+
+                      {/* Desktop: text-badge breakdown (visible on desktop only) */}
+                      <div className={styles.taskBreakdown}>
+                        <span className={styles.loadBadge} title="In Progress">
+                          <span className={styles.dotInProgress} /> {inProgress} Active
+                        </span>
+                        <span className={styles.loadBadge} title="In Review">
+                          <span className={styles.dotInReview} /> {review} Review
+                        </span>
+                        <span className={styles.loadBadge} title="Completed">
+                          <span className={styles.dotCompleted} /> {completed} Done
+                        </span>
+                      </div>
+
+                      <div className={styles.statusCol}>
+                        <span className={`${styles.workloadStatus} ${workloadClass}`}>
+                          {workloadLabel}
+                        </span>
+                      </div>
+
+                      <button
+                        className={styles.quickAssignBtnDesktop}
+                        onClick={() => navigate('/tasks/create', { state: { prefilledAssigneeId: c.id } })}
+                        title={`Assign new task to ${c.name}`}
+                      >
+                        <UserPlus size={13} />
+                        <span>Assign</span>
+                      </button>
                     </div>
 
-                    {/* Mobile-only: icon badge breakdown */}
-                    <div className={styles.taskBreakdownMobile}>
-                      <span className={styles.iconBadgeBlue} title={`${inProgress} Active`}>
-                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-                        <strong>{inProgress}</strong>
-                      </span>
-                      <span className={styles.iconBadgeOrange} title={`${review} Review`}>
-                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                        <strong>{review}</strong>
-                      </span>
-                      <span className={styles.iconBadgeGreen} title={`${completed} Done`}>
-                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                        <strong>{completed}</strong>
-                      </span>
+                    {/* ── Bottom sub-row (mobile only): icon badges + assign btn ── */}
+                    <div className={styles.creatorRowBottom}>
+                      <div className={styles.taskBreakdownMobile}>
+                        <span className={styles.iconBadgeBlue} title={`${inProgress} Active`}>
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                          <strong>{inProgress}</strong>
+                        </span>
+                        <span className={styles.iconBadgeOrange} title={`${review} Review`}>
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                          <strong>{review}</strong>
+                        </span>
+                        <span className={styles.iconBadgeGreen} title={`${completed} Done`}>
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                          <strong>{completed}</strong>
+                        </span>
+                      </div>
+
+                      <button
+                        className={styles.quickAssignBtn}
+                        onClick={() => navigate('/tasks/create', { state: { prefilledAssigneeId: c.id } })}
+                        title={`Assign new task to ${c.name}`}
+                      >
+                        <UserPlus size={13} />
+                        <span>Assign</span>
+                      </button>
                     </div>
-                    
-                    <div className={styles.statusCol}>
-                      <span className={`${styles.workloadStatus} ${workloadClass}`}>
-                        {workloadLabel}
-                      </span>
-                    </div>
-                    
-                    <button
-                      className={styles.quickAssignBtn}
-                      onClick={() => navigate('/tasks/create', { state: { prefilledAssigneeId: c.id } })}
-                      title={`Assign new task to ${c.name}`}
-                    >
-                      <UserPlus size={13} />
-                      <span className={styles.btnLabel}>Assign</span>
-                    </button>
+
                   </div>
                 );
               })
