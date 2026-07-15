@@ -21,7 +21,20 @@ export const getFileMetadata = (file) => {
 export const StorageService = {
   uploadFile: async (taskId, file, onProgress) => {
     const bucketName = 'mediaflow-assets';
-    const filePath = `tasks/${taskId}/${Date.now()}_${file.name}`;
+    
+    // Sanitize the file name to avoid "Invalid key" errors from Supabase Storage
+    // (caused by non-standard unicode characters, spaces, special brackets, emojis, etc.)
+    const rawName = file.name || 'unnamed_file';
+    const lastDotIndex = rawName.lastIndexOf('.');
+    const baseName = lastDotIndex !== -1 ? rawName.slice(0, lastDotIndex) : rawName;
+    const ext = lastDotIndex !== -1 ? rawName.slice(lastDotIndex) : '';
+    
+    const sanitizedBase = baseName
+      .replace(/[^a-zA-Z0-9_.-]/g, '_') // replace any non-safe character with underscore
+      .replace(/__+/g, '_'); // simplify multiple consecutive underscores
+      
+    const cleanFileName = `${sanitizedBase}${ext}`;
+    const filePath = `tasks/${taskId}/${Date.now()}_${cleanFileName}`;
 
     // Upload asset with upsert option
     const { data, error } = await supabase.storage
@@ -40,7 +53,7 @@ export const StorageService = {
 
     return {
       url: publicUrl,
-      name: file.name,
+      name: cleanFileName,
       size: `${(file.size / (1024 * 1024)).toFixed(1)} MB`,
       uploaded_at: new Date().toISOString()
     };
