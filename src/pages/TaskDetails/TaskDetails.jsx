@@ -281,6 +281,8 @@ const TaskDetails = ({ task, taskId, onBack }) => {
               actions={mappedActions}
               onActionClick={handleWorkflowAction}
               currentStatus={currentTask.status}
+              requiresReview={meta.requiresReview}
+              requiresPublishing={meta.requiresPublishing}
             />
           </motion.div>
 

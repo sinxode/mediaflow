@@ -26,27 +26,33 @@ const getActionIcon = (id) => {
   }
 };
 
-const STAGES = [
-  { key: 'created', label: 'Created' },
-  { key: 'assigned', label: 'Assigned' },
-  { key: 'working', label: 'Working' },
-  { key: 'review', label: 'In Review', matches: ['ready_for_review', 'reviewing'] },
-  { key: 'approved', label: 'Approved' },
-  { key: 'published', label: 'Published' },
-  { key: 'completed', label: 'Completed' }
-];
+const WorkflowActions = ({ 
+  actions = [], 
+  onActionClick, 
+  currentStatus,
+  requiresReview = true,
+  requiresPublishing = true
+}) => {
+  const stages = React.useMemo(() => {
+    return [
+      { key: 'created', label: 'Created' },
+      { key: 'assigned', label: 'Assigned' },
+      { key: 'working', label: 'Working' },
+      requiresReview && { key: 'review', label: 'In Review', matches: ['ready_for_review', 'reviewing'] },
+      requiresReview && requiresPublishing && { key: 'approved', label: 'Approved' },
+      requiresReview && requiresPublishing && { key: 'published', label: 'Published' },
+      { key: 'completed', label: 'Completed' }
+    ].filter(Boolean);
+  }, [requiresReview, requiresPublishing]);
 
-const getActiveStageIndex = (currentStatus) => {
-  if (!currentStatus) return 0;
-  const norm = currentStatus.toLowerCase().replace(/\s+/g, '_');
-  return STAGES.findIndex((s) => {
-    if (s.matches) return s.matches.includes(norm);
-    return s.key === norm;
-  });
-};
-
-const WorkflowActions = ({ actions = [], onActionClick, currentStatus }) => {
-  const activeIndex = getActiveStageIndex(currentStatus);
+  const activeIndex = React.useMemo(() => {
+    if (!currentStatus) return 0;
+    const norm = currentStatus.toLowerCase().replace(/\s+/g, '_');
+    return stages.findIndex((s) => {
+      if (s.matches) return s.matches.includes(norm);
+      return s.key === norm;
+    });
+  }, [currentStatus, stages]);
 
   // Check if "Submit for Review" is currently present in the list but disabled
   const isSubmitDisabled = actions.some((a) => a.id === 'submit-review' && !a.enabled);
@@ -60,11 +66,15 @@ const WorkflowActions = ({ actions = [], onActionClick, currentStatus }) => {
         <div className={styles.progressLineBg} />
         <div
           className={styles.progressLineActive}
-          style={{ width: `calc((${activeIndex} / 6) * (100% - (100% / 7)))` }}
+          style={{ 
+            width: stages.length > 1 
+              ? `calc((${activeIndex} / ${stages.length - 1}) * (100% - (100% / ${stages.length})))` 
+              : '0%' 
+          }}
         />
 
         <div className={styles.stepsList}>
-          {STAGES.map((stage, idx) => {
+          {stages.map((stage, idx) => {
             const isCompleted = idx < activeIndex;
             const isActive = idx === activeIndex;
             const isFuture = idx > activeIndex;
