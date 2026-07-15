@@ -1,5 +1,5 @@
-import React from 'react';
-import { Calendar, Clock, Edit3, Trash2, ArrowLeft } from 'lucide-react';
+import React, { useState } from 'react';
+import { Calendar, Clock, Edit3, Trash2, ArrowLeft, Share2, Check } from 'lucide-react';
 import Button from '../../../components/Button/Button';
 import styles from './TaskHeader.module.scss';
 
@@ -47,6 +47,20 @@ const formatRelativeTime = (dateString) => {
 };
 
 const TaskHeader = ({ task, approvalsCount = 0, onBack, onEdit, onDelete }) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyLink = () => {
+    const shareUrl = `${window.location.origin}/tasks?id=${task.id}`;
+    navigator.clipboard.writeText(shareUrl)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      })
+      .catch((err) => {
+        console.error('Failed to copy task link', err);
+      });
+  };
+
   return (
     <div className={styles.headerContainer}>
       {/* Back button row */}
@@ -69,6 +83,14 @@ const TaskHeader = ({ task, approvalsCount = 0, onBack, onEdit, onDelete }) => {
 
         {/* Action Buttons */}
         <div className={styles.actions}>
+          <Button
+            variant={copied ? 'success' : 'secondary'}
+            size="sm"
+            leftIcon={copied ? <Check size={14} /> : <Share2 size={14} />}
+            onClick={handleCopyLink}
+          >
+            {copied ? 'Link Copied!' : 'Copy Share Link'}
+          </Button>
           <Button variant="secondary" size="sm" leftIcon={<Edit3 />} onClick={onEdit}>
             Edit Task
           </Button>
