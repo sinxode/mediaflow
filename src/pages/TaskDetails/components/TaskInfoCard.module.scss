@@ -15,6 +15,7 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: $color-text-secondary;
+  margin-bottom: $spacing-xs;
 }
 
 .description {
@@ -29,39 +30,182 @@
 
 .fileSection {
   @include flex-col(flex-start, stretch, $spacing-xs);
+  margin-top: $spacing-sm;
 }
 
-.fileDisplay {
-  @include flex-col(flex-start, stretch, $spacing-sm);
+// Deliverables CSS Grid Layout
+.deliverablesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
   width: 100%;
 }
 
-.replaceActionRow {
-  @include flex-row(flex-start, center);
-  width: 100%;
-}
-
-.replaceBtn {
-  height: 32px !important;
-  font-size: 11.5px !important;
-  border-radius: 8px !important;
+// Deliverable Grid Card Item
+.deliverableCard {
+  background-color: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all $transition-fast;
+  display: flex;
+  flex-direction: column;
+  position: relative;
   
-  @include mobile-only {
-    width: 100%;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-md;
+    border-color: rgba($color-primary, 0.3);
+    
+    .cardThumb {
+      transform: scale(1.05);
+    }
   }
 }
 
-.uploadPlaceholder {
-  @include flex-col(center, center, $spacing-xs);
-  text-align: center;
-  padding: $spacing-lg $spacing-md;
-  border: 1px dashed $color-border;
-  border-radius: $radius-button;
-  font-size: 12.5px;
+.cardPreviewFrame {
+  aspect-ratio: 4 / 3;
+  width: 100%;
+  background-color: #0d121f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  border-bottom: 1px solid rgba($color-border, 0.4);
+}
+
+.cardThumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.25s ease;
+}
+
+.cardIconPlaceholder {
+  color: rgba($color-text-secondary, 0.6);
+  svg {
+    width: 28px;
+    height: 28px;
+    stroke-width: 1.5;
+  }
+}
+
+.extBadge {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  background-color: rgba(#000000, 0.75);
+  backdrop-filter: blur(4px);
+  color: #ffffff;
+  font-size: 8.5px;
+  font-weight: $font-weight-bold;
+  padding: 2px 5px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+}
+
+.cardMetadata {
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background-color: $color-surface;
+}
+
+.cardFileName {
+  font-size: 11.5px;
+  font-weight: $font-weight-semibold;
+  color: $color-text;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cardFileSize {
+  font-size: 9.5px;
   color: $color-text-secondary;
 }
 
-.placeholderIcon {
+// Uploader Trigger Card Slot
+.uploadTriggerCard {
+  border: 1.5px dashed $color-border;
+  background-color: rgba($color-primary, 0.01);
+  border-radius: 12px;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all $transition-fast;
+  min-height: 140px;
+  
+  &:hover {
+    border-color: $color-primary;
+    background-color: rgba($color-primary, 0.03);
+    
+    .uploadIcon {
+      color: $color-primary;
+      transform: translateY(-2px);
+    }
+  }
+}
+
+.uploadLabel {
+  @include flex-col(center, center, 6px);
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  padding: $spacing-sm;
+}
+
+.uploadIcon {
+  color: rgba($color-text-secondary, 0.7);
+  transition: all $transition-fast;
+}
+
+.uploadLabelText {
+  font-size: 11px;
+  font-weight: $font-weight-bold;
+  color: $color-text-secondary;
+}
+
+.hiddenFileInput {
+  display: none;
+}
+
+// Uploading Spinner State
+.uploadingSpinner {
+  @include flex-col(center, center, 6px);
+}
+
+.spinIcon {
+  width: 20px;
+  height: 20px;
+  color: $color-primary;
+  animation: spin 1s linear infinite;
+}
+
+.progressPercent {
+  font-size: 10.5px;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+}
+
+// Empty State Placeholder
+.emptyGridPlaceholder {
+  grid-column: 1 / -1;
+  @include flex-col(center, center, $spacing-xs);
+  text-align: center;
+  padding: $spacing-xl $spacing-md;
+  border: 1px dashed $color-border;
+  border-radius: 12px;
+  font-size: 12.5px;
+  color: $color-text-secondary;
+  background-color: rgba($color-border, 0.05);
+}
+
+.emptyIcon {
   width: 24px;
   height: 24px;
   color: lighten($color-text-secondary, 15%);
@@ -69,19 +213,16 @@
 
 // Error alert boxes inside file area
 .errorContainer {
-  @include flex-col(flex-start, stretch, $spacing-sm);
+  @include flex-row(space-between, center, $spacing-md);
   background-color: rgba($color-danger, 0.04);
   border: 1px solid rgba($color-danger, 0.15);
   border-radius: $radius-button;
-  padding: $spacing-sm $spacing-md;
-  
-  @media (min-width: 576px) {
-    @include flex-row(space-between, center, $spacing-md);
-  }
+  padding: 8px 12px;
+  margin-bottom: 12px;
   
   & > button {
     height: 28px !important;
-    font-size: 11.5px !important;
+    font-size: 11px !important;
     border-radius: 8px !important;
   }
 }
@@ -97,4 +238,8 @@
   width: 16px;
   height: 16px;
   flex-shrink: 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }

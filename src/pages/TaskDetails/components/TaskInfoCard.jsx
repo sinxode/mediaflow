@@ -1,155 +1,144 @@
 import React, { useState } from 'react';
-import { Upload, HardDrive, FileWarning } from 'lucide-react';
+import { Upload, HardDrive, FileWarning, RefreshCw } from 'lucide-react';
 import Card from '../../../components/Card/Card';
 import Button from '../../../components/Button/Button';
-import FilePreviewCard from './FilePreviewCard';
-import FileUploadZone from './FileUploadZone';
-import UploadProgress from './UploadProgress';
-import ReplaceFileDialog from './ReplaceFileDialog';
-import FileSkeleton from './FileSkeleton';
-import { StorageService, getFileMetadata } from '../../../services/storage/storageService';
+import { getFileIcon } from './FilePreviewCard';
+import DeliverableModal from './DeliverableModal';
+import { StorageService } from '../../../services/storage/storageService';
 import { TaskService } from '../../../services/tasks/taskService';
+import { parseDeliverables, serializeDeliverables } from '../../../utils/deliverableHelper';
 import styles from './TaskInfoCard.module.scss';
 
-const TaskInfoCard = ({ taskId, description, fileUrl, fileMeta, role = 'creator', isAssignee = false, onFileUpdated }) => {
+const TaskInfoCard = ({ task, description, role = 'creator', isAssignee = false, onFileUpdated }) => {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState('');
   
-  // Workflow UI states
-  const [isConfirmingReplace, setIsConfirmingReplace] = useState(false);
-  const [showUploadZone, setShowUploadZone] = useState(false);
+  // Lightbox selection state
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const isCreator = role === 'creator';
-  const canUploadOrReplace = isCreator && isAssignee;
+  const canEdit = isCreator || isAssignee;
 
-  const handleFileSelected = async (file) => {
-    if (!taskId) return;
+  // Parse list of deliverables
+  const deliverables = parseDeliverables(task);
+
+  const handleFileUpload = async (file) => {
+    if (!task?.id) return;
     setUploading(true);
     setProgress(0);
     setError('');
-    setIsConfirmingReplace(false);
-    setShowUploadZone(false);
 
     try {
       // Begin storage upload
-      const uploaded = await StorageService.uploadFile(taskId, file, (percent) => {
+      const uploaded = await StorageService.uploadFile(task.id, file, (percent) => {
         setProgress(percent);
       });
 
+      const newFileObj = {
+        id: `file-${Date.now()}`,
+        url: uploaded.url,
+        name: uploaded.name,
+        size: uploaded.size,
+        uploadedAt: uploaded.uploaded_at || new Date().toISOString()
+      };
+
+      const updatedList = [...deliverables, newFileObj];
+      const serializedPayload = serializeDeliverables(updatedList);
+      
       // Update database task entry
-      await TaskService.updateTask(taskId, {
-        file_url: uploaded.url,
-        // Store meta helper parameters
-        file_name: uploaded.name,
-        file_size: uploaded.size,
-        file_uploaded_at: uploaded.uploaded_at
-      });
+      await TaskService.updateTask(task.id, serializedPayload);
 
       if (onFileUpdated) {
-        onFileUpdated(uploaded.url, uploaded);
+        onFileUpdated(serializedPayload);
       }
     } catch (err) {
       console.error('File upload failed', err);
-      setError('Upload failed. Please verify network connectivity.');
+      setError('Upload failed. Check your network connection.');
     } finally {
       setUploading(false);
     }
   };
 
-  const handleDownload = () => {
-    if (!fileUrl) return;
-    // Download asset via link
-    window.open(fileUrl, '_blank');
+  const handleFileDelete = async (fileToDelete) => {
+    if (!task?.id) return;
+    if (!window.confirm(`Are you sure you want to delete "${fileToDelete.name}"?`)) return;
+
+    try {
+      const updatedList = deliverables.filter(f => f.url !== fileToDelete.url);
+      const serializedPayload = serializeDeliverables(updatedList);
+      
+      await TaskService.updateTask(task.id, serializedPayload);
+      
+      if (onFileUpdated) {
+        onFileUpdated(serializedPayload);
+      }
+      setSelectedFile(null); // Close lightbox modal
+    } catch (err) {
+      console.error('Failed to delete deliverable file', err);
+      setError('Failed to delete file.');
+    }
   };
 
-  const triggerReplacement = () => {
-    setIsConfirmingReplace(true);
+  const handleFileReplace = async (fileToReplace, newRawFile) => {
+    if (!task?.id) return;
+    setUploading(true);
+    setProgress(0);
+    setError('');
+
+    try {
+      const uploaded = await StorageService.uploadFile(task.id, newRawFile, (percent) => {
+        setProgress(percent);
+      });
+
+      const updatedList = deliverables.map(f => {
+        if (f.url === fileToReplace.url) {
+          return {
+            ...f,
+            url: uploaded.url,
+            name: uploaded.name,
+            size: uploaded.size,
+            uploadedAt: uploaded.uploaded_at || new Date().toISOString()
+          };
+        }
+        return f;
+      });
+
+      const serializedPayload = serializeDeliverables(updatedList);
+      await TaskService.updateTask(task.id, serializedPayload);
+      
+      if (onFileUpdated) {
+        onFileUpdated(serializedPayload);
+      }
+
+      // Auto update modal focus to view the newly replaced item
+      const replacedItem = updatedList.find(f => f.name === uploaded.name);
+      setSelectedFile(replacedItem || null);
+    } catch (err) {
+      console.error('File replacement failed', err);
+      setError('Failed to replace file.');
+    } finally {
+      setUploading(false);
+    }
   };
 
-  const confirmReplacement = () => {
-    setIsConfirmingReplace(false);
-    setShowUploadZone(true);
-  };
-
-  // Determine active visual layout state
-  const renderFileArea = () => {
-    if (uploading) {
-      return <UploadProgress percent={progress} />;
+  const handleFileDownload = async (fileToDownload) => {
+    if (!fileToDownload.url) return;
+    try {
+      const res = await fetch(fileToDownload.url);
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', fileToDownload.name || 'download');
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (e) {
+      // Fallback in case of CORS or browser limits
+      window.open(fileToDownload.url, '_blank');
     }
-
-    if (error) {
-      return (
-        <div className={styles.errorContainer}>
-          <div className={styles.errorMeta}>
-            <FileWarning className={styles.errorIcon} />
-            <span>{error}</span>
-          </div>
-          <Button variant="secondary" size="sm" onClick={() => setError('')}>
-            Try Again
-          </Button>
-        </div>
-      );
-    }
-
-    if (isConfirmingReplace) {
-      return (
-        <ReplaceFileDialog
-          onConfirm={confirmReplacement}
-          onCancel={() => setIsConfirmingReplace(false)}
-        />
-      );
-    }
-
-    if (fileUrl && !showUploadZone) {
-      // Resolve name/meta tags
-      const fileName = fileMeta?.name || fileUrl.split('/').pop() || 'DeliverableAsset.jpg';
-      const fileSize = fileMeta?.size || '4.2 MB';
-      const uploadedAt = fileMeta?.uploaded_at || new Date().toISOString();
-
-      return (
-        <div className={styles.fileDisplay}>
-          <FilePreviewCard
-            fileName={fileName}
-            fileUrl={fileUrl}
-            fileSize={fileSize}
-            uploadedAt={uploadedAt}
-            onDownload={handleDownload}
-            canAction={true}
-          />
-          {canUploadOrReplace && (
-            <div className={styles.replaceActionRow}>
-              <Button
-                variant="secondary"
-                size="sm"
-                leftIcon={<Upload />}
-                onClick={triggerReplacement}
-                className={styles.replaceBtn}
-              >
-                Replace Deliverable File
-              </Button>
-            </div>
-          )}
-        </div>
-      );
-    }
-
-    if (showUploadZone || (!fileUrl && canUploadOrReplace)) {
-      return (
-        <FileUploadZone
-          onFileSelected={handleFileSelected}
-          onError={(msg) => setError(msg)}
-        />
-      );
-    }
-
-    // Reviewer or Guest empty placeholder
-    return (
-      <div className={styles.uploadPlaceholder}>
-        <HardDrive className={styles.placeholderIcon} />
-        <span>No deliverable files uploaded yet.</span>
-      </div>
-    );
   };
 
   return (
@@ -160,11 +149,101 @@ const TaskInfoCard = ({ taskId, description, fileUrl, fileMeta, role = 'creator'
         <p className={styles.description}>{description || 'No instructions provided.'}</p>
       </div>
 
-      {/* Latest File Section */}
+      {/* Multiple Deliverables Section */}
       <div className={styles.fileSection}>
-        <h3 className={styles.sectionTitle}>Latest Deliverable</h3>
-        {renderFileArea()}
+        <h3 className={styles.sectionTitle}>Deliverables ({deliverables.length})</h3>
+        
+        {error && (
+          <div className={styles.errorContainer}>
+            <div className={styles.errorMeta}>
+              <FileWarning className={styles.errorIcon} />
+              <span>{error}</span>
+            </div>
+            <Button variant="secondary" size="sm" onClick={() => setError('')}>
+              Dismiss
+            </Button>
+          </div>
+        )}
+
+        <div className={styles.deliverablesGrid}>
+          {/* Grid Cards */}
+          {deliverables.map((file, idx) => {
+            const ext = file.name.split('.').pop().toLowerCase();
+            const isImg = ['png', 'jpg', 'jpeg', 'gif'].includes(ext);
+            
+            return (
+              <div
+                key={file.id || idx}
+                className={styles.deliverableCard}
+                onClick={() => setSelectedFile(file)}
+              >
+                <div className={styles.cardPreviewFrame}>
+                  {isImg ? (
+                    <img src={file.url} alt={file.name} className={styles.cardThumb} />
+                  ) : (
+                    <div className={styles.cardIconPlaceholder}>
+                      {getFileIcon(file.name)}
+                    </div>
+                  )}
+                  <span className={styles.extBadge}>{ext.toUpperCase()}</span>
+                </div>
+                <div className={styles.cardMetadata}>
+                  <span className={styles.cardFileName} title={file.name}>
+                    {file.name}
+                  </span>
+                  <span className={styles.cardFileSize}>{file.size}</span>
+                </div>
+              </div>
+            );
+          })}
+
+          {/* Add file zone (only for assignee/creator) */}
+          {canEdit && (
+            <div className={styles.uploadTriggerCard}>
+              {uploading ? (
+                <div className={styles.uploadingSpinner}>
+                  <RefreshCw className={styles.spinIcon} />
+                  <span className={styles.progressPercent}>{progress}%</span>
+                </div>
+              ) : (
+                <label className={styles.uploadLabel}>
+                  <Upload size={20} className={styles.uploadIcon} />
+                  <span className={styles.uploadLabelText}>Add Deliverable</span>
+                  <input
+                    type="file"
+                    className={styles.hiddenFileInput}
+                    onChange={(e) => {
+                      const selected = e.target.files?.[0];
+                      if (selected) handleFileUpload(selected);
+                    }}
+                  />
+                </label>
+              )}
+            </div>
+          )}
+
+          {/* Empty Placeholder for Reviewers/Guests if no deliverables */}
+          {deliverables.length === 0 && !canEdit && (
+            <div className={styles.emptyGridPlaceholder}>
+              <HardDrive className={styles.emptyIcon} />
+              <span>No deliverables uploaded yet.</span>
+            </div>
+          )}
+        </div>
       </div>
+
+      {/* Lightbox File Modal View */}
+      {selectedFile && (
+        <DeliverableModal
+          file={selectedFile}
+          onClose={() => setSelectedFile(null)}
+          onDownload={handleFileDownload}
+          onDelete={handleFileDelete}
+          onReplace={handleFileReplace}
+          canEdit={canEdit}
+          replacing={uploading}
+        />
+      )}
     </div>
   );
 };

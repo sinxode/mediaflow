@@ -187,23 +187,14 @@ const TaskDetails = ({ task, taskId, onBack }) => {
           {/* Section 2: Instructions & File previews */}
           <motion.div variants={fadeUpVariants} className={styles.cardWrapper}>
             <TaskInfoCard
-              taskId={currentTask.id}
+              task={currentTask}
               description={normalizedTask.description}
-              fileUrl={currentTask.file_url}
-              fileMeta={{
-                name: currentTask.file_name,
-                size: currentTask.file_size,
-                uploaded_at: currentTask.file_uploaded_at
-              }}
               role={role}
               isAssignee={isAssignee}
-              onFileUpdated={(newUrl, meta) => {
+              onFileUpdated={(updatedFields) => {
                 setCurrentTask((prev) => ({
                   ...prev,
-                  file_url: newUrl,
-                  file_name: meta.name,
-                  file_size: meta.size,
-                  file_uploaded_at: meta.uploaded_at
+                  ...updatedFields
                 }));
               }}
             />
