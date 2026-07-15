@@ -252,6 +252,86 @@ const Dashboard = () => {
         ))}
       </motion.div>
 
+      {/* Section 4: Creator Workload Monitor */}
+      <div className={styles.section} style={{ marginTop: '24px', marginBottom: '24px' }}>
+        <Card padding={true} className={styles.workloadCard}>
+          <div className={styles.sectionHeaderInside}>
+            <h3 className={styles.sectionTitle}>Creator Workload Monitor</h3>
+            <span style={{ fontSize: '11px', color: '#64748B', display: 'block', marginTop: '2px' }}>
+              Realtime task loads and status of team creators
+            </span>
+          </div>
+          
+          <div className={styles.creatorList}>
+            {creators.length > 0 ? (
+              creators.map((c) => {
+                const creatorTasks = tasks.filter((t) => t.assigned_to === c.id);
+                const inProgress = creatorTasks.filter((t) => t.status === 'in_progress').length;
+                const review = creatorTasks.filter((t) => t.status === 'ready_for_review' || t.status === 'reviewing').length;
+                const completed = creatorTasks.filter((t) => t.status === 'completed' || t.status === 'published').length;
+                const totalActive = inProgress + review;
+                
+                let workloadLabel = 'Available';
+                let workloadClass = styles.available;
+                if (totalActive >= 5) {
+                  workloadLabel = 'Overloaded';
+                  workloadClass = styles.overloaded;
+                } else if (totalActive >= 3) {
+                  workloadLabel = 'Busy';
+                  workloadClass = styles.busy;
+                } else if (totalActive >= 1) {
+                  workloadLabel = 'Optimal';
+                  workloadClass = styles.optimal;
+                }
+                
+                return (
+                  <div key={c.id} className={styles.creatorRow}>
+                    <div className={styles.creatorInfo}>
+                      <Avatar src={c.avatar_url || c.avatar} name={c.name} size="sm" />
+                      <div className={styles.meta}>
+                        <h4 className={styles.name}>{c.name}</h4>
+                        <span className={styles.email}>{c.email}</span>
+                      </div>
+                    </div>
+                    
+                    <div className={styles.taskBreakdown}>
+                      <span className={styles.loadBadge} title="In Progress">
+                        <span className={styles.dotInProgress} /> {inProgress} Active
+                      </span>
+                      <span className={styles.loadBadge} title="In Review">
+                        <span className={styles.dotInReview} /> {review} Review
+                      </span>
+                      <span className={styles.loadBadge} title="Completed">
+                        <span className={styles.dotCompleted} /> {completed} Done
+                      </span>
+                    </div>
+                    
+                    <div className={styles.statusCol}>
+                      <span className={`${styles.workloadStatus} ${workloadClass}`}>
+                        {workloadLabel}
+                      </span>
+                    </div>
+                    
+                    <button
+                      className={styles.quickAssignBtn}
+                      onClick={() => navigate('/tasks/create', { state: { prefilledAssigneeId: c.id } })}
+                      title={`Assign new task to ${c.name}`}
+                    >
+                      <UserPlus size={13} />
+                      <span>Assign</span>
+                    </button>
+                  </div>
+                );
+              })
+            ) : (
+              <div style={{ padding: '20px 0', textAlign: 'center', fontSize: '12.5px', color: '#64748B' }}>
+                No creators found in this workspace.
+              </div>
+            )}
+          </div>
+        </Card>
+      </div>
+
       {/* Main SaaS Multi-Column Grid */}
       <div className={styles.mainGrid}>
         {/* Left Column: Tasks & Review Preview */}
@@ -284,7 +364,7 @@ const Dashboard = () => {
                   >
                     <TaskCard
                       task={task}
-                      onClick={() => navigate(`/tasks`)}
+                      onClick={() => navigate(`/tasks?id=${task.id}`)}
                     />
                   </motion.div>
                 ))
@@ -294,85 +374,6 @@ const Dashboard = () => {
                 </div>
               )}
             </motion.div>
-          </div>
-          {/* Section 4: Creator Workload Monitor */}
-          <div className={styles.section}>
-            <Card padding={true} className={styles.workloadCard}>
-              <div className={styles.sectionHeaderInside}>
-                <h3 className={styles.sectionTitle}>Creator Workload Monitor</h3>
-                <span style={{ fontSize: '11px', color: '#64748B', display: 'block', marginTop: '2px' }}>
-                  Realtime task loads and status of team creators
-                </span>
-              </div>
-              
-              <div className={styles.creatorList}>
-                {creators.length > 0 ? (
-                  creators.map((c) => {
-                    const creatorTasks = tasks.filter((t) => t.assigned_to === c.id);
-                    const inProgress = creatorTasks.filter((t) => t.status === 'in_progress').length;
-                    const review = creatorTasks.filter((t) => t.status === 'ready_for_review' || t.status === 'reviewing').length;
-                    const completed = creatorTasks.filter((t) => t.status === 'completed' || t.status === 'published').length;
-                    const totalActive = inProgress + review;
-                    
-                    let workloadLabel = 'Available';
-                    let workloadClass = styles.available;
-                    if (totalActive >= 5) {
-                      workloadLabel = 'Overloaded';
-                      workloadClass = styles.overloaded;
-                    } else if (totalActive >= 3) {
-                      workloadLabel = 'Busy';
-                      workloadClass = styles.busy;
-                    } else if (totalActive >= 1) {
-                      workloadLabel = 'Optimal';
-                      workloadClass = styles.optimal;
-                    }
-                    
-                    return (
-                      <div key={c.id} className={styles.creatorRow}>
-                        <div className={styles.creatorInfo}>
-                          <Avatar src={c.avatar_url || c.avatar} name={c.name} size="sm" />
-                          <div className={styles.meta}>
-                            <h4 className={styles.name}>{c.name}</h4>
-                            <span className={styles.email}>{c.email}</span>
-                          </div>
-                        </div>
-                        
-                        <div className={styles.taskBreakdown}>
-                          <span className={styles.loadBadge} title="In Progress">
-                            <span className={styles.dotInProgress} /> {inProgress} Active
-                          </span>
-                          <span className={styles.loadBadge} title="In Review">
-                            <span className={styles.dotInReview} /> {review} Review
-                          </span>
-                          <span className={styles.loadBadge} title="Completed">
-                            <span className={styles.dotCompleted} /> {completed} Done
-                          </span>
-                        </div>
-                        
-                        <div className={styles.statusCol}>
-                          <span className={`${styles.workloadStatus} ${workloadClass}`}>
-                            {workloadLabel}
-                          </span>
-                        </div>
-                        
-                        <button
-                          className={styles.quickAssignBtn}
-                          onClick={() => navigate('/tasks/create', { state: { prefilledAssigneeId: c.id } })}
-                          title={`Assign new task to ${c.name}`}
-                        >
-                          <UserPlus size={13} />
-                          <span>Assign</span>
-                        </button>
-                      </div>
-                    );
-                  })
-                ) : (
-                  <div style={{ padding: '20px 0', textAlign: 'center', fontSize: '12.5px', color: '#64748B' }}>
-                    No creators found in this workspace.
-                  </div>
-                )}
-              </div>
-            </Card>
           </div>
 
           {/* Section 5: Review Queue Preview */}

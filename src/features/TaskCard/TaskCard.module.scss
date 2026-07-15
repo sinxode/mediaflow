@@ -1,156 +1,218 @@
 @import '../../styles/shared';
 
-.taskCard {
-  background: linear-gradient(135deg, rgba($color-surface, 0.98) 0%, rgba($color-surface, 0.9) 100%);
+.taskCardRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $spacing-md;
+  background-color: $color-surface;
   border: 1px solid rgba($color-border, 0.6);
-  border-radius: 16px;
+  border-radius: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
   transition: all $transition-normal;
-  overflow: hidden;
-  position: relative;
-  height: 100%;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.01);
+  width: 100%;
   
   &:hover {
-    transform: translateY(-4px);
+    transform: translateX(4px);
     border-color: rgba($color-primary, 0.35);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08), 0 0 24px rgba($color-primary, 0.04);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05), 0 0 16px rgba($color-primary, 0.03);
+    
+    .chevron {
+      transform: translateX(2px);
+      color: $color-primary;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    gap: $spacing-sm;
+    padding: 10px 12px;
   }
 }
 
-.innerContent {
-  @include flex-col(space-between, stretch, 10px);
-  height: 100%;
-  padding: $spacing-md !important;
-}
-
-.header {
-  @include flex-row(space-between, center);
-}
-
-.category {
-  font-size: 10px;
-  color: $color-text-secondary;
-  font-weight: $font-weight-semibold;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+.iconContainer {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
   background-color: rgba($color-primary, 0.06);
   color: $color-primary;
-  padding: 3px 8px;
-  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  
+  svg {
+    width: 18px;
+    height: 18px;
+  }
 }
 
-.badges {
-  @include flex-row(flex-end, center, $spacing-xxs);
+.mainInfo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.titleWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .title {
-  font-size: 15px;
-  font-weight: $font-weight-bold;
+  font-size: 13.5px;
+  font-weight: $font-weight-semibold;
   color: $color-text;
-  line-height: 1.4;
-  margin: 4px 0 2px;
-  @include line-clamp(2);
-  min-height: auto;
+  margin: 0;
+  line-height: 1.35;
+  @include text-truncate;
 }
 
-.descriptionSnippet {
-  font-size: 12px;
+.descriptionPreview {
+  font-size: 11px;
   color: $color-text-secondary;
-  line-height: 1.45;
-  @include line-clamp(2);
-  margin-bottom: $spacing-xs;
+  @include text-truncate;
 }
 
-.userSection {
+.metadata {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
-  margin-top: 4px;
-  padding-bottom: $spacing-xs;
 }
 
-.userBadge {
+.metaItem {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  background-color: rgba($color-primary, 0.03);
-  border: 1px solid rgba($color-primary, 0.06);
-  padding: 4px 10px;
-  border-radius: 20px;
+  gap: 4px;
   font-size: 10.5px;
   color: $color-text-secondary;
+}
+
+.metaText {
+  @include text-truncate;
+  max-width: 100px;
+}
+
+.metaIcon {
+  width: 11px;
+  height: 11px;
+  color: lighten($color-text-secondary, 10%);
+}
+
+.creatorInitial {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: rgba($color-primary, 0.12);
+  color: $color-primary;
+  font-size: 8px;
+  font-weight: $font-weight-bold;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.metaDivider {
+  font-size: 9px;
+  color: $color-border;
+  user-select: none;
+}
+
+.actionArea {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $spacing-md;
+  flex-shrink: 0;
   
-  strong {
-    color: $color-text;
-    font-weight: $font-weight-semibold;
+  @media (max-width: 768px) {
+    gap: $spacing-xs;
   }
 }
 
-.unassignedBadge {
-  display: inline-flex;
+.badges {
+  display: flex;
+  flex-direction: row;
   align-items: center;
   gap: 6px;
-  background-color: transparent;
-  border: 1px dashed rgba($color-border, 0.8);
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 10.5px;
-  color: $color-text-secondary;
-}
-
-.unassignedDot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background-color: $color-text-secondary;
-  display: inline-block;
-}
-
-.footer {
-  @include flex-row(space-between, center, $spacing-xs);
-  padding-top: $spacing-xs;
-  border-top: 1px dashed rgba($color-border, 0.6);
-}
-
-.deadline {
-  @include flex-row(flex-start, center, 6px);
-  font-size: 11px;
-  color: $color-text-secondary;
   
-  svg {
-    width: 12px;
-    height: 12px;
+  @media (max-width: 576px) {
+    display: none; // Hide badges on extra small screens to save space
+  }
+}
+
+.priorityBadge {
+  font-size: 9px;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  
+  &.low {
+    background-color: rgba($color-text-secondary, 0.1);
     color: $color-text-secondary;
   }
-}
-
-/* Progress indicator styles */
-.progressTrack {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background-color: rgba($color-border, 0.2);
-}
-
-.progressBar {
-  height: 100%;
-  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  background-color: $color-primary; // Default fallback
-  
-  &.in_progress {
-    background-color: #3b82f6; // Blue
+  &.medium {
+    background-color: rgba($color-primary, 0.1);
+    color: $color-primary;
   }
-  &.ready_for_review, &.reviewing {
-    background-color: #f59e0b; // Amber/Orange
+  &.high {
+    background-color: rgba($color-warning, 0.12);
+    color: darken($color-warning, 5%);
+  }
+  &.urgent {
+    background-color: rgba($color-danger, 0.1);
+    color: $color-danger;
+  }
+}
+
+.statusBadge {
+  font-size: 9.5px;
+  font-weight: $font-weight-semibold;
+  padding: 2px 7px;
+  border-radius: 20px;
+  text-transform: capitalize;
+  
+  &.created {
+    background-color: rgba($color-text-secondary, 0.08);
+    color: $color-text-secondary;
+  }
+  &.assigned {
+    background-color: rgba(#3b82f6, 0.1);
+    color: #2563eb;
+  }
+  &.in-progress {
+    background-color: rgba(#3b82f6, 0.15);
+    color: #1d4ed8;
+    font-weight: $font-weight-bold;
+  }
+  &.ready-for-review {
+    background-color: rgba(#f59e0b, 0.12);
+    color: #d97706;
+  }
+  &.reviewing {
+    background-color: rgba(#f59e0b, 0.18);
+    color: #b45309;
   }
   &.completed {
-    background-color: #10b981; // Emerald/Green
+    background-color: rgba(#10b981, 0.1);
+    color: #059669;
   }
   &.published {
-    background-color: #8b5cf6; // Purple
+    background-color: rgba(#8b5cf6, 0.1);
+    color: #7c3aed;
   }
+}
+
+.chevron {
+  width: 16px;
+  height: 16px;
+  color: $color-border;
+  transition: transform $transition-fast, color $transition-fast;
 }

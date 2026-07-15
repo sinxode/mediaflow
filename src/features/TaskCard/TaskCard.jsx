@@ -1,103 +1,97 @@
 import React from 'react';
-import { Calendar } from 'lucide-react';
-import Card from '../../components/Card/Card';
-import StatusBadge from '../../components/StatusBadge/StatusBadge';
-import Badge from '../../components/Badge/Badge';
+import {
+  Image,
+  Film,
+  Sparkles,
+  Share2,
+  FileText,
+  Camera,
+  ChevronRight,
+  Calendar
+} from 'lucide-react';
 import Avatar from '../../components/Avatar/Avatar';
 import styles from './TaskCard.module.scss';
 
-const STATUS_PROGRESS = {
-  created: 15,
-  assigned: 35,
-  in_progress: 55,
-  ready_for_review: 75,
-  reviewing: 85,
-  completed: 100,
-  published: 100,
+// Category Icon Mapper
+const getCategoryIcon = (category) => {
+  const normalized = category?.toLowerCase() || '';
+  if (normalized.includes('poster')) return <Image />;
+  if (normalized.includes('video')) return <Film />;
+  if (normalized.includes('thumbnail')) return <Sparkles />;
+  if (normalized.includes('social') || normalized.includes('post')) return <Share2 />;
+  if (normalized.includes('document') || normalized.includes('docs')) return <FileText />;
+  if (normalized.includes('photograph') || normalized.includes('photo')) return <Camera />;
+  return <FileText />;
 };
 
 const TaskCard = ({ task, onClick, className = '' }) => {
-  const { title, status, priority, deadline, assignedUser, category, description, creator, assignee } = task;
-
-  const priorityVariants = {
-    low: 'secondary',
-    medium: 'primary',
-    high: 'warning',
-    urgent: 'danger',
-  };
-
-  const getPriorityLabel = (pri) => {
-    if (!pri) return '';
-    return pri.charAt(0).toUpperCase() + pri.slice(1);
-  };
+  const { title, description, category, status, priority, deadline, assignedUser, creator, assignee } = task;
 
   const displayAssignee = assignee || assignedUser;
   const displayCreator = creator || task.creator;
-  const progressVal = STATUS_PROGRESS[status?.toLowerCase()] || 10;
+
+  const prio = priority?.toLowerCase() || 'medium';
+  const statusClass = status?.toLowerCase().replace(/\s+/g, '-') || 'created';
 
   return (
-    <Card
-      hoverable={true}
+    <div
       onClick={onClick}
-      className={`${styles.taskCard} ${className}`}
-      padding={false}
+      className={`${styles.taskCardRow} ${className}`}
     >
-      <div className={styles.innerContent}>
-        <div className={styles.header}>
-          <span className={styles.category}>{category}</span>
-          <div className={styles.badges}>
-            <Badge variant={priorityVariants[priority.toLowerCase()] || 'secondary'}>
-              {getPriorityLabel(priority)}
-            </Badge>
-            <StatusBadge status={status} />
-          </div>
+      {/* Left: Category Icon */}
+      <div className={styles.iconContainer}>
+        {getCategoryIcon(category)}
+      </div>
+
+      {/* Middle: Title & Metadata */}
+      <div className={styles.mainInfo}>
+        <div className={styles.titleWrapper}>
+          <h4 className={styles.title}>{title}</h4>
+          {description && <span className={styles.descriptionPreview}>{description}</span>}
         </div>
-
-        <h4 className={styles.title}>{title}</h4>
-
-        {description && <p className={styles.descriptionSnippet}>{description}</p>}
-
-        <div className={styles.userSection}>
-          {displayCreator && (
-            <div className={styles.userBadge} title={`Creator: ${displayCreator.name}`}>
-              <Avatar src={displayCreator.avatar_url || displayCreator.avatar} name={displayCreator.name} size="xs" />
-              <span className={styles.userRoleText}>
-                Creator: <strong>{displayCreator.name.split(' ')[0]}</strong>
-              </span>
-            </div>
-          )}
-          
+        
+        {/* Bottom Metadata row */}
+        <div className={styles.metadata}>
           {displayAssignee ? (
-            <div className={styles.userBadge} title={`Assignee: ${displayAssignee.name}`}>
+            <span className={styles.metaItem} title="Assignee">
               <Avatar src={displayAssignee.avatar_url || displayAssignee.avatar} name={displayAssignee.name} size="xs" />
-              <span className={styles.userRoleText}>
-                Assignee: <strong>{displayAssignee.name.split(' ')[0]}</strong>
-              </span>
-            </div>
+              <span className={styles.metaText}>{displayAssignee.name}</span>
+            </span>
           ) : (
-            <div className={styles.unassignedBadge}>
-              <span className={styles.unassignedDot} />
-              <span>Unassigned</span>
-            </div>
+            <span className={styles.metaItem} style={{ fontStyle: 'italic', color: '#94A3B8' }}>
+              Unassigned
+            </span>
+          )}
+          <span className={styles.metaDivider}>•</span>
+          <span className={styles.metaItem} title="Deadline">
+            <Calendar className={styles.metaIcon} />
+            <span className={styles.metaText}>{deadline || 'No deadline'}</span>
+          </span>
+          {displayCreator && (
+            <>
+              <span className={styles.metaDivider}>•</span>
+              <span className={styles.metaItem} title="Creator">
+                <span className={styles.creatorInitial}>C</span>
+                <span className={styles.metaText}>{displayCreator.name}</span>
+              </span>
+            </>
           )}
         </div>
+      </div>
 
-        <div className={styles.footer}>
-          <div className={styles.deadline}>
-            <Calendar />
-            <span>Due: {deadline || 'No deadline'}</span>
-          </div>
+      {/* Right: Badges & Chevron */}
+      <div className={styles.actionArea}>
+        <div className={styles.badges}>
+          <span className={`${styles.priorityBadge} ${styles[prio]}`}>
+            {priority}
+          </span>
+          <span className={`${styles.statusBadge} ${styles[statusClass]}`}>
+            {status}
+          </span>
         </div>
+        <ChevronRight className={styles.chevron} />
       </div>
-
-      {/* Modern Status Progress Indicator Track */}
-      <div className={styles.progressTrack}>
-        <div 
-          className={`${styles.progressBar} ${styles[status?.toLowerCase()] || ''}`}
-          style={{ width: `${progressVal}%` }}
-        />
-      </div>
-    </Card>
+    </div>
   );
 };
 
