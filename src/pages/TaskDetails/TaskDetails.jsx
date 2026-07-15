@@ -11,7 +11,7 @@ import Modal from '../../components/Modal/Modal';
 import Button from '../../components/Button/Button';
 import { TaskService } from '../../services/tasks/taskService';
 import { getStatusActions } from '../../services/workflow/workflowService';
-import { parseTaskMetadata } from '../../utils/workflowMeta';
+import { parseTaskMetadata, serializeTaskMetadata } from '../../utils/workflowMeta';
 import { useRealtimeTask } from '../../hooks/useRealtime';
 import { useAuth } from '../../auth/hooks/useAuth';
 import { pageVariants, fadeUpVariants } from '../../utils/animations';
@@ -79,14 +79,74 @@ const TaskDetails = ({ task, taskId, onBack }) => {
     
     try {
       setLoading(true);
-      const payload = { status: targetStatus };
+      const meta = parseTaskMetadata(currentTask.description);
+      let newApprovals = [...(meta.approvals || [])];
+      let finalStatus = targetStatus;
+      let alertMessage = '';
+
+      const isApprovalAction = 
+        currentTask.status === 'reviewing' && 
+        (targetStatus === 'approved' || targetStatus === 'completed');
+
+      const isResetAction = 
+        targetStatus === 'working' || 
+        targetStatus === 'assigned' || 
+        targetStatus === 'created';
+
+      if (isApprovalAction) {
+        if (!user?.id) {
+          alert('Error: User session not found.');
+          return;
+        }
+
+        if (newApprovals.includes(user.id)) {
+          alert('You have already approved this task. Waiting for another reviewer.');
+          return;
+        }
+
+        newApprovals.push(user.id);
+
+        if (newApprovals.length >= 2) {
+          // Threshold of 2 approvals met!
+          finalStatus = targetStatus;
+          alertMessage = `Task approved! 2 of 2 approvals received. Status updated to ${targetStatus}.`;
+        } else {
+          // Keep in reviewing, but save the approval state
+          finalStatus = 'reviewing';
+          alertMessage = `Approval logged successfully! (1 of 2 approvals received). Waiting for another reviewer.`;
+        }
+      } else if (isResetAction) {
+        // Clear approvals if changes are requested or reset
+        newApprovals = [];
+      }
+
+      // Serialize new description with updated approvals list
+      const serializedDescription = serializeTaskMetadata(
+        meta.cleanDescription,
+        meta.requiresReview,
+        meta.requiresPublishing,
+        meta.requiresDeliverable,
+        newApprovals
+      );
+
+      const payload = { 
+        status: finalStatus,
+        description: serializedDescription
+      };
+
       if (targetStatus === 'assigned') {
         payload.assigned_to = user?.id;
       }
+
       const updated = await TaskService.updateTask(currentTask.id, payload);
       setCurrentTask(updated);
+
+      if (alertMessage) {
+        alert(alertMessage);
+      }
     } catch (err) {
       console.error('Failed to update status', err);
+      alert('Failed to update status: ' + err.message);
     } finally {
       setLoading(false);
     }
@@ -163,6 +223,19 @@ const TaskDetails = ({ task, taskId, onBack }) => {
     }
   }
 
+  // If this user already approved this task, disable their approval button
+  const hasApproved = meta.approvals?.includes(user?.id);
+  const mappedActions = dynamicActions.map(action => {
+    if (hasApproved && (action.id === 'approve' || action.id === 'approve-complete')) {
+      return {
+        ...action,
+        label: 'Approved (Pending 2nd)',
+        enabled: false
+      };
+    }
+    return action;
+  });
+
   return (
     <motion.div
       variants={pageVariants}
@@ -175,6 +248,7 @@ const TaskDetails = ({ task, taskId, onBack }) => {
       {/* Task Header Section */}
       <TaskHeader
         task={normalizedTask}
+        approvalsCount={meta?.approvals?.length || 0}
         onBack={onBack}
         onEdit={handleEditClick}
         onDelete={() => setIsDeleteModalOpen(true)}
@@ -203,7 +277,7 @@ const TaskDetails = ({ task, taskId, onBack }) => {
           {/* Section 4: Workflow Actions Panel */}
           <motion.div variants={fadeUpVariants} className={styles.cardWrapper}>
             <WorkflowActions
-              actions={dynamicActions}
+              actions={mappedActions}
               onActionClick={handleWorkflowAction}
               currentStatus={currentTask.status}
             />

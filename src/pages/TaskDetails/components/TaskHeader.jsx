@@ -13,9 +13,14 @@ const PriorityBadge = ({ priority }) => {
   return <span className={`${styles.priorityBadge} ${styles[prio]}`}>{priority}</span>;
 };
 
-const StatusBadge = ({ status }) => {
+const StatusBadge = ({ status, approvalsCount = 0 }) => {
   const statusClass = status.toLowerCase().replace(/\s+/g, '-');
-  return <span className={`${styles.statusBadge} ${styles[statusClass]}`}>{status}</span>;
+  const isReviewing = status.toLowerCase() === 'reviewing';
+  return (
+    <span className={`${styles.statusBadge} ${styles[statusClass]}`}>
+      {status} {isReviewing && approvalsCount > 0 ? `(${approvalsCount}/2)` : ''}
+    </span>
+  );
 };
 
 // Relative time formatting helper
@@ -41,7 +46,7 @@ const formatRelativeTime = (dateString) => {
   }
 };
 
-const TaskHeader = ({ task, onBack, onEdit, onDelete }) => {
+const TaskHeader = ({ task, approvalsCount = 0, onBack, onEdit, onDelete }) => {
   return (
     <div className={styles.headerContainer}>
       {/* Back button row */}
@@ -57,7 +62,7 @@ const TaskHeader = ({ task, onBack, onEdit, onDelete }) => {
           <div className={styles.badges}>
             <CategoryBadge category={task.category} />
             <PriorityBadge priority={task.priority} />
-            <StatusBadge status={task.status} />
+            <StatusBadge status={task.status} approvalsCount={approvalsCount} />
           </div>
           <h1 className={styles.title}>{task.title}</h1>
         </div>
