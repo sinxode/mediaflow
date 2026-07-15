@@ -51,7 +51,19 @@ const TaskHeader = ({ task, approvalsCount = 0, onBack, onEdit, onDelete }) => {
 
   const handleCopyLink = () => {
     const shareUrl = `${window.location.origin}/tasks?id=${task.id}`;
-    navigator.clipboard.writeText(shareUrl)
+    
+    const formattedPriority = task.priority 
+      ? task.priority.charAt(0).toUpperCase() + task.priority.slice(1) 
+      : 'Medium';
+
+    const copyText = `*Task:* ${task.title}
+*Category:* ${task.category || 'Other'}
+*Priority:* ${formattedPriority}
+*Deadline:* ${task.deadline || 'No deadline'}
+*Status:* ${task.status}
+*Link:* ${shareUrl}`;
+
+    navigator.clipboard.writeText(copyText)
       .then(() => {
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
