@@ -34,13 +34,16 @@ const WorkflowActions = ({
   requiresPublishing = true
 }) => {
   const stages = React.useMemo(() => {
+    const hasReview = requiresReview === true || String(requiresReview) === 'true';
+    const hasPublishing = requiresPublishing === true || String(requiresPublishing) === 'true';
+
     return [
       { key: 'created', label: 'Created' },
       { key: 'assigned', label: 'Assigned' },
       { key: 'working', label: 'Working' },
-      requiresReview && { key: 'review', label: 'In Review', matches: ['ready_for_review', 'reviewing'] },
-      requiresReview && requiresPublishing && { key: 'approved', label: 'Approved' },
-      requiresReview && requiresPublishing && { key: 'published', label: 'Published' },
+      hasReview && { key: 'review', label: 'In Review', matches: ['ready_for_review', 'reviewing'] },
+      hasReview && hasPublishing && { key: 'approved', label: 'Approved' },
+      hasReview && hasPublishing && { key: 'published', label: 'Published' },
       { key: 'completed', label: 'Completed' }
     ].filter(Boolean);
   }, [requiresReview, requiresPublishing]);
@@ -48,10 +51,11 @@ const WorkflowActions = ({
   const activeIndex = React.useMemo(() => {
     if (!currentStatus) return 0;
     const norm = currentStatus.toLowerCase().replace(/\s+/g, '_');
-    return stages.findIndex((s) => {
+    const idx = stages.findIndex((s) => {
       if (s.matches) return s.matches.includes(norm);
       return s.key === norm;
     });
+    return idx >= 0 ? idx : stages.length - 1; // Fallback to last step if not found
   }, [currentStatus, stages]);
 
   // Check if "Submit for Review" is currently present in the list but disabled
