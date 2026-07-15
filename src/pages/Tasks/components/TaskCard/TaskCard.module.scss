@@ -14,6 +14,7 @@
   min-height: 64px; // Target height for 10-15 cards per screen height
   width: 100%;
   max-width: 800px;
+  min-width: 0;
   
   @include hover-active {
     transform: translateY(-1px);

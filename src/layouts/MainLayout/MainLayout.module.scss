@@ -46,6 +46,7 @@
 .appContent {
   flex: 1;
   padding: $spacing-md;
+  padding-top: calc(64px + $spacing-md);
   // Extra space at bottom to clear mobile bottom navigation
   padding-bottom: calc($bottom-nav-height + 24px + env(safe-area-inset-bottom, 0px));
   overflow-y: auto;
@@ -55,5 +56,6 @@
   @include tablet-and-up {
     padding: $spacing-xl;
     padding-bottom: $spacing-xl;
+    padding-top: $spacing-xl;
   }
 }

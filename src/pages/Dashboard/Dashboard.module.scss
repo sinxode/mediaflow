@@ -29,12 +29,13 @@
 
 // Main Scaffold Layout
 .mainGrid {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
   gap: $spacing-md;
   width: 100%;
   
   @include desktop-and-up {
+    display: grid;
     grid-template-columns: 1.8fr 1.2fr;
     gap: $spacing-xl;
     align-items: start;
@@ -45,6 +46,7 @@
   @include flex-col(flex-start, stretch, $spacing-xl);
   width: 100%;
   max-width: 760px;
+  min-width: 0;
 }
 
 .rightCol {
