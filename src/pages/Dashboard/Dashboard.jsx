@@ -351,15 +351,18 @@ const Dashboard = () => {
                       </div>
                     </div>
                     
-                    <div className={styles.taskBreakdown}>
-                      <span className={styles.loadBadge} title="In Progress">
-                        <span className={styles.dotInProgress} /> {inProgress} Active
+                    <div className={styles.taskBreakdownCompact}>
+                      <span className={`${styles.loadDotBadge} ${styles.blueDot}`} title={`${inProgress} Active`}>
+                        <span className={styles.colorDot} />
+                        <strong>{inProgress}</strong>
                       </span>
-                      <span className={styles.loadBadge} title="In Review">
-                        <span className={styles.dotInReview} /> {review} Review
+                      <span className={`${styles.loadDotBadge} ${styles.orangeDot}`} title={`${review} Review`}>
+                        <span className={styles.colorDot} />
+                        <strong>{review}</strong>
                       </span>
-                      <span className={styles.loadBadge} title="Completed">
-                        <span className={styles.dotCompleted} /> {completed} Done
+                      <span className={`${styles.loadDotBadge} ${styles.greenDot}`} title={`${completed} Done`}>
+                        <span className={styles.colorDot} />
+                        <strong>{completed}</strong>
                       </span>
                     </div>
                     
@@ -375,7 +378,7 @@ const Dashboard = () => {
                       title={`Assign new task to ${c.name}`}
                     >
                       <UserPlus size={13} />
-                      <span>Assign</span>
+                      <span className={styles.btnLabel}>Assign</span>
                     </button>
                   </div>
                 );

@@ -396,10 +396,11 @@
 }
 
 .creatorRow {
-  @include flex-row(space-between, center, $spacing-md);
-  padding: 14px $spacing-sm;
+  @include flex-row(space-between, center, $spacing-sm);
+  padding: 10px $spacing-sm;
   border-bottom: 1px solid rgba($color-border, 0.5);
   transition: background-color $transition-fast;
+  gap: $spacing-sm;
   
   &:last-child {
     border-bottom: none;
@@ -407,12 +408,6 @@
   
   &:hover {
     background-color: rgba($color-primary, 0.015);
-  }
-  
-  @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
   }
 }
 
@@ -427,7 +422,7 @@
   }
   
   .name {
-    font-size: 13.5px;
+    font-size: 13px;
     font-weight: $font-weight-semibold;
     color: $color-text;
     margin: 0;
@@ -438,52 +433,49 @@
     font-size: 11px;
     color: $color-text-secondary;
     @include text-truncate;
+    
+    @media (max-width: 480px) {
+      display: none;
+    }
   }
 }
 
-.taskBreakdown {
+.taskBreakdownCompact {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 10px;
-  
-  @media (max-width: 576px) {
-    flex-wrap: wrap;
-  }
+  gap: 12px;
+  flex-shrink: 0;
 }
 
-.loadBadge {
+.loadDotBadge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  background-color: rgba($color-text-secondary, 0.05);
+  gap: 5px;
+  font-size: 12px;
   color: $color-text-secondary;
-  font-size: 11px;
-  font-weight: $font-weight-medium;
-  padding: 4px 8px;
-  border-radius: 6px;
-  border: 1px solid rgba($color-border, 0.5);
-}
-
-.dotInProgress {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: #3b82f6;
-}
-
-.dotInReview {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: #f59e0b;
-}
-
-.dotCompleted {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: #10b981;
+  
+  strong {
+    color: $color-text;
+    font-weight: $font-weight-bold;
+  }
+  
+  .colorDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  
+  &.blueDot .colorDot {
+    background-color: #3b82f6;
+  }
+  &.orangeDot .colorDot {
+    background-color: #f59e0b;
+  }
+  &.greenDot .colorDot {
+    background-color: #10b981;
+  }
 }
 
 .statusCol {
@@ -539,6 +531,7 @@
   font-weight: $font-weight-semibold;
   cursor: pointer;
   transition: all $transition-fast;
+  flex-shrink: 0;
   
   &:hover {
     background-color: $color-primary;
@@ -547,15 +540,18 @@
     transform: translateY(-1px);
   }
   
-  @media (max-width: 768px) {
-    width: 100%;
-    margin-top: 4px;
-    height: 38px;
-    justify-content: center;
-  }
-  
   &:active {
     transform: translateY(0);
+  }
+
+  .btnLabel {
+    @media (max-width: 480px) {
+      display: none;
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 6px 8px;
   }
 }
 

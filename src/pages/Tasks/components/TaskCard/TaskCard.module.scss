@@ -104,6 +104,7 @@
 // Metadata row
 .metadata {
   @include flex-row(flex-start, center, 6px);
+  flex-wrap: wrap;
   font-size: 11px;
   color: lighten($color-text-secondary, 10%);
   width: 100%;
@@ -111,6 +112,7 @@
 
 .metaItem {
   @include flex-row(flex-start, center, 4px);
+  white-space: nowrap;
 }
 
 .metaIcon {
@@ -140,6 +142,10 @@
 
 .metaDivider {
   color: lighten($color-border, 10%);
+  
+  @include mobile-only {
+    display: none;
+  }
 }
 
 // Right Action Area (Badges + Chevron)
