@@ -10,9 +10,12 @@ import Button from '../../components/Button/Button';
 import LoadingSkeleton from '../../components/LoadingSkeleton/LoadingSkeleton';
 import ActivityFeed from '../../components/Activity/ActivityFeed';
 import { TaskService } from '../../services/tasks/taskService';
+import { UserService } from '../../services/users/userService';
+import Avatar from '../../components/Avatar/Avatar';
 import { useRealtimeTasksList } from '../../hooks/useRealtime';
 import { useAuth } from '../../auth/hooks/useAuth';
 import StatusBadge from '../../components/StatusBadge/StatusBadge';
+import { UserPlus } from 'lucide-react';
 import {
   pageVariants,
   containerVariants,
@@ -25,13 +28,18 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [tasks, setTasks] = useState([]);
+  const [creators, setCreators] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const loadDashboardData = async () => {
     try {
       setLoading(true);
-      const list = await TaskService.getTasks();
-      setTasks(list);
+      const [taskList, userList] = await Promise.all([
+        TaskService.getTasks(),
+        UserService.getAllUsers()
+      ]);
+      setTasks(taskList || []);
+      setCreators((userList || []).filter(u => u.role === 'creator'));
     } catch (err) {
       console.error('Failed to load dashboard metrics', err);
     } finally {
@@ -45,10 +53,20 @@ const Dashboard = () => {
     // Background polling fallback every 4 seconds
     const interval = setInterval(async () => {
       try {
-        const list = await TaskService.getTasks();
+        const [taskList, userList] = await Promise.all([
+          TaskService.getTasks(),
+          UserService.getAllUsers()
+        ]);
+        
         setTasks((prev) => {
-          if (JSON.stringify(prev) === JSON.stringify(list)) return prev;
-          return list;
+          if (JSON.stringify(prev) === JSON.stringify(taskList)) return prev;
+          return taskList || [];
+        });
+        
+        setCreators((prev) => {
+          const filtered = (userList || []).filter(u => u.role === 'creator');
+          if (JSON.stringify(prev) === JSON.stringify(filtered)) return prev;
+          return filtered;
         });
       } catch (err) {
         console.error('Failed to poll dashboard data', err);
@@ -61,8 +79,12 @@ const Dashboard = () => {
   const handleRealtimeDashboardUpdate = useCallback(() => {
     const refreshDashboard = async () => {
       try {
-        const list = await TaskService.getTasks();
-        setTasks(list);
+        const [taskList, userList] = await Promise.all([
+          TaskService.getTasks(),
+          UserService.getAllUsers()
+        ]);
+        setTasks(taskList || []);
+        setCreators((userList || []).filter(u => u.role === 'creator'));
       } catch (err) {
         console.error('Failed to refresh dashboard list in real-time', err);
       }
@@ -273,8 +295,87 @@ const Dashboard = () => {
               )}
             </motion.div>
           </div>
+          {/* Section 4: Creator Workload Monitor */}
+          <div className={styles.section}>
+            <Card padding={true} className={styles.workloadCard}>
+              <div className={styles.sectionHeaderInside}>
+                <h3 className={styles.sectionTitle}>Creator Workload Monitor</h3>
+                <span style={{ fontSize: '11px', color: '#64748B', display: 'block', marginTop: '2px' }}>
+                  Realtime task loads and status of team creators
+                </span>
+              </div>
+              
+              <div className={styles.creatorList}>
+                {creators.length > 0 ? (
+                  creators.map((c) => {
+                    const creatorTasks = tasks.filter((t) => t.assigned_to === c.id);
+                    const inProgress = creatorTasks.filter((t) => t.status === 'in_progress').length;
+                    const review = creatorTasks.filter((t) => t.status === 'ready_for_review' || t.status === 'reviewing').length;
+                    const completed = creatorTasks.filter((t) => t.status === 'completed' || t.status === 'published').length;
+                    const totalActive = inProgress + review;
+                    
+                    let workloadLabel = 'Available';
+                    let workloadClass = styles.available;
+                    if (totalActive >= 5) {
+                      workloadLabel = 'Overloaded';
+                      workloadClass = styles.overloaded;
+                    } else if (totalActive >= 3) {
+                      workloadLabel = 'Busy';
+                      workloadClass = styles.busy;
+                    } else if (totalActive >= 1) {
+                      workloadLabel = 'Optimal';
+                      workloadClass = styles.optimal;
+                    }
+                    
+                    return (
+                      <div key={c.id} className={styles.creatorRow}>
+                        <div className={styles.creatorInfo}>
+                          <Avatar src={c.avatar_url || c.avatar} name={c.name} size="sm" />
+                          <div className={styles.meta}>
+                            <h4 className={styles.name}>{c.name}</h4>
+                            <span className={styles.email}>{c.email}</span>
+                          </div>
+                        </div>
+                        
+                        <div className={styles.taskBreakdown}>
+                          <span className={styles.loadBadge} title="In Progress">
+                            <span className={styles.dotInProgress} /> {inProgress} Active
+                          </span>
+                          <span className={styles.loadBadge} title="In Review">
+                            <span className={styles.dotInReview} /> {review} Review
+                          </span>
+                          <span className={styles.loadBadge} title="Completed">
+                            <span className={styles.dotCompleted} /> {completed} Done
+                          </span>
+                        </div>
+                        
+                        <div className={styles.statusCol}>
+                          <span className={`${styles.workloadStatus} ${workloadClass}`}>
+                            {workloadLabel}
+                          </span>
+                        </div>
+                        
+                        <button
+                          className={styles.quickAssignBtn}
+                          onClick={() => navigate('/tasks/create', { state: { prefilledAssigneeId: c.id } })}
+                          title={`Assign new task to ${c.name}`}
+                        >
+                          <UserPlus size={13} />
+                          <span>Assign</span>
+                        </button>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div style={{ padding: '20px 0', textAlign: 'center', fontSize: '12.5px', color: '#64748B' }}>
+                    No creators found in this workspace.
+                  </div>
+                )}
+              </div>
+            </Card>
+          </div>
 
-          {/* Section 4: Review Queue Preview */}
+          {/* Section 5: Review Queue Preview */}
           <div className={styles.section}>
             <Card padding={true} className={styles.reviewCard}>
               <div className={styles.sectionHeaderInside}>

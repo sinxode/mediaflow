@@ -34,7 +34,7 @@ const CreateTask = () => {
     description: location.state?.prefillDescription || '',
     category: 'Poster Design',
     priority: 'medium',
-    assignedUser: '',
+    assignedUser: location.state?.prefilledAssigneeId || '',
     deadline: ''
   });
 
