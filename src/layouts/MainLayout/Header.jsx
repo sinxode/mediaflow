@@ -46,7 +46,7 @@ const Header = ({ onMenuClick }) => {
             className={styles.roleToggleButton}
             title={`Switch view/role permissions to ${role === 'reviewer' ? 'Manager (Creator)' : 'Reviewer'}`}
           >
-            Acting as: <strong>{role === 'reviewer' ? 'Reviewer' : 'Manager'}</strong> ⇄
+            <strong>{role === 'reviewer' ? 'Reviewer' : 'Manager'}</strong> ⇄
           </button>
         )}
         <NotificationBell />

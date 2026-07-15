@@ -75,6 +75,10 @@
 
 .actions {
   @include flex-row(flex-end, center, $spacing-md);
+  
+  @media (max-width: 576px) {
+    gap: 8px;
+  }
 }
 
 .iconButton {
@@ -152,5 +156,12 @@
     background-color: $color-primary;
     border-color: $color-primary;
     color: #ffffff;
+  }
+  
+  @media (max-width: 576px) {
+    height: 28px;
+    padding: 0 8px;
+    font-size: 10px;
+    margin-right: 2px;
   }
 }

@@ -67,6 +67,13 @@
     font-size: 13px !important;
     border-radius: $radius-button !important;
   }
+
+  @media (max-width: 576px) {
+    & > button {
+      flex: 1;
+      justify-content: center;
+    }
+  }
 }
 
 .deleteBtn {
