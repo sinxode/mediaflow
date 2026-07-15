@@ -396,11 +396,10 @@
 }
 
 .creatorRow {
-  @include flex-row(space-between, center, $spacing-sm);
-  padding: 10px $spacing-sm;
+  @include flex-row(space-between, center, $spacing-md);
+  padding: 14px $spacing-sm;
   border-bottom: 1px solid rgba($color-border, 0.5);
   transition: background-color $transition-fast;
-  gap: $spacing-sm;
   
   &:last-child {
     border-bottom: none;
@@ -408,6 +407,11 @@
   
   &:hover {
     background-color: rgba($color-primary, 0.015);
+  }
+  
+  @media (max-width: 767px) {
+    flex-wrap: wrap;
+    gap: $spacing-sm;
   }
 }
 
@@ -422,7 +426,7 @@
   }
   
   .name {
-    font-size: 13px;
+    font-size: 13.5px;
     font-weight: $font-weight-semibold;
     color: $color-text;
     margin: 0;
@@ -434,47 +438,131 @@
     color: $color-text-secondary;
     @include text-truncate;
     
-    @media (max-width: 480px) {
+    @media (max-width: 767px) {
       display: none;
     }
   }
 }
 
-.taskBreakdownCompact {
+// Desktop breakdown: text-badge chips
+.taskBreakdown {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 12px;
-  flex-shrink: 0;
+  gap: 10px;
+
+  // Hide on mobile — mobile uses taskBreakdownMobile instead
+  @media (max-width: 767px) {
+    display: none;
+  }
 }
 
-.loadDotBadge {
+.loadBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: rgba($color-text-secondary, 0.05);
+  color: $color-text-secondary;
+  font-size: 11px;
+  font-weight: $font-weight-medium;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba($color-border, 0.5);
+}
+
+.dotInProgress {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #3b82f6;
+}
+
+.dotInReview {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #f59e0b;
+}
+
+.dotCompleted {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #10b981;
+}
+
+// Mobile breakdown: icon badges with coloured circle background
+.taskBreakdownMobile {
+  display: none; // Hidden on desktop
+
+  @media (max-width: 767px) {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+}
+
+// Shared icon badge base
+%iconBadgeBase {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  font-size: 12px;
-  color: $color-text-secondary;
-  
+  border-radius: 20px;
+  padding: 4px 8px 4px 5px;
+  font-size: 11.5px;
+  font-weight: $font-weight-semibold;
+
+  svg {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+  }
+
   strong {
-    color: $color-text;
     font-weight: $font-weight-bold;
+    font-size: 12px;
   }
-  
-  .colorDot {
-    width: 8px;
-    height: 8px;
+
+  .iconCircle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
-    display: inline-block;
+    flex-shrink: 0;
   }
-  
-  &.blueDot .colorDot {
-    background-color: #3b82f6;
+}
+
+.iconBadgeBlue {
+  @extend %iconBadgeBase;
+  background-color: rgba(59, 130, 246, 0.08);
+  color: #1d4ed8;
+
+  svg {
+    color: #3b82f6;
   }
-  &.orangeDot .colorDot {
-    background-color: #f59e0b;
+}
+
+.iconBadgeOrange {
+  @extend %iconBadgeBase;
+  background-color: rgba(245, 158, 11, 0.08);
+  color: #b45309;
+
+  svg {
+    color: #f59e0b;
   }
-  &.greenDot .colorDot {
-    background-color: #10b981;
+}
+
+.iconBadgeGreen {
+  @extend %iconBadgeBase;
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #047857;
+
+  svg {
+    color: #10b981;
   }
 }
 

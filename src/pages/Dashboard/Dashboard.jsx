@@ -351,17 +351,31 @@ const Dashboard = () => {
                       </div>
                     </div>
                     
-                    <div className={styles.taskBreakdownCompact}>
-                      <span className={`${styles.loadDotBadge} ${styles.blueDot}`} title={`${inProgress} Active`}>
-                        <span className={styles.colorDot} />
+                    {/* Desktop: original text-badge breakdown */}
+                    <div className={styles.taskBreakdown}>
+                      <span className={styles.loadBadge} title="In Progress">
+                        <span className={styles.dotInProgress} /> {inProgress} Active
+                      </span>
+                      <span className={styles.loadBadge} title="In Review">
+                        <span className={styles.dotInReview} /> {review} Review
+                      </span>
+                      <span className={styles.loadBadge} title="Completed">
+                        <span className={styles.dotCompleted} /> {completed} Done
+                      </span>
+                    </div>
+
+                    {/* Mobile-only: icon badge breakdown */}
+                    <div className={styles.taskBreakdownMobile}>
+                      <span className={styles.iconBadgeBlue} title={`${inProgress} Active`}>
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
                         <strong>{inProgress}</strong>
                       </span>
-                      <span className={`${styles.loadDotBadge} ${styles.orangeDot}`} title={`${review} Review`}>
-                        <span className={styles.colorDot} />
+                      <span className={styles.iconBadgeOrange} title={`${review} Review`}>
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                         <strong>{review}</strong>
                       </span>
-                      <span className={`${styles.loadDotBadge} ${styles.greenDot}`} title={`${completed} Done`}>
-                        <span className={styles.colorDot} />
+                      <span className={styles.iconBadgeGreen} title={`${completed} Done`}>
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                         <strong>{completed}</strong>
                       </span>
                     </div>
