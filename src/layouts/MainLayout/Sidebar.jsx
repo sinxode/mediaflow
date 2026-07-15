@@ -17,10 +17,12 @@ import {
 import Button from '../../components/Button/Button';
 import ConnectionStatus from '../../components/ConnectionStatus/ConnectionStatus';
 import { usePermissions } from '../../auth/hooks/usePermissions';
+import { useAuth } from '../../auth/hooks/useAuth';
 import styles from './Sidebar.module.scss';
 
 const Sidebar = ({ isOpen, onClose, onLogoutClick }) => {
   const permissions = usePermissions();
+  const { role } = useAuth();
 
   const menuItems = [
     { label: 'Dashboard', path: '/dashboard', icon: <LayoutDashboard /> },
@@ -30,7 +32,7 @@ const Sidebar = ({ isOpen, onClose, onLogoutClick }) => {
     { label: 'Archive', path: '/published', icon: <CheckCircle2 /> },
     { type: 'separator' },
     { label: 'Notifications', path: '/notifications', icon: <Bell /> },
-    { label: 'Analytics', path: '/analytics', icon: <BarChart3 /> },
+    role !== 'reviewer' && { label: 'Analytics', path: '/analytics', icon: <BarChart3 /> },
     { label: 'Settings', path: '/settings', icon: <Settings /> },
   ].filter(Boolean);
 

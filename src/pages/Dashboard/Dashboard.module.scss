@@ -190,19 +190,36 @@
 
 .healthAlertBar {
   background-color: rgba($color-danger, 0.04);
-  border: 1px solid rgba($color-danger, 0.15);
-  border-radius: $radius-button !important;
-  margin-bottom: $spacing-md;
-  width: 100%;
-}
-
-.healthAlertContent {
+  border: 1px solid rgba($color-danger, 0.12);
+  border-radius: 12px;
   @include flex-row(flex-start, center, $spacing-xs);
   padding: $spacing-sm $spacing-md;
   font-size: 12.5px;
   color: $color-danger;
   font-weight: $font-weight-medium;
   width: 100%;
+}
+
+.alertCardContent {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 12px;
+
+  @media (max-width: 576px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+}
+
+.alertText {
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: $color-danger;
+  flex: 1;
 }
 
 .healthAlertIcon {
@@ -715,6 +732,12 @@
 
   &:active {
     transform: translateY(0);
+  }
+
+  span {
+    @media (max-width: 480px) {
+      display: none;
+    }
   }
 }
 

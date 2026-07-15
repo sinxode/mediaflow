@@ -10,10 +10,12 @@ import {
   Plus,
 } from 'lucide-react';
 import { usePermissions } from '../../auth/hooks/usePermissions';
+import { useAuth } from '../../auth/hooks/useAuth';
 import styles from './BottomNav.module.scss';
 
 const BottomNav = () => {
   const permissions = usePermissions();
+  const { role } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -26,7 +28,7 @@ const BottomNav = () => {
   // Right nav items
   const rightItems = [
     permissions.canReviewTask && { label: 'Review', path: '/review', icon: <Eye /> },
-    { label: 'Analytics', path: '/analytics', icon: <BarChart2 /> },
+    role !== 'reviewer' && { label: 'Analytics', path: '/analytics', icon: <BarChart2 /> },
     { label: 'Settings', path: '/settings', icon: <Settings /> },
   ].filter(Boolean);
 
