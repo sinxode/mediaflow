@@ -19,7 +19,6 @@ const BottomNav = () => {
   const navItems = [
     { label: 'Dashboard', path: '/dashboard', icon: <LayoutDashboard /> },
     { label: 'Tasks', path: '/tasks', icon: <CheckSquare /> },
-    { label: 'Hub', path: '/team-hub', icon: <MessageSquare /> },
     permissions.canReviewTask && { label: 'Review', path: '/review', icon: <Eye /> },
     { label: 'Settings', path: '/settings', icon: <Settings /> },
   ].filter(Boolean);

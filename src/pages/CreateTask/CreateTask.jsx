@@ -121,14 +121,6 @@ const CreateTask = () => {
           deadline: formData.deadline || null
         };
         const createdTask = await TaskService.createTask(payload);
-        if (location.state?.linkedPlanId && createdTask?.id) {
-          try {
-            const { TeamHubService } = await import('../../services/teamhub/teamHubService');
-            await TeamHubService.linkPlanToTask(location.state.linkedPlanId, createdTask.id);
-          } catch (planErr) {
-            console.error('Failed to link plan to task', planErr);
-          }
-        }
       } else if (mode === 'edit' && editTaskId) {
         const payload = {
           title: formData.title.trim(),

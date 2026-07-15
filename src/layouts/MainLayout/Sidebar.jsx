@@ -29,8 +29,6 @@ const Sidebar = ({ isOpen, onClose, onLogoutClick }) => {
     permissions.canReviewTask && { label: 'Review Queue', path: '/review', icon: <Eye /> },
     { label: 'Archive', path: '/published', icon: <CheckCircle2 /> },
     { type: 'separator' },
-    { label: 'Team Hub', path: '/team-hub', icon: <MessageSquare /> },
-    { type: 'separator' },
     { label: 'Notifications', path: '/notifications', icon: <Bell /> },
     { label: 'Analytics', path: '/analytics', icon: <BarChart3 /> },
     { label: 'Settings', path: '/settings', icon: <Settings /> },
