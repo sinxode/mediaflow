@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ClipboardList, Plus } from 'lucide-react';
+import { ClipboardList, Plus, Activity, SlidersHorizontal } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader/PageHeader';
 import EmptyState from '../../components/EmptyState/EmptyState';
 import Button from '../../components/Button/Button';
+import Card from '../../components/Card/Card';
 import TaskStats from './components/TaskStats/TaskStats';
 import TaskFilters from './components/TaskFilters/TaskFilters';
 import TaskCard from './components/TaskCard/TaskCard';
@@ -43,6 +44,53 @@ const Tasks = () => {
   const [priorityFilter, setPriorityFilter] = useState('');
   const [userFilter, setUserFilter] = useState('');
   const [onlyMyTasks, setOnlyMyTasks] = useState(false);
+
+  // Quick Add draft states
+  const [quickTitle, setQuickTitle] = useState('');
+  const [quickCategory, setQuickCategory] = useState(Object.values(CATEGORIES)[0]);
+  const [quickAdding, setQuickAdding] = useState(false);
+
+  const handleQuickAddSubmit = async (e) => {
+    if (e) e.preventDefault();
+    if (!quickTitle.trim()) return;
+
+    if (!navigator.onLine) {
+      alert('Network Offline: Please reconnect to save new tasks.');
+      return;
+    }
+
+    try {
+      setQuickAdding(true);
+      
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const day = String(today.getDate()).padStart(2, '0');
+      const todayStr = `${year}-${month}-${day}`;
+
+      const serializedDescription = `\n\n[workflow:review=true;publishing=true;deliverable=true]`;
+
+      const payload = {
+        title: quickTitle.trim(),
+        description: serializedDescription,
+        category: quickCategory,
+        priority: 'medium',
+        status: STATUSES.CREATED,
+        assigned_to: null,
+        created_by: user?.id,
+        deadline: todayStr
+      };
+
+      await TaskService.createTask(payload);
+      setQuickTitle('');
+      loadTasksData();
+    } catch (err) {
+      console.error('Quick add failed', err);
+      alert('Failed to quick add task: ' + err.message);
+    } finally {
+      setQuickAdding(false);
+    }
+  };
 
   // Fetch tasks data
   const loadTasksData = async () => {
@@ -243,44 +291,147 @@ const Tasks = () => {
         onResetFilters={handleResetFilters}
       />
 
-      {/* List Scaffolding */}
-      <div className={styles.listContainer}>
-        {isLoading ? (
-          <LoadingState count={8} />
-        ) : filteredTasks.length > 0 ? (
-          <motion.div
-            variants={containerVariants}
-            initial="initial"
-            animate="animate"
-            className={styles.tasksList}
-          >
-            {filteredTasks.map((task) => (
-              <motion.div key={task.id} variants={fadeUpVariants}>
-                <TaskCard
-                  task={task}
-                  onClick={() => setSearchParams({ id: task.id })} // Opens Task Details Page
-                />
-              </motion.div>
-            ))}
-          </motion.div>
-        ) : (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            <EmptyState
-              title="No Tasks Found"
-              description="Adjust your filters or create a new task."
-              icon={<ClipboardList />}
-              action={
-                <Button variant="secondary" onClick={handleResetFilters}>
-                  Clear Filters
-                </Button>
-              }
-            />
-          </motion.div>
-        )}
+      {/* Two-Column Layout Grid */}
+      <div className={styles.tasksLayoutGrid}>
+        {/* Left Column: Tasks List */}
+        <div className={styles.listContainer}>
+          {isLoading ? (
+            <LoadingState count={8} />
+          ) : filteredTasks.length > 0 ? (
+            <motion.div
+              variants={containerVariants}
+              initial="initial"
+              animate="animate"
+              className={styles.tasksList}
+            >
+              {filteredTasks.map((task) => (
+                <motion.div key={task.id} variants={fadeUpVariants}>
+                  <TaskCard
+                    task={task}
+                    onClick={() => setSearchParams({ id: task.id })} // Opens Task Details Page
+                  />
+                </motion.div>
+              ))}
+            </motion.div>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <EmptyState
+                title="No Tasks Found"
+                description="Adjust your filters or create a new task."
+                icon={<ClipboardList />}
+                action={
+                  <Button variant="secondary" onClick={handleResetFilters}>
+                    Clear Filters
+                  </Button>
+                }
+              />
+            </motion.div>
+          )}
+        </div>
+
+        {/* Right Column: Sticky Sidebar Widgets */}
+        <div className={styles.sidebarColumn}>
+          {/* Widget 1: Quick Add Draft Task */}
+          <Card padding={true} className={styles.sidebarWidget}>
+            <div className={styles.widgetHeader}>
+              <Plus size={14} className={styles.widgetIcon} />
+              <h4 className={styles.widgetTitle}>Quick Add Draft</h4>
+            </div>
+            <p className={styles.widgetDesc}>
+              Quickly create a task draft with medium priority. Default deadline set to today.
+            </p>
+            <form onSubmit={handleQuickAddSubmit} className={styles.quickAddForm}>
+              <input
+                type="text"
+                placeholder="Task title (e.g. Logo Design)..."
+                value={quickTitle}
+                onChange={(e) => setQuickTitle(e.target.value)}
+                className={styles.quickInput}
+                disabled={quickAdding}
+                required
+              />
+              <div className={styles.quickSelectWrapper}>
+                <select
+                  value={quickCategory}
+                  onChange={(e) => setQuickCategory(e.target.value)}
+                  className={styles.quickSelect}
+                  disabled={quickAdding}
+                >
+                  {Object.values(CATEGORIES).map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <Button
+                type="submit"
+                variant="primary"
+                size="sm"
+                className={styles.quickSubmitBtn}
+                disabled={quickAdding || !quickTitle.trim()}
+              >
+                {quickAdding ? 'Adding...' : 'Add Draft Task'}
+              </Button>
+            </form>
+          </Card>
+
+          {/* Widget 2: Interactive Workflow Guide */}
+          <Card padding={true} className={styles.sidebarWidget}>
+            <div className={styles.widgetHeader}>
+              <SlidersHorizontal size={14} className={styles.widgetIcon} />
+              <h4 className={styles.widgetTitle}>Workflow Step Map</h4>
+            </div>
+            <p className={styles.widgetDesc}>
+              Dynamic transition stages configured based on active workflow settings.
+            </p>
+            
+            <div className={styles.stepMap}>
+              <div className={styles.stepItem}>
+                <span className={`${styles.stepDot} ${styles.created}`}>1</span>
+                <div className={styles.stepInfo}>
+                  <h5 className={styles.stepName}>Created</h5>
+                  <span className={styles.stepDetail}>Task initialized & ready to accept</span>
+                </div>
+              </div>
+              <div className={styles.stepConnector} />
+
+              <div className={styles.stepItem}>
+                <span className={`${styles.stepDot} ${styles.assigned}`}>2</span>
+                <div className={styles.stepInfo}>
+                  <h5 className={styles.stepName}>Assigned & Working</h5>
+                  <span className={styles.stepDetail}>Accepted by assignee; production active</span>
+                </div>
+              </div>
+              <div className={styles.stepConnector} />
+
+              <div className={styles.stepItem}>
+                <span className={`${styles.stepDot} ${styles.reviewing}`}>3</span>
+                <div className={styles.stepInfo}>
+                  <h5 className={styles.stepName}>Review Queue</h5>
+                  <span className={styles.stepDetail}>Feedback and file inspection loop</span>
+                </div>
+              </div>
+              <div className={styles.stepConnector} />
+
+              <div className={styles.stepItem}>
+                <span className={`${styles.stepDot} ${styles.completed}`}>4</span>
+                <div className={styles.stepInfo}>
+                  <h5 className={styles.stepName}>Completed</h5>
+                  <span className={styles.stepDetail}>Asset finished and task completed</span>
+                </div>
+              </div>
+            </div>
+            
+            <div className={styles.guideTip}>
+              <strong>Bypass Rules:</strong> Bypassing the review/publish settings transitions a task directly from <strong>Working → Completed</strong>.
+            </div>
+          </Card>
+        </div>
       </div>
     </motion.div>
   );
