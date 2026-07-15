@@ -195,9 +195,10 @@ const TaskDetails = ({ task, taskId, onBack }) => {
   const isCreator = currentTask.created_by === user?.id;
   const isUnassigned = !currentTask.assigned_to;
   
+  const normalisedRole = role ? role.toLowerCase() : null;
   const dynamicActions = getStatusActions(
     currentTask.status,
-    role,
+    normalisedRole,
     !!currentTask.file_url,
     isAssignee,
     isUnassigned,

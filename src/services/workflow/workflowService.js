@@ -59,8 +59,11 @@ export const getStatusActions = (
   const normRole = role.toLowerCase();
   const actions = [];
 
-  if (normRole === ROLES.CREATOR) {
-    // Creator Actions
+  // ── CREATOR ACTIONS ──────────────────────────────────────────────────────
+  // Reviewers also get creator actions because they can be assignees too.
+  const isCreatorRole = normRole === ROLES.CREATOR || normRole === ROLES.REVIEWER;
+
+  if (isCreatorRole) {
     if (normStatus === STATUSES.CREATED) {
       if (isAssignee || isUnassigned) {
         actions.push({
@@ -73,7 +76,7 @@ export const getStatusActions = (
       }
     }
     
-    // For all other statuses, creator must be the assignee
+    // For all other creator-flow statuses, user must be the assignee
     if (isAssignee) {
       if (normStatus === STATUSES.ASSIGNED) {
         actions.push({
@@ -113,26 +116,10 @@ export const getStatusActions = (
         });
       }
     }
-  } else if (normRole === ROLES.REVIEWER) {
-    // Reviewer Actions
-    if (normStatus === STATUSES.CREATED) {
-      actions.push({
-        id: 'assign-task',
-        label: 'Accept & Assign',
-        targetStatus: STATUSES.ASSIGNED,
-        variant: 'primary',
-        enabled: true
-      });
-    }
-    if (normStatus === STATUSES.ASSIGNED) {
-      actions.push({
-        id: 'start-working',
-        label: 'Start Working',
-        targetStatus: STATUSES.WORKING,
-        variant: 'primary',
-        enabled: true
-      });
-    }
+  }
+
+  // ── REVIEWER-ONLY ACTIONS ────────────────────────────────────────────────
+  if (normRole === ROLES.REVIEWER) {
     if (normStatus === STATUSES.READY_FOR_REVIEW) {
       actions.push({
         id: 'start-review',
@@ -228,7 +215,13 @@ export const getStatusActions = (
     }
   }
 
-  return actions;
+  // Deduplicate by id in case role overlap produced duplicates
+  const seen = new Set();
+  return actions.filter((a) => {
+    if (seen.has(a.id)) return false;
+    seen.add(a.id);
+    return true;
+  });
 };
 
 export const WorkflowService = {
