@@ -152,3 +152,40 @@
     background-color: rgba($color-danger, 0.05) !important;
   }
 }
+
+.myTasksBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  padding: 0 14px;
+  border-radius: 18px;
+  font-size: 11.5px;
+  font-weight: $font-weight-bold;
+  background-color: $color-background;
+  border: 1px solid $color-border;
+  color: $color-text-secondary;
+  cursor: pointer;
+  transition: all $transition-fast;
+  user-select: none;
+  white-space: nowrap;
+  
+  &:hover {
+    background-color: rgba($color-primary, 0.04);
+    border-color: rgba($color-primary, 0.2);
+    color: $color-primary;
+  }
+  
+  &.active {
+    background-color: $color-primary;
+    border-color: $color-primary;
+    color: #ffffff;
+    box-shadow: 0 3px 8px rgba($color-primary, 0.2);
+    
+    &:hover {
+      background-color: darken($color-primary, 4%);
+      border-color: darken($color-primary, 4%);
+      color: #ffffff;
+    }
+  }
+}

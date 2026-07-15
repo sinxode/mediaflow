@@ -12,6 +12,7 @@ import LoadingState from './components/LoadingState/LoadingState';
 import TaskDetails from '../TaskDetails/TaskDetails';
 import { TaskService } from '../../services/tasks/taskService';
 import { UserService } from '../../services/users/userService';
+import { useAuth } from '../../auth/hooks/useAuth';
 import { useRealtimeTasksList } from '../../hooks/useRealtime';
 import { STATUSES, PRIORITIES, CATEGORIES } from '../../constants';
 import {
@@ -23,6 +24,7 @@ import styles from './Tasks.module.scss';
 
 const Tasks = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const taskIdParam = searchParams.get('id');
   
@@ -40,6 +42,7 @@ const Tasks = () => {
   const [statusFilter, setStatusFilter] = useState('');
   const [priorityFilter, setPriorityFilter] = useState('');
   const [userFilter, setUserFilter] = useState('');
+  const [onlyMyTasks, setOnlyMyTasks] = useState(false);
 
   // Fetch tasks data
   const loadTasksData = async () => {
@@ -131,17 +134,23 @@ const Tasks = () => {
       const matchesUser =
         userFilter === '' || task.assignedUser.toLowerCase().includes(userFilter.toLowerCase());
 
+      const matchesMyTasks =
+        !onlyMyTasks ||
+        task.assigned_to === user?.id ||
+        task.created_by === user?.id;
+
       return (
         matchesSearch &&
         matchesCategory &&
         matchesStatus &&
         matchesPriority &&
-        matchesUser
+        matchesUser &&
+        matchesMyTasks
       );
     });
     
     setFilteredTasks(filtered);
-  }, [searchQuery, categoryFilter, statusFilter, priorityFilter, userFilter, tasks]);
+  }, [searchQuery, categoryFilter, statusFilter, priorityFilter, userFilter, onlyMyTasks, tasks, user?.id]);
 
   const handleResetFilters = () => {
     setSearchQuery('');
@@ -149,6 +158,7 @@ const Tasks = () => {
     setStatusFilter('');
     setPriorityFilter('');
     setUserFilter('');
+    setOnlyMyTasks(false);
   };
 
   // Compute dynamic stats
@@ -228,6 +238,8 @@ const Tasks = () => {
         statuses={filterStatuses}
         priorities={filterPriorities}
         users={filterUsers}
+        onlyMyTasks={onlyMyTasks}
+        setOnlyMyTasks={setOnlyMyTasks}
         onResetFilters={handleResetFilters}
       />
 

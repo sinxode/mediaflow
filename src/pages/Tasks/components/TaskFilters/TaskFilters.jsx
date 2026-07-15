@@ -18,6 +18,8 @@ const TaskFilters = ({
   statuses = [],
   priorities = [],
   users = [],
+  onlyMyTasks,
+  setOnlyMyTasks,
   onResetFilters
 }) => {
   return (
@@ -38,6 +40,15 @@ const TaskFilters = ({
         {/* Filters Scroll Container */}
         <div className={styles.filtersScroll}>
           <div className={styles.filtersList}>
+            {/* My Tasks Toggle */}
+            <button
+              type="button"
+              className={`${styles.myTasksBtn} ${onlyMyTasks ? styles.active : ''}`}
+              onClick={() => setOnlyMyTasks(!onlyMyTasks)}
+            >
+              My Tasks
+            </button>
+
             {/* Category Filter */}
             <div className={styles.selectWrapper}>
               <select
@@ -99,7 +110,7 @@ const TaskFilters = ({
             </div>
             
             {/* Reset Button */}
-            {(searchQuery || statusFilter || priorityFilter || categoryFilter || userFilter) && (
+            {(searchQuery || statusFilter || priorityFilter || categoryFilter || userFilter || onlyMyTasks) && (
               <Button
                 variant="ghost"
                 size="sm"
