@@ -126,3 +126,31 @@
   color: $color-text-secondary;
   line-height: 1.2;
 }
+
+.roleToggleButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 16px;
+  font-size: 11.5px;
+  font-weight: $font-weight-medium;
+  background-color: rgba($color-primary, 0.06);
+  border: 1px solid rgba($color-primary, 0.15);
+  color: $color-primary;
+  cursor: pointer;
+  transition: all $transition-fast;
+  user-select: none;
+  margin-right: $spacing-xs;
+  
+  strong {
+    font-weight: $font-weight-bold;
+  }
+  
+  &:hover {
+    background-color: $color-primary;
+    border-color: $color-primary;
+    color: #ffffff;
+  }
+}

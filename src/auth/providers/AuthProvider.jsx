@@ -23,6 +23,11 @@ export const AuthProvider = ({ children }) => {
   const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeRoleOverride, setActiveRoleOverride] = useState(null);
+
+  const isDualRoleUser = useCallback((usr) => {
+    return usr?.email?.toLowerCase() === 'sinanneyy@zainussunna.com';
+  }, []);
 
   // Load active sessions on boot
   useEffect(() => {
@@ -34,6 +39,9 @@ export const AuthProvider = ({ children }) => {
           setSession(currentData.session);
           setUser(currentData.user);
           setRole(currentData.user.role);
+          if (isDualRoleUser(currentData.user)) {
+            setActiveRoleOverride(currentData.user.role || 'creator');
+          }
         }
       } catch (err) {
         console.error('Failed to initialize auth session', err);
@@ -47,7 +55,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     initializeAuth();
-  }, []);
+  }, [isDualRoleUser]);
 
   const login = useCallback(async (email, password) => {
     setLoading(true);
@@ -57,6 +65,9 @@ export const AuthProvider = ({ children }) => {
       setSession(data.session);
       setUser(data.user);
       setRole(data.user.role);
+      if (isDualRoleUser(data.user)) {
+        setActiveRoleOverride(data.user.role || 'creator');
+      }
       return data.user;
     } catch (err) {
       setError(err.message);
@@ -64,7 +75,7 @@ export const AuthProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [isDualRoleUser]);
 
   const logout = useCallback(async () => {
     setLoading(true);
@@ -73,6 +84,7 @@ export const AuthProvider = ({ children }) => {
       setSession(null);
       setUser(null);
       setRole(null);
+      setActiveRoleOverride(null);
     } catch (err) {
       console.error('Failed to sign out', err);
     } finally {
@@ -87,23 +99,37 @@ export const AuthProvider = ({ children }) => {
       if (currentData) {
         setUser(currentData.user);
         setRole(currentData.user.role);
+        if (isDualRoleUser(currentData.user) && !activeRoleOverride) {
+          setActiveRoleOverride(currentData.user.role || 'creator');
+        }
       }
     } catch (err) {
       console.error('Failed to refresh user profile', err);
     }
-  }, [user]);
+  }, [user, activeRoleOverride, isDualRoleUser]);
+
+  const isDualRole = isDualRoleUser(user);
+
+  const toggleRole = useCallback(() => {
+    if (!isDualRole) return;
+    setActiveRoleOverride((prev) => (prev === 'reviewer' ? 'creator' : 'reviewer'));
+  }, [isDualRole]);
+
+  const currentRole = isDualRole && activeRoleOverride ? activeRoleOverride : role;
 
   // Memoize context value to prevent unneeded consumer renders
   const value = useMemo(() => ({
     session,
     user,
-    role,
+    role: currentRole,
+    isDualRole,
+    toggleRole,
     loading,
     error,
     login,
     logout,
     profileRefresh
-  }), [session, user, role, loading, error, login, logout, profileRefresh]);
+  }), [session, user, currentRole, isDualRole, toggleRole, loading, error, login, logout, profileRefresh]);
 
   if (loading) {
     return <AuthLoadingScreen />;

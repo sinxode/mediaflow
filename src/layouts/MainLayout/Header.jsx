@@ -8,10 +8,10 @@ import { useAuth } from '../../auth/hooks/useAuth';
 import styles from './Header.module.scss';
 
 const Header = ({ onMenuClick }) => {
-  const { user } = useAuth();
+  const { user, role, isDualRole, toggleRole } = useAuth();
 
   const displayName = user?.name || 'User';
-  const displayRole = user?.role ? (user.role.charAt(0).toUpperCase() + user.role.slice(1)) : 'Member';
+  const displayRole = role ? (role.charAt(0).toUpperCase() + role.slice(1)) : 'Member';
 
   return (
     <header className={styles.header}>
@@ -39,6 +39,16 @@ const Header = ({ onMenuClick }) => {
 
       {/* Action triggers */}
       <div className={styles.actions}>
+        {isDualRole && (
+          <button
+            type="button"
+            onClick={toggleRole}
+            className={styles.roleToggleButton}
+            title={`Switch view/role permissions to ${role === 'reviewer' ? 'Manager (Creator)' : 'Reviewer'}`}
+          >
+            Acting as: <strong>{role === 'reviewer' ? 'Reviewer' : 'Manager'}</strong> ⇄
+          </button>
+        )}
         <NotificationBell />
         <div className={styles.userProfile}>
           <Avatar
