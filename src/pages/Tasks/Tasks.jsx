@@ -231,6 +231,10 @@ const Tasks = () => {
     completed: completedCount
   };
 
+  // Grouped tasks by status categories
+  const activeTasksList = filteredTasks.filter((t) => t.status !== STATUSES.COMPLETED && t.status !== STATUSES.PUBLISHED);
+  const completedTasksList = filteredTasks.filter((t) => t.status === STATUSES.COMPLETED || t.status === STATUSES.PUBLISHED);
+
   // Static options mapping
   const filterCategories = Object.values(CATEGORIES);
   const filterStatuses = Object.values(STATUSES);
@@ -313,14 +317,43 @@ const Tasks = () => {
               animate="animate"
               className={styles.tasksList}
             >
-              {filteredTasks.map((task) => (
-                <motion.div key={task.id} variants={fadeUpVariants}>
-                  <TaskCard
-                    task={task}
-                    onClick={() => setSearchParams({ id: task.id })} // Opens Task Details Page
-                  />
-                </motion.div>
-              ))}
+              {activeTasksList.length > 0 && (
+                <>
+                  <div className={styles.sectionHeader}>
+                    <h3 className={styles.sectionTitle}>
+                      Active Tasks
+                      <span className={styles.sectionCount}>{activeTasksList.length}</span>
+                    </h3>
+                  </div>
+                  {activeTasksList.map((task) => (
+                    <motion.div key={task.id} variants={fadeUpVariants}>
+                      <TaskCard
+                        task={task}
+                        onClick={() => setSearchParams({ id: task.id })}
+                      />
+                    </motion.div>
+                  ))}
+                </>
+              )}
+
+              {completedTasksList.length > 0 && (
+                <>
+                  <div className={`${styles.sectionHeader} ${styles.completedSectionHeader}`}>
+                    <h3 className={styles.sectionTitle}>
+                      Completed & Published
+                      <span className={styles.sectionCount}>{completedTasksList.length}</span>
+                    </h3>
+                  </div>
+                  {completedTasksList.map((task) => (
+                    <motion.div key={task.id} variants={fadeUpVariants}>
+                      <TaskCard
+                        task={task}
+                        onClick={() => setSearchParams({ id: task.id })}
+                      />
+                    </motion.div>
+                  ))}
+                </>
+              )}
             </motion.div>
           ) : (
             <motion.div
