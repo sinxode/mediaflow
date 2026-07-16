@@ -50,7 +50,7 @@ const TaskHeader = ({ task, approvalsCount = 0, onBack, onEdit, onDelete }) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopyLink = () => {
-    const shareUrl = `${window.location.origin}/tasks?id=${task.id}`;
+    const shareUrl = `${window.location.origin}${window.location.pathname}#/tasks?id=${task.id}`;
     
     const formattedPriority = task.priority 
       ? task.priority.charAt(0).toUpperCase() + task.priority.slice(1) 

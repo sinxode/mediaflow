@@ -12,8 +12,10 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Redirect destination after login
-  const from = location.state?.from?.pathname || '/dashboard';
+  // Redirect destination after login, preserving query params
+  const from = location.state?.from
+    ? `${location.state.from.pathname}${location.state.from.search || ''}`
+    : '/dashboard';
 
   // Form Fields
   const [email, setEmail] = useState('');
