@@ -6,10 +6,10 @@ const htmlPlugin = () => {
   return {
     name: 'html-transform',
     transformIndexHtml(html) {
-      // VERCEL_URL is provided by Vercel deployments automatically
+      // Use correct domain as absolute URL fallback
       const host = process.env.VERCEL_URL 
         ? `https://${process.env.VERCEL_URL}` 
-        : '';
+        : 'https://mediaflow.zainussunnaacademy.com';
       
       return html
         .replace(/%OG_IMAGE_URL%/g, host ? `${host}/og-image.jpg` : '/og-image.jpg')
