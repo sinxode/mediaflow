@@ -197,7 +197,16 @@ const Tasks = () => {
       );
     });
     
-    setFilteredTasks(filtered);
+    const ordered = [...filtered].sort((a, b) => {
+      const isAFinished = a.status === 'completed' || a.status === 'published';
+      const isBFinished = b.status === 'completed' || b.status === 'published';
+      
+      if (isAFinished && !isBFinished) return 1;
+      if (!isAFinished && isBFinished) return -1;
+      return 0;
+    });
+    
+    setFilteredTasks(ordered);
   }, [searchQuery, categoryFilter, statusFilter, priorityFilter, userFilter, onlyMyTasks, tasks, user?.id]);
 
   const handleResetFilters = () => {
