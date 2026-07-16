@@ -323,7 +323,12 @@ const Dashboard = () => {
             {creators.length > 0 ? (
               creators.map((c) => {
                 const creatorTasks = tasks.filter((t) => t.assigned_to === c.id);
-                const inProgress = creatorTasks.filter((t) => t.status === 'working' || t.status === 'assigned').length;
+                const inProgress = creatorTasks.filter((t) => 
+                  t.status === 'created' || 
+                  t.status === 'assigned' || 
+                  t.status === 'working' || 
+                  t.status === 'in-progress'
+                ).length;
                 const review = creatorTasks.filter((t) => t.status === 'ready_for_review' || t.status === 'reviewing').length;
                 const completed = creatorTasks.filter((t) => t.status === 'completed' || t.status === 'published' || t.status === 'approved').length;
                 const totalActive = inProgress + review;
