@@ -3,6 +3,7 @@
 
 import { TaskService } from '../tasks/taskService';
 import { ActivityService } from '../activity/activityService';
+import { CATEGORIES } from '../../constants';
 
 const calculateStatsFromTasks = (tasks, logs = []) => {
   const now = new Date();
@@ -131,7 +132,7 @@ const calculateStatsFromTasks = (tasks, logs = []) => {
 
   // 4. Category Insights
   const categories = {};
-  const allowedCategories = ['Poster Design', 'Video Editing', 'Thumbnail Design', 'Photography', 'Documentation', 'Social Media Post'];
+  const allowedCategories = Object.values(CATEGORIES);
   
   allowedCategories.forEach((c) => {
     categories[c] = { created: 0, completed: 0, published: 0, pending: 0 };

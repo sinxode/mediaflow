@@ -64,6 +64,10 @@ export const CATEGORIES = {
   VIDEO: 'Video Editing',
   THUMBNAIL: 'Thumbnail Design',
   PHOTO: 'Photography',
+  VIDEOGRAPHY: 'Videography',
+  DTP: 'DTP',
+  SLIDES: 'Slides',
+  PRINT: 'Print',
   DOCS: 'Documentation',
   SOCIAL: 'Social Media Post',
   OTHER: 'Other'
