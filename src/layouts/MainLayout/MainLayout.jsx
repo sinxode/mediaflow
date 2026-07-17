@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import BottomNav from './BottomNav';
@@ -14,6 +14,16 @@ const MainLayout = () => {
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
   const { logout } = useAuth();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  // Scroll to top of window and content container on page navigation
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    const scrollContainer = document.querySelector(`.${styles.appContent}`);
+    if (scrollContainer) {
+      scrollContainer.scrollTop = 0;
+    }
+  }, [pathname]);
 
   useEffect(() => {
     const handleOnline = () => setIsOffline(false);
