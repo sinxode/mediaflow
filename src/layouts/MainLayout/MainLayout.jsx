@@ -16,6 +16,7 @@ const MainLayout = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const isStudentPortal = pathname === '/student-portal';
 
   // Scroll to top of window and content container on page navigation
   useEffect(() => {
@@ -91,7 +92,7 @@ const MainLayout = () => {
         </div>
       )}
       {/* Mobile Sidebar Overlay Backdrop */}
-      {isSidebarOpen && (
+      {isSidebarOpen && !isStudentPortal && (
         <div
           className={styles.overlay}
           onClick={() => setIsSidebarOpen(false)}
@@ -99,22 +100,23 @@ const MainLayout = () => {
       )}
 
       {/* Navigation Sidebar (Desktop Panel / Mobile Overlay) */}
-      <Sidebar
-        isOpen={isSidebarOpen}
-        onClose={() => setIsSidebarOpen(false)}
-        onLogoutClick={() => setIsLogoutModalOpen(true)}
-      />
+      {!isStudentPortal && (
+        <Sidebar
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
+          onLogoutClick={() => setIsLogoutModalOpen(true)}
+        />
+      )}
 
       {/* Main Panel Content Container */}
-      <div className={styles.appMain}>
-        <Header onMenuClick={() => setIsSidebarOpen(true)} />
+      <div className={`${styles.appMain} ${isStudentPortal ? styles.standaloneMain : ''}`}>
+        {!isStudentPortal && <Header onMenuClick={() => setIsSidebarOpen(true)} />}
         
-        <main className={styles.appContent}>
+        <main className={`${styles.appContent} ${isStudentPortal ? styles.standaloneContent : ''}`}>
           <Outlet />
         </main>
 
-        {/* Mobile Navigation Bar */}
-        <BottomNav />
+        {!isStudentPortal && <BottomNav />}
       </div>
 
       {/* Global Logout Modal */}

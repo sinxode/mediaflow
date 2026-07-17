@@ -59,3 +59,14 @@
     padding-top: $spacing-xl;
   }
 }
+
+.standaloneMain {
+  margin-left: 0 !important;
+}
+
+.standaloneContent {
+  padding: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  min-height: 100vh;
+}
