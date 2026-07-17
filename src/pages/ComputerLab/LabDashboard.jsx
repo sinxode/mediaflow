@@ -150,7 +150,7 @@ const LabDashboard = () => {
           setWarningThreshold(parseInt(setts.warning_threshold) || 5);
           setAlertThreshold(parseInt(setts.alert_threshold) || 1);
           setOvertimePolicy(setts.overtime_policy || 'allow');
-          setDefaultCredit(parseInt(setts.default_credit_allocation) || 45);
+          setDefaultCredit(setts.default_credit_allocation !== undefined && setts.default_credit_allocation !== null ? parseInt(setts.default_credit_allocation) : 45);
         }
       } catch (err) {
         console.error('Failed to initialize settings configuration', err);
@@ -173,7 +173,7 @@ const LabDashboard = () => {
             setWarningThreshold(parseInt(setts.warning_threshold) || 5);
             setAlertThreshold(parseInt(setts.alert_threshold) || 1);
             setOvertimePolicy(setts.overtime_policy || 'allow');
-            setDefaultCredit(parseInt(setts.default_credit_allocation) || 45);
+            setDefaultCredit(setts.default_credit_allocation !== undefined && setts.default_credit_allocation !== null ? parseInt(setts.default_credit_allocation) : 45);
           }
         } catch (err) {
           console.error('Failed to populate settings tab', err);
