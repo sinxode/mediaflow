@@ -1,0 +1,783 @@
+@import '../../styles/shared';
+
+// Parent container layout
+.labContainer {
+  @include flex-col(flex-start, stretch, $spacing-lg);
+  width: 100%;
+}
+
+// Stats overview grids
+.seatsOverview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: $spacing-md;
+  width: 100%;
+}
+
+.overviewCard {
+  background-color: $color-surface;
+  border-radius: 16px;
+  border: 1px solid rgba($color-border, 0.6);
+  box-shadow: $shadow-sm;
+  padding: $spacing-md;
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  transition: transform $transition-fast, box-shadow $transition-fast;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-md;
+  }
+}
+
+.overviewIcon {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  @include flex-row(center, center);
+}
+
+.overviewMeta {
+  display: flex;
+  flex-direction: column;
+}
+
+.overviewLabel {
+  font-size: 11px;
+  font-weight: $font-weight-bold;
+  color: $color-text-secondary;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.overviewValue {
+  font-size: 22px;
+  font-weight: $font-weight-bold;
+  color: $color-text;
+  margin-top: 2px;
+}
+
+// Two column grid layout for Dashboard
+.dashboardGridLayout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-lg;
+  width: 100%;
+  
+  @include tablet-and-up {
+    grid-template-columns: 2fr 1.1fr;
+    align-items: start;
+  }
+}
+
+// ----------------------------------------------------
+// VERITY MODERN DEPARTURES BOARD UI
+// ----------------------------------------------------
+.boardSection {
+  background-color: #090D16; // Deep space black-slate
+  border-radius: 20px;
+  padding: $spacing-lg;
+  border: 1px solid rgba(124, 58, 237, 0.15); // Neon lavender border glow
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2), 0 0 15px rgba(124, 58, 237, 0.05);
+  color: #F8FAFC;
+  width: 100%;
+}
+
+.boardHeader {
+  @include flex-row(space-between, center);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: $spacing-md;
+  margin-bottom: $spacing-lg;
+}
+
+.boardTitle {
+  font-family: $font-family;
+  font-size: 16px;
+  font-weight: $font-weight-bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #38BDF8; // Glow sky blue
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.seatsIndicators {
+  @include flex-row(flex-end, center, 8px);
+  
+  .indicatorDot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid #090D16;
+    
+    &.occupied {
+      background-color: #EF4444;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.8);
+    }
+    &.available {
+      background-color: #10B981;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.8);
+    }
+  }
+}
+
+// Departure Airport Terminal Grid list
+.airportRowsList {
+  @include flex-col(flex-start, stretch, 12px);
+}
+
+.airportRowItem {
+  background-color: rgba(255, 255, 255, 0.02);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  padding: $spacing-md;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  transition: all 0.2s ease;
+  
+  @include tablet-and-up {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.04);
+    border-color: rgba(124, 58, 237, 0.3);
+  }
+}
+
+.pcBadge {
+  font-family: monospace;
+  font-size: 12px;
+  font-weight: $font-weight-bold;
+  background-color: rgba(56, 189, 248, 0.15);
+  color: #38BDF8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  padding: 6px 12px;
+  border-radius: 8px;
+  text-align: center;
+  min-width: 65px;
+  display: inline-block;
+  align-self: flex-start;
+}
+
+.occupantInfo {
+  flex: 1;
+  @include flex-col(center, flex-start, 2px);
+}
+
+.occupantName {
+  font-size: 14.5px;
+  font-weight: $font-weight-bold;
+  color: #F8FAFC;
+  letter-spacing: -0.01em;
+}
+
+.occupantPurpose {
+  font-size: 12px;
+  color: #94A3B8;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pcStatusAvailable {
+  font-size: 13.5px;
+  font-weight: $font-weight-bold;
+  color: #64748B;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+// Battery timer tracker progress bar (Verity Modern)
+.timerProgressionWrapper {
+  @include flex-row(flex-start, center, 12px);
+  min-width: 200px;
+  flex: 1;
+  
+  @include tablet-and-up {
+    flex: none;
+  }
+}
+
+.batteryTrack {
+  flex: 1;
+  height: 8px;
+  background-color: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  min-width: 80px;
+}
+
+.batteryFill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 1s linear;
+  
+  &.normal {
+    background: linear-gradient(90deg, #10B981, #34D399);
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+  }
+  &.warning {
+    background: linear-gradient(90deg, #F59E0B, #FBBF24);
+    box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+  }
+  &.alert {
+    background: linear-gradient(90deg, #F97316, #FB923C);
+    box-shadow: 0 0 8px rgba(249, 115, 22, 0.5);
+  }
+  &.overtime {
+    background: linear-gradient(90deg, #EF4444, #F87171);
+    box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+  }
+}
+
+.countdownTimer {
+  font-family: monospace;
+  font-size: 15px;
+  font-weight: $font-weight-bold;
+  letter-spacing: 0.5px;
+  min-width: 60px;
+  text-align: right;
+  
+  &.normal { color: #10B981; }
+  &.warning { color: #F59E0B; }
+  &.alert { color: #F97316; }
+  &.overtime {
+    color: #EF4444;
+    animation: flash 1s infinite;
+  }
+}
+
+// ----------------------------------------------------
+// VERITY CARD ROWS (MEDIAFLOW NATIVE)
+// ----------------------------------------------------
+.taskCardRow {
+  background-color: $color-surface;
+  border-radius: 16px;
+  border: 1px solid rgba($color-border, 0.7);
+  padding: $spacing-md $spacing-lg;
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  box-shadow: $shadow-sm;
+  transition: all 0.2s ease;
+  width: 100%;
+  
+  &:hover {
+    border-color: rgba($color-primary, 0.3);
+    box-shadow: $shadow-md;
+    transform: translateY(-1px);
+  }
+}
+
+.iconContainer {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background-color: rgba($color-primary, 0.06);
+  color: $color-primary;
+  @include flex-row(center, center);
+  flex-shrink: 0;
+}
+
+.mainInfo {
+  flex: 1;
+  min-width: 0; // Allows text overflow ellipsis
+  @include flex-col(center, flex-start, 2px);
+}
+
+.titleWrapper {
+  @include flex-row(flex-start, center, 8px);
+  width: 100%;
+}
+
+.title {
+  font-size: 14.5px;
+  font-weight: $font-weight-bold;
+  color: $color-text;
+  margin: 0;
+}
+
+.descriptionPreview {
+  font-size: 12.5px;
+  color: $color-text-secondary;
+}
+
+.metadata {
+  @include flex-row(flex-start, center, 6px);
+  font-size: 11px;
+  color: $color-text-secondary;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+
+.metaItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.metaDivider {
+  color: lighten($color-text-secondary, 20%);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: $color-primary;
+}
+
+.actionArea {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+// ----------------------------------------------------
+// CUSTOM INPUT FIELDS & LAYOUT UTILITIES
+// ----------------------------------------------------
+.inputField, .selectField, .textareaField, .searchInput {
+  background-color: #F8FAFC;
+  border: 1px solid rgba($color-border, 0.6);
+  border-radius: 12px;
+  color: $color-text;
+  font-family: $font-family;
+  font-size: 13.5px;
+  padding: 11px 14px;
+  width: 100%;
+  transition: border-color $transition-fast, box-shadow $transition-fast, background-color $transition-fast;
+  
+  &:hover {
+    border-color: rgba($color-primary, 0.3);
+  }
+  
+  &:focus {
+    outline: none;
+    background-color: #FFFFFF;
+    border-color: $color-primary;
+    box-shadow: 0 0 0 4px rgba($color-primary, 0.08);
+  }
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  
+  label {
+    font-size: 11px;
+    font-weight: 700;
+    color: $color-text-secondary;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+.searchInput {
+  height: 38px;
+  padding-left: 36px;
+}
+
+.row2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-md;
+  
+  @include tablet-and-up {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+// ----------------------------------------------------
+// WAITING QUEUE TIMELINE SIMULATION
+// ----------------------------------------------------
+.queueSimulatorSection {
+  background-color: $color-surface;
+  border-radius: 20px;
+  padding: $spacing-md $spacing-lg;
+  border: 1px solid rgba($color-border, 0.6);
+  box-shadow: $shadow-sm;
+  width: 100%;
+}
+
+.queueList {
+  @include flex-col(flex-start, stretch, 10px);
+  margin-top: $spacing-md;
+}
+
+.queueItemCard {
+  background-color: $color-background;
+  border: 1px solid rgba($color-border, 0.8);
+  border-radius: 12px;
+  padding: $spacing-md;
+  @include flex-row(space-between, center);
+  gap: $spacing-md;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    border-color: rgba($color-primary, 0.2);
+  }
+  
+  &.pending {
+    border-left: 4px solid #F59E0B;
+  }
+  &.approved {
+    border-left: 4px solid #10B981;
+    background-color: rgba(16, 185, 129, 0.02);
+  }
+}
+
+.queueIndex {
+  font-size: 13.5px;
+  font-weight: $font-weight-bold;
+  color: $color-text-secondary;
+  width: 20px;
+}
+
+.queueDetails {
+  flex: 1;
+  @include flex-col(center, flex-start, 2px);
+}
+
+.queueName {
+  font-size: 13.5px;
+  font-weight: $font-weight-bold;
+  color: $color-text;
+}
+
+.queuePurpose {
+  font-size: 11.5px;
+  color: $color-text-secondary;
+}
+
+.queueDuration {
+  font-size: 11.5px;
+  font-weight: $font-weight-semibold;
+  color: $color-primary;
+  background-color: rgba($color-primary, 0.06);
+  padding: 3px 8px;
+  border-radius: 10px;
+}
+
+.queueTimeEstimation {
+  @include flex-col(center, flex-end, 1px);
+  text-align: right;
+  min-width: 90px;
+  
+  .estTime {
+    font-size: 13px;
+    font-weight: $font-weight-bold;
+    color: #10B981;
+  }
+  .estLabel {
+    font-size: 9.5px;
+    color: $color-text-secondary;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+// ----------------------------------------------------
+// VISUAL PROGRESS METERS (STUDENT DB / WALLETS)
+// ----------------------------------------------------
+.progressWalletTrack {
+  width: 100%;
+  height: 6px;
+  background-color: #F1F5F9;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+
+.progressWalletFill {
+  height: 100%;
+  background-color: $color-primary;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+// Filter Toolbar layout
+.filterToolbar {
+  background-color: $color-surface;
+  border-radius: 16px;
+  border: 1px solid rgba($color-border, 0.7);
+  padding: $spacing-md;
+  box-shadow: $shadow-sm;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  width: 100%;
+  
+  @include tablet-and-up {
+    flex-direction: row;
+    align-items: center;
+    gap: $spacing-md;
+  }
+}
+
+.searchWrapper {
+  position: relative;
+  width: 100%;
+  
+  @include tablet-and-up {
+    flex: 1;
+    width: auto;
+  }
+  
+  svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $color-text-secondary;
+    width: 15px;
+    height: 15px;
+    z-index: 2;
+    pointer-events: none;
+  }
+  
+  input {
+    padding-left: 36px !important;
+  }
+}
+
+.filtersGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+  align-items: center;
+  width: 100%;
+  
+  @include tablet-and-up {
+    width: auto;
+    flex-wrap: nowrap;
+  }
+}
+
+.filterSelect, .filterDateInput {
+  flex: 1 1 120px;
+  height: 38px;
+  background-color: #FFFFFF;
+  border: 1px solid rgba($color-border, 0.8);
+  border-radius: 10px;
+  font-size: 13px;
+  color: $color-text;
+  padding: 0 10px;
+  outline: none;
+  font-family: $font-family;
+  box-sizing: border-box;
+  
+  &:focus {
+    border-color: $color-primary;
+  }
+  
+  @include tablet-and-up {
+    flex: none;
+    width: 140px;
+  }
+}
+
+// Portal check-in wrapper
+.portalWrapper {
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(135deg, #F5F3FF, #EDE9FE);
+  overflow-y: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-md;
+  font-family: $font-family;
+}
+
+.portalContainer {
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: $shadow-lg;
+  width: 100%;
+  max-width: 600px;
+  padding: $spacing-lg;
+  @include flex-col(flex-start, stretch, $spacing-md);
+}
+
+// Portal logo header layout
+.portalLogo {
+  @include flex-row(center, center, 10px);
+  width: 100%;
+  margin-bottom: $spacing-sm;
+  
+  img {
+    height: 36px;
+    object-fit: contain;
+  }
+  
+  span {
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    color: $color-text;
+  }
+}
+
+// Session banner inside portal check-in
+.portalSessionBanner {
+  background-color: #FFFFFF;
+  border: 1px solid rgba($color-border, 0.8);
+  border-radius: 18px;
+  padding: $spacing-md;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  box-shadow: $shadow-sm;
+  width: 100%;
+  
+  @include tablet-and-up {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.timeInfo {
+  @include flex-col(center, flex-start, 2px);
+}
+
+.timeTitle {
+  font-size: 11px;
+  font-weight: $font-weight-bold;
+  color: $color-text-secondary;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.timeValue {
+  font-size: 15px;
+  font-weight: $font-weight-bold;
+  color: $color-text;
+}
+
+.capacityProgress {
+  flex: 1;
+  max-width: 200px;
+  @include flex-col(center, flex-start, 4px);
+  
+  @include tablet-and-up {
+    align-items: flex-end;
+  }
+}
+
+.customProgressBar {
+  width: 100%;
+  height: 8px;
+  background-color: $color-background;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid rgba($color-border, 0.5);
+}
+
+.progressBarFill {
+  height: 100%;
+  background-color: $color-primary;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.portalDivider {
+  height: 1px;
+  background-color: rgba($color-border, 0.8);
+  width: 100%;
+  margin: $spacing-sm 0;
+}
+
+.portalForm {
+  @include flex-col(flex-start, stretch, $spacing-md);
+  width: 100%;
+}
+
+// Pill style tab navigation (like settings)
+.tabsWrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  padding-bottom: $spacing-xs;
+  margin-bottom: $spacing-md;
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.tabsList {
+  @include flex-row(flex-start, center, 4px);
+  width: max-content;
+  background-color: $color-surface;
+  border: 1px solid rgba($color-border, 0.8);
+  border-radius: 12px;
+  padding: 4px;
+}
+
+.tabItemBtn {
+  position: relative;
+  height: 36px;
+  padding: 0 $spacing-md;
+  border-radius: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  @include flex-row(center, center, 6px);
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  
+  svg {
+    width: 14px;
+    height: 14px;
+    color: $color-text-secondary;
+    position: relative;
+    z-index: 2;
+  }
+}
+
+.tabActiveBg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: $color-background;
+  border-radius: 8px;
+  box-shadow: $shadow-sm;
+  border: 1px solid rgba($color-border, 0.8);
+  z-index: 1;
+}
+
+.tabText {
+  position: relative;
+  z-index: 2;
+  font-family: $font-family;
+  font-size: 12.5px;
+  font-weight: $font-weight-semibold;
+  color: $color-text-secondary;
+}
+
+.tabActive {
+  .tabText { color: $color-primary; }
+  svg { color: $color-primary; }
+}
+
+// Animations helpers
+@keyframes flash {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}

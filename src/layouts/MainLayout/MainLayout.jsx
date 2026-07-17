@@ -6,6 +6,7 @@ import BottomNav from './BottomNav';
 import Modal from '../../components/Modal/Modal';
 import Button from '../../components/Button/Button';
 import { useAuth } from '../../auth/hooks/useAuth';
+import { WorkflowScheduler } from '../../services/workflows/workflowScheduler';
 import styles from './MainLayout.module.scss';
 
 const MainLayout = () => {
@@ -24,6 +25,19 @@ const MainLayout = () => {
       scrollContainer.scrollTop = 0;
     }
   }, [pathname]);
+
+  // Execute recurring workflow scheduler check on application mount
+  useEffect(() => {
+    WorkflowScheduler.checkAndGenerateTasks()
+      .then(res => {
+        if (res?.results && res.results.length > 0) {
+          console.log('Automated recurring task check complete:', res.results);
+        }
+      })
+      .catch(err => {
+        console.error('Scheduler failure', err);
+      });
+  }, []);
 
   useEffect(() => {
     const handleOnline = () => setIsOffline(false);

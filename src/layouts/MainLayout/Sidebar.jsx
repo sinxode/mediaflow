@@ -12,7 +12,15 @@ import {
   LogOut,
   X,
   MessageSquare,
-  Bell
+  Bell,
+  RefreshCw,
+  Monitor,
+  Inbox,
+  Play,
+  History,
+  Users,
+  Sliders,
+  ExternalLink
 } from 'lucide-react';
 import Button from '../../components/Button/Button';
 import ConnectionStatus from '../../components/ConnectionStatus/ConnectionStatus';
@@ -29,7 +37,12 @@ const Sidebar = ({ isOpen, onClose, onLogoutClick }) => {
     { label: 'Tasks', path: '/tasks', icon: <CheckSquare /> },
     permissions.canCreateTask && { label: 'Create Task', path: '/tasks/create', icon: <PlusSquare /> },
     permissions.canReviewTask && { label: 'Review Queue', path: '/review', icon: <Eye /> },
+    { label: 'Recurring Workflows', path: '/workflows', icon: <RefreshCw /> },
     { label: 'Archive', path: '/published', icon: <CheckCircle2 /> },
+    { type: 'separator' },
+    { type: 'header', label: 'Ignite LabOS' },
+    { label: 'Computer Lab', path: '/lab/dashboard', icon: <Monitor /> },
+    { label: 'Student Portal', path: '/lab/portal', icon: <ExternalLink /> },
     { type: 'separator' },
     { label: 'Notifications', path: '/notifications', icon: <Bell /> },
     role !== 'reviewer' && { label: 'Analytics', path: '/analytics', icon: <BarChart3 /> },
@@ -61,6 +74,9 @@ const Sidebar = ({ isOpen, onClose, onLogoutClick }) => {
           {menuItems.map((item, index) => {
             if (item.type === 'separator') {
               return <div key={`sep-${index}`} className={styles.separator} />;
+            }
+            if (item.type === 'header') {
+              return <div key={`hdr-${index}`} className={styles.menuHeader}>{item.label}</div>;
             }
             return (
               <NavLink

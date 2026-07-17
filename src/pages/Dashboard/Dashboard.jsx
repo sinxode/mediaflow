@@ -34,6 +34,8 @@ import { UserService } from '../../services/users/userService';
 import Avatar from '../../components/Avatar/Avatar';
 import { useRealtimeTasksList } from '../../hooks/useRealtime';
 import { useAuth } from '../../auth/hooks/useAuth';
+import { supabase } from '../../lib/supabaseClient';
+import WorkflowsDashboardWidget from '../RecurringWorkflows/WorkflowsDashboardWidget';
 import StatusBadge from '../../components/StatusBadge/StatusBadge';
 import {
   pageVariants,
@@ -48,6 +50,8 @@ const Dashboard = () => {
   const { user } = useAuth();
   const [tasks, setTasks] = useState([]);
   const [creators, setCreators] = useState([]);
+  const [workflows, setWorkflows] = useState([]);
+  const [historyCount, setHistoryCount] = useState({ success: 0, failed: 0 });
   const [loading, setLoading] = useState(true);
 
   const loadDashboardData = async () => {
@@ -59,6 +63,26 @@ const Dashboard = () => {
       ]);
       setTasks(taskList || []);
       setCreators((userList || []).filter(u => u.role === 'creator'));
+
+      // Fetch workflow details for metrics widget
+      const startOfMonth = new Date();
+      startOfMonth.setDate(1);
+      startOfMonth.setHours(0,0,0,0);
+
+      const [wfRes, histRes] = await Promise.all([
+        supabase.from('recurring_workflows').select('*'),
+        supabase.from('workflow_history').select('status').gte('generation_date', startOfMonth.toISOString())
+      ]);
+
+      if (wfRes.data) setWorkflows(wfRes.data);
+      if (histRes.data) {
+        const stats = histRes.data.reduce((acc, log) => {
+          if (log.status === 'success') acc.success++;
+          if (log.status === 'failed') acc.failed++;
+          return acc;
+        }, { success: 0, failed: 0 });
+        setHistoryCount(stats);
+      }
     } catch (err) {
       console.error('Failed to load dashboard metrics', err);
     } finally {
@@ -87,13 +111,41 @@ const Dashboard = () => {
           if (JSON.stringify(prev) === JSON.stringify(filtered)) return prev;
           return filtered;
         });
+
+        // Poll workflows for dashboard widget
+        const startOfMonth = new Date();
+        startOfMonth.setDate(1);
+        startOfMonth.setHours(0,0,0,0);
+
+        const [wfRes, histRes] = await Promise.all([
+          supabase.from('recurring_workflows').select('*'),
+          supabase.from('workflow_history').select('status').gte('generation_date', startOfMonth.toISOString())
+        ]);
+
+        if (wfRes.data) {
+          setWorkflows((prev) => {
+            if (JSON.stringify(prev) === JSON.stringify(wfRes.data)) return prev;
+            return wfRes.data;
+          });
+        }
+        if (histRes.data) {
+          const stats = histRes.data.reduce((acc, log) => {
+            if (log.status === 'success') acc.success++;
+            if (log.status === 'failed') acc.failed++;
+            return acc;
+          }, { success: 0, failed: 0 });
+          setHistoryCount((prev) => {
+            if (JSON.stringify(prev) === JSON.stringify(stats)) return prev;
+            return stats;
+          });
+        }
       } catch (err) {
         console.error('Failed to poll dashboard data', err);
       }
     }, 4000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [user?.role]);
 
   const handleRealtimeDashboardUpdate = useCallback(() => {
     const refreshDashboard = async () => {
@@ -308,6 +360,26 @@ const Dashboard = () => {
           </motion.div>
         ))}
       </motion.div>
+
+      {/* Recurring Workflows Automation Widget */}
+      <div className={styles.section} style={{ marginTop: '24px' }}>
+        <div className={styles.sectionHeader} style={{ marginBottom: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h3 className={styles.sectionTitle}>Recurring Workflows Automation</h3>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate('/workflows')}
+            style={{ padding: '0 8px', height: '28px', fontSize: '11px' }}
+          >
+            Manage Workflows
+          </Button>
+        </div>
+        <WorkflowsDashboardWidget 
+          workflows={workflows} 
+          monthlyGenerated={historyCount.success}
+          failedGenerations={historyCount.failed}
+        />
+      </div>
 
       {/* Section 4: Creator Workload Monitor */}
       <div className={styles.section} style={{ marginTop: '24px', marginBottom: '24px' }}>

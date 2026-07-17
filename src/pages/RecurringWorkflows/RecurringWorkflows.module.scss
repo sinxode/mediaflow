@@ -1,0 +1,501 @@
+@import '../../styles/shared';
+
+.workflowsContainer {
+  @include flex-col(flex-start, stretch, $spacing-md);
+  width: 100%;
+}
+
+.dashboardSummary {
+  width: 100%;
+}
+
+// Controls panel
+.controlsBar {
+  @include flex-row(space-between, center);
+  gap: $spacing-md;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.searchBox {
+  position: relative;
+  flex: 1;
+  min-width: 260px;
+  max-width: 400px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: $color-text-secondary;
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  height: 44px;
+  padding: 0 16px 0 44px;
+  border-radius: $radius-input;
+  border: 1px solid rgba($color-border, 0.8);
+  background-color: $color-surface;
+  color: $color-text;
+  font-size: 14px;
+  font-family: $font-family;
+  transition: all 0.2s ease;
+  
+  &:focus {
+    @include focus-ring;
+    background-color: $color-surface;
+  }
+  
+  &::placeholder {
+    color: $color-text-secondary;
+    opacity: 0.8;
+  }
+}
+
+// Workflows Grid Layout
+.workflowsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-md;
+  width: 100%;
+  
+  @include tablet-and-up {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  @include desktop-and-up {
+    grid-template-columns: repeat(3, 1fr);
+    gap: $spacing-lg;
+  }
+}
+
+// Premium Card Styles
+.workflowCard {
+  background-color: $color-surface;
+  border-radius: 20px;
+  border: 1px solid rgba($color-border, 0.6);
+  box-shadow: $shadow-sm;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: $shadow-md;
+    border-color: rgba($color-primary, 0.3);
+  }
+}
+
+.cardBanner {
+  height: 6px;
+  width: 100%;
+  background: linear-gradient(90deg, #A78BFA, #C084FC); // Lavender gradient accent
+}
+
+.cardHeader {
+  padding: $spacing-md;
+  padding-bottom: $spacing-xs;
+  @include flex-row(space-between, flex-start);
+  gap: $spacing-sm;
+}
+
+.cardTitleSection {
+  flex: 1;
+}
+
+.workflowName {
+  font-size: 16px;
+  font-weight: $font-weight-bold;
+  color: $color-text;
+  margin: 0 0 4px 0;
+  line-height: 1.3;
+}
+
+.categoryTag {
+  font-size: 11px;
+  font-weight: $font-weight-medium;
+  color: $color-primary;
+  background-color: rgba($color-primary, 0.06);
+  padding: 2px 8px;
+  border-radius: 12px;
+  display: inline-block;
+}
+
+.statusIndicator {
+  font-size: 10px;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+  
+  &.active {
+    background-color: #ECFDF5;
+    color: #047857;
+  }
+  &.paused {
+    background-color: #FFFBEB;
+    color: #B45309;
+  }
+  &.disabled {
+    background-color: #F1F5F9;
+    color: #64748B;
+  }
+}
+
+.cardBody {
+  padding: $spacing-md;
+  flex: 1;
+  @include flex-col(flex-start, stretch, $spacing-sm);
+}
+
+.templatePreview {
+  background-color: rgba($color-border, 0.15);
+  border-radius: 12px;
+  padding: $spacing-sm;
+  
+  .templateLabel {
+    font-size: 10px;
+    font-weight: $font-weight-bold;
+    color: $color-text-secondary;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    display: block;
+  }
+  
+  .templateText {
+    font-size: 13px;
+    font-weight: $font-weight-medium;
+    color: $color-text;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+  }
+}
+
+.scheduleDetails {
+  @include flex-col(flex-start, stretch, 6px);
+  
+  .scheduleRow {
+    @include flex-row(flex-start, center, 8px);
+    font-size: 12px;
+    color: $color-text-secondary;
+  }
+  
+  .scheduleIcon {
+    color: $color-primary;
+    flex-shrink: 0;
+  }
+  
+  .scheduleValue {
+    font-weight: $font-weight-medium;
+    color: $color-text;
+  }
+}
+
+.cardMetaGroup {
+  @include flex-row(flex-start, center, $spacing-md);
+  margin-top: auto;
+  border-top: 1px solid rgba($color-border, 0.4);
+  padding-top: $spacing-sm;
+}
+
+.metaItem {
+  @include flex-row(flex-start, center, 6px);
+  font-size: 12px;
+  color: $color-text-secondary;
+  
+  span {
+    font-weight: $font-weight-medium;
+    color: $color-text;
+  }
+}
+
+.cardActions {
+  padding: $spacing-sm $spacing-md;
+  border-top: 1px solid rgba($color-border, 0.4);
+  @include flex-row(space-between, center);
+  background-color: rgba($color-border, 0.05);
+}
+
+.leftActionGroup {
+  @include flex-row(flex-start, center, 4px);
+}
+
+.rightActionGroup {
+  @include flex-row(flex-end, center, 6px);
+}
+
+.actionBtn {
+  height: 32px !important;
+  width: 32px !important;
+  padding: 0 !important;
+  border-radius: 8px !important;
+  @include flex-row(center, center);
+  
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+// Modal Form layout
+.formGrid {
+  @include flex-col(flex-start, stretch, $spacing-md);
+  width: 100%;
+}
+
+.formSection {
+  @include flex-col(flex-start, stretch, $spacing-sm);
+  width: 100%;
+  
+  .sectionTitle {
+    font-size: 13px;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0 0 $spacing-xs 0;
+    border-bottom: 1px solid rgba($color-border, 0.4);
+    padding-bottom: 6px;
+  }
+}
+
+.row2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-md;
+  width: 100%;
+  
+  @include tablet-and-up {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.row3 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-md;
+  width: 100%;
+  
+  @include tablet-and-up {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.inputGroup {
+  @include flex-col(flex-start, stretch, 6px);
+  width: 100%;
+  
+  label {
+    font-size: 12px;
+    font-weight: $font-weight-semibold;
+    color: $color-text-secondary;
+  }
+}
+
+.inputField, .selectField, .textareaField {
+  width: 100%;
+  border-radius: $radius-input;
+  border: 1px solid $color-border;
+  background-color: $color-background;
+  color: $color-text;
+  font-size: 13px;
+  font-family: $font-family;
+  transition: all 0.2s ease;
+  
+  &:focus {
+    @include focus-ring;
+  }
+}
+
+.inputField {
+  height: 40px;
+  padding: 0 12px;
+}
+
+.selectField {
+  height: 40px;
+  padding: 0 12px;
+  cursor: pointer;
+}
+
+.textareaField {
+  padding: 10px 12px;
+  min-height: 80px;
+  resize: vertical;
+}
+
+// Checklist Manager
+.checklistManager {
+  @include flex-col(flex-start, stretch, 8px);
+}
+
+.checklistItem {
+  @include flex-row(space-between, center, $spacing-sm);
+  background-color: rgba($color-border, 0.1);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: $color-text;
+}
+
+.checklistInputRow {
+  @include flex-row(flex-start, center, 8px);
+  width: 100%;
+}
+
+// Weekdays Selector
+.weekdayGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  width: 100%;
+}
+
+.weekdayCheckbox {
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid $color-border;
+  background-color: $color-background;
+  color: $color-text-secondary;
+  font-size: 11px;
+  font-weight: $font-weight-bold;
+  cursor: pointer;
+  @include flex-row(center, center);
+  transition: all 0.2s ease;
+  user-select: none;
+  
+  &.checked {
+    background-color: rgba($color-primary, 0.1);
+    border-color: $color-primary;
+    color: $color-primary;
+  }
+}
+
+// Tags List Editor
+.tagsContainer {
+  @include flex-row(flex-start, center, 6px);
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.tagPill {
+  font-size: 11px;
+  font-weight: $font-weight-semibold;
+  background-color: rgba($color-border, 0.3);
+  color: $color-text;
+  padding: 3px 8px;
+  border-radius: 12px;
+  @include flex-row(flex-start, center, 4px);
+}
+
+.tagRemoveBtn {
+  background: none;
+  border: none;
+  color: $color-text-secondary;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  
+  &:hover {
+    color: $color-danger;
+  }
+}
+
+// History view timeline
+.historyTimeline {
+  @include flex-col(flex-start, stretch, $spacing-md);
+  max-height: 480px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.historyRow {
+  @include flex-row(flex-start, flex-start, $spacing-md);
+  position: relative;
+  padding-bottom: $spacing-md;
+  
+  &:not(:last-of-type)::after {
+    content: '';
+    position: absolute;
+    left: 17px;
+    top: 36px;
+    bottom: 0;
+    width: 2px;
+    background-color: rgba($color-border, 0.4);
+  }
+}
+
+.historyDot {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  @include flex-row(center, center);
+  color: white;
+  flex-shrink: 0;
+  
+  &.success {
+    background-color: $color-success;
+  }
+  &.skipped {
+    background-color: $color-warning;
+  }
+  &.failed {
+    background-color: $color-danger;
+  }
+}
+
+.historyContent {
+  flex: 1;
+  background-color: rgba($color-border, 0.1);
+  border-radius: 12px;
+  padding: $spacing-sm $spacing-md;
+  @include flex-col(flex-start, stretch, 4px);
+}
+
+.historyMetaRow {
+  @include flex-row(space-between, center);
+  font-size: 11px;
+  color: $color-text-secondary;
+}
+
+.historyTitle {
+  font-size: 13.5px;
+  font-weight: $font-weight-bold;
+  color: $color-text;
+  margin: 2px 0;
+}
+
+.historyTaskLink {
+  font-size: 12px;
+  color: $color-primary;
+  font-weight: $font-weight-semibold;
+  cursor: pointer;
+  text-decoration: underline;
+  align-self: flex-start;
+  margin-top: 4px;
+  
+  &:hover {
+    color: darken($color-primary, 10%);
+  }
+}
+
+.historyError {
+  font-size: 11px;
+  color: $color-danger;
+  background-color: rgba($color-danger, 0.05);
+  padding: 4px 8px;
+  border-radius: 6px;
+  margin-top: 4px;
+}

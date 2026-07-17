@@ -16,6 +16,11 @@ const Profile = lazy(() => import('../pages/Profile/Profile'));
 const Settings = lazy(() => import('../pages/Settings/Settings'));
 const Notifications = lazy(() => import('../pages/Notifications/Notifications'));
 const Analytics = lazy(() => import('../pages/Analytics/Analytics'));
+const RecurringWorkflows = lazy(() => import('../pages/RecurringWorkflows/RecurringWorkflows'));
+
+// Ignite LabOS Lazy Components
+const StudentPortal = lazy(() => import('../pages/ComputerLab/StudentPortal'));
+const LabDashboard = lazy(() => import('../pages/ComputerLab/LabDashboard'));
 
 const SuspenseWrapper = ({ children }) => (
   <Suspense fallback={
@@ -31,6 +36,16 @@ export const router = createHashRouter([
   {
     path: '/login',
     element: <Login />
+  },
+  {
+    path: '/lab/portal',
+    element: (
+      <ProtectedRoute>
+        <SuspenseWrapper>
+          <StudentPortal />
+        </SuspenseWrapper>
+      </ProtectedRoute>
+    )
   },
   {
     path: '/',
@@ -81,6 +96,14 @@ export const router = createHashRouter([
         )
       },
       {
+        path: 'workflows',
+        element: (
+          <SuspenseWrapper>
+            <RecurringWorkflows />
+          </SuspenseWrapper>
+        )
+      },
+      {
         path: 'published',
         element: (
           <SuspenseWrapper>
@@ -117,6 +140,14 @@ export const router = createHashRouter([
         element: (
           <SuspenseWrapper>
             <Analytics />
+          </SuspenseWrapper>
+        )
+      },
+      {
+        path: 'lab/dashboard',
+        element: (
+          <SuspenseWrapper>
+            <LabDashboard />
           </SuspenseWrapper>
         )
       },
