@@ -607,8 +607,8 @@ const LabDashboard = () => {
           <div className={styles.tabsWrapper}>
             <div className={styles.tabsList}>
               {[
-                { id: 'dashboard', label: 'Live departures board', icon: <Monitor size={14} /> },
-                { id: 'requests', label: `Pending Requests (${pendingRequests.length + extensionRequests.length})`, icon: <Inbox size={14} />, highlight: pendingRequests.length + extensionRequests.length > 0 },
+                { id: 'dashboard', label: 'Live departures board', icon: <Monitor size={14} style={{ color: activeSessions.length > 0 ? '#10B981' : 'inherit' }} /> },
+                { id: 'requests', label: `Pending Requests (${pendingRequests.length + extensionRequests.length})`, icon: <Inbox size={14} style={{ color: (pendingRequests.length + extensionRequests.length) > 0 ? '#EF4444' : 'inherit' }} />, highlight: pendingRequests.length + extensionRequests.length > 0 },
                 role === 'creator' && { id: 'history', label: 'Session logs timeline', icon: <History size={14} /> },
                 role === 'creator' && { id: 'students', label: 'Students database', icon: <Users size={14} /> },
                 role === 'creator' && { id: 'settings', label: 'System Settings', icon: <Sliders size={14} /> }
@@ -814,7 +814,7 @@ const LabDashboard = () => {
                 {extensionRequests.length > 0 && (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     <h4 style={{ margin: 0, fontSize: '12px', fontWeight: 'bold', color: '#EF4444', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <AlertTriangle size={14} /> Extension Overtime Approvals
+                      <AlertTriangle size={14} style={{ color: '#EF4444' }} /> Extension Overtime Approvals
                     </h4>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '10px' }}>
                       {extensionRequests.map(req => (
@@ -847,7 +847,7 @@ const LabDashboard = () => {
                 {/* Entry Requests List */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   <h4 style={{ margin: 0, fontSize: '12px', fontWeight: 'bold', color: '#7C3AED', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <Inbox size={14} /> Pending Check-in requests
+                    <Inbox size={14} style={{ color: pendingRequests.length > 0 ? '#F59E0B' : '#10B981' }} /> Pending Check-in requests
                   </h4>
 
                   {pendingRequests.length > 0 ? (
