@@ -79,7 +79,7 @@ const LabDashboard = () => {
   const [studentName, setStudentName] = useState('');
   const [studentEnrollment, setStudentEnrollment] = useState('');
   const [studentBatch, setBatch] = useState('');
-  const [studentCredits, setStudentCredits] = useState(45);
+  const [studentCredits, setStudentCredits] = useState(0);
 
   const [editingRequest, setEditingRequest] = useState(null);
   const [overridePC, setOverridePC] = useState('');
@@ -371,7 +371,7 @@ const LabDashboard = () => {
     setStudentName('');
     setStudentEnrollment(`IGN-2026-${String(students.length + 1).padStart(3, '0')}`);
     setBatch('Batch Alpha');
-    setStudentCredits(45);
+    setStudentCredits(0);
     setIsStudentModalOpen(true);
   };
 
@@ -392,7 +392,7 @@ const LabDashboard = () => {
         name: studentName.trim(),
         enrollment_number: studentEnrollment.trim(),
         batch: studentBatch.trim(),
-        credit_balance: parseInt(studentCredits) || 0
+        credit_balance: studentCredits === '' ? 0 : (parseInt(studentCredits) ?? 0)
       };
 
       if (editingStudent) {
@@ -1224,7 +1224,7 @@ const LabDashboard = () => {
               </div>
               <div className={styles.inputGroup}>
                 <label>Wallet Credit Balance (mins)</label>
-                <input type="number" min="0" required className={styles.inputField} value={studentCredits} onChange={(e) => setStudentCredits(parseInt(e.target.value) || 0)} />
+                <input type="number" min="0" required className={styles.inputField} value={studentCredits} onChange={(e) => setStudentCredits(e.target.value === '' ? '' : parseInt(e.target.value))} />
               </div>
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', marginTop: '12px' }}>
                 <Button variant="ghost" size="sm" type="button" onClick={() => setIsStudentModalOpen(false)}>Cancel</Button>
