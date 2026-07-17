@@ -748,7 +748,9 @@ const LabDashboard = () => {
                           ) : (
                             <>
                               <div className={styles.occupantInfo}>
-                                <span className={styles.pcStatusAvailable}>🟢 VACANT SEAT READY</span>
+                                <span className={styles.pcStatusAvailable} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                  <CheckCircle2 size={13} /> VACANT SEAT READY
+                                </span>
                               </div>
                               <span style={{ fontSize: '12px', color: '#64748B', fontFamily: 'monospace' }}>VACANT</span>
                             </>
@@ -811,8 +813,8 @@ const LabDashboard = () => {
                 {/* Extensions List */}
                 {extensionRequests.length > 0 && (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    <h4 style={{ margin: 0, fontSize: '12px', fontWeight: 'bold', color: '#EF4444', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                      ⚡ Extension Overtime Approvals
+                    <h4 style={{ margin: 0, fontSize: '12px', fontWeight: 'bold', color: '#EF4444', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <AlertTriangle size={14} /> Extension Overtime Approvals
                     </h4>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '10px' }}>
                       {extensionRequests.map(req => (
@@ -844,8 +846,8 @@ const LabDashboard = () => {
 
                 {/* Entry Requests List */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  <h4 style={{ margin: 0, fontSize: '12px', fontWeight: 'bold', color: '#7C3AED', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                    📥 Pending Check-in requests
+                  <h4 style={{ margin: 0, fontSize: '12px', fontWeight: 'bold', color: '#7C3AED', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <Inbox size={14} /> Pending Check-in requests
                   </h4>
 
                   {pendingRequests.length > 0 ? (
