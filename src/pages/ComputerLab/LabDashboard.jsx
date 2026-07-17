@@ -117,16 +117,6 @@ const LabDashboard = () => {
       setStudents(studentList || []);
       setRequests(requestList || []);
       setSettings(settingsList || {});
-
-      // Prefill settings form
-      if (settingsList) {
-        setPcCount(parseInt(settingsList.pc_count) || 4);
-        setPcNamesInput(JSON.stringify(settingsList.pc_names || ["PC-1", "PC-2", "PC-3", "PC-4"]));
-        setWarningThreshold(parseInt(settingsList.warning_threshold) || 5);
-        setAlertThreshold(parseInt(settingsList.alert_threshold) || 1);
-        setOvertimePolicy(settingsList.overtime_policy || 'allow');
-        setDefaultCredit(parseInt(settingsList.default_credit_allocation) || 45);
-      }
     } catch (err) {
       console.error('Failed to load lab data', err);
     } finally {
@@ -149,9 +139,49 @@ const LabDashboard = () => {
     }
   };
 
+  // Fetch config settings once on initial mount
+  useEffect(() => {
+    const initSettings = async () => {
+      try {
+        const setts = await LabService.getSettings();
+        if (setts) {
+          setPcCount(parseInt(setts.pc_count) || 4);
+          setPcNamesInput(JSON.stringify(setts.pc_names || ["PC-1", "PC-2", "PC-3", "PC-4"]));
+          setWarningThreshold(parseInt(setts.warning_threshold) || 5);
+          setAlertThreshold(parseInt(setts.alert_threshold) || 1);
+          setOvertimePolicy(setts.overtime_policy || 'allow');
+          setDefaultCredit(parseInt(setts.default_credit_allocation) || 45);
+        }
+      } catch (err) {
+        console.error('Failed to initialize settings configuration', err);
+      }
+    };
+    initSettings();
+  }, []);
+
   useEffect(() => {
     loadLabData();
     
+    // Switch to settings: populate inputs once
+    if (activeTab === 'settings') {
+      const loadSettingsOnce = async () => {
+        try {
+          const setts = await LabService.getSettings();
+          if (setts) {
+            setPcCount(parseInt(setts.pc_count) || 4);
+            setPcNamesInput(JSON.stringify(setts.pc_names || ["PC-1", "PC-2", "PC-3", "PC-4"]));
+            setWarningThreshold(parseInt(setts.warning_threshold) || 5);
+            setAlertThreshold(parseInt(setts.alert_threshold) || 1);
+            setOvertimePolicy(setts.overtime_policy || 'allow');
+            setDefaultCredit(parseInt(setts.default_credit_allocation) || 45);
+          }
+        } catch (err) {
+          console.error('Failed to populate settings tab', err);
+        }
+      };
+      loadSettingsOnce();
+    }
+
     let interval = null;
     // Pause background polling while supervisor is editing configurations
     if (activeTab !== 'settings') {
