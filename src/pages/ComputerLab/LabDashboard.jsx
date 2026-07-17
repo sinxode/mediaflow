@@ -500,13 +500,18 @@ const LabDashboard = () => {
         return alert('PC names must be a valid JSON array format, e.g. ["PC-1", "PC-2"]');
       }
 
+      const finalPcCount = pcCount === '' ? 4 : (parseInt(pcCount) ?? 4);
+      const finalWarning = warningThreshold === '' ? 5 : (parseInt(warningThreshold) ?? 5);
+      const finalAlert = alertThreshold === '' ? 1 : (parseInt(alertThreshold) ?? 1);
+      const finalCredit = defaultCredit === '' ? 0 : (parseInt(defaultCredit) ?? 0);
+
       await Promise.all([
-        LabService.updateSetting('pc_count', pcCount),
+        LabService.updateSetting('pc_count', finalPcCount),
         LabService.updateSetting('pc_names', parsedPCs),
-        LabService.updateSetting('warning_threshold', warningThreshold),
-        LabService.updateSetting('alert_threshold', alertThreshold),
+        LabService.updateSetting('warning_threshold', finalWarning),
+        LabService.updateSetting('alert_threshold', finalAlert),
         LabService.updateSetting('overtime_policy', overtimePolicy),
-        LabService.updateSetting('default_credit_allocation', defaultCredit)
+        LabService.updateSetting('default_credit_allocation', finalCredit)
       ]);
 
       alert('Ignite LabOS configurations saved.');
@@ -1144,7 +1149,7 @@ const LabDashboard = () => {
                     <div className={styles.row2}>
                       <div className={styles.inputGroup}>
                         <label>Active Seats Count</label>
-                        <input type="number" min="1" max="24" className={styles.inputField} value={pcCount} onChange={(e) => setPcCount(parseInt(e.target.value) || 4)} />
+                        <input type="number" min="1" max="24" className={styles.inputField} value={pcCount} onChange={(e) => setPcCount(e.target.value === '' ? '' : parseInt(e.target.value))} />
                       </div>
                       <div className={styles.inputGroup}>
                         <label>Computer Names JSON Array</label>
@@ -1160,11 +1165,11 @@ const LabDashboard = () => {
                     <div className={styles.row2}>
                       <div className={styles.inputGroup}>
                         <label>Yellow Status (Mins remaining)</label>
-                        <input type="number" min="1" className={styles.inputField} value={warningThreshold} onChange={(e) => setWarningThreshold(parseInt(e.target.value) || 5)} />
+                        <input type="number" min="1" className={styles.inputField} value={warningThreshold} onChange={(e) => setWarningThreshold(e.target.value === '' ? '' : parseInt(e.target.value))} />
                       </div>
                       <div className={styles.inputGroup}>
                         <label>Orange Status (Mins remaining)</label>
-                        <input type="number" min="1" className={styles.inputField} value={alertThreshold} onChange={(e) => setAlertThreshold(parseInt(e.target.value) || 1)} />
+                        <input type="number" min="1" className={styles.inputField} value={alertThreshold} onChange={(e) => setAlertThreshold(e.target.value === '' ? '' : parseInt(e.target.value))} />
                       </div>
                     </div>
                     <div className={styles.inputGroup}>
@@ -1182,7 +1187,7 @@ const LabDashboard = () => {
                     </h3>
                     <div className={styles.inputGroup}>
                       <label>Default Starting Credit Wallet (Minutes)</label>
-                      <input type="number" min="0" className={styles.inputField} value={defaultCredit} onChange={(e) => setDefaultCredit(parseInt(e.target.value) || 45)} />
+                      <input type="number" min="0" className={styles.inputField} value={defaultCredit} onChange={(e) => setDefaultCredit(e.target.value === '' ? '' : parseInt(e.target.value))} />
                     </div>
                   </Card>
 
