@@ -16,6 +16,11 @@ export const ProtectedRoute = ({ children }) => {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
+  // If this is the student portal terminal account, restrict them exclusively to /lab/portal
+  if (user && user.email === 'mediasquad@zainussunna.com' && location.pathname !== '/lab/portal') {
+    return <Navigate to="/lab/portal" replace />;
+  }
+
   return children;
 };
 
