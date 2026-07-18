@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Play, CheckCircle2, Clock, AlertTriangle, UserCheck, 
@@ -8,10 +9,12 @@ import Card from '../../components/Card/Card';
 import Button from '../../components/Button/Button';
 import LoadingSkeleton from '../../components/LoadingSkeleton/LoadingSkeleton';
 import { LabService } from '../../services/lab/labService';
+import { AuthService } from '../../services/auth/authService';
 import { calculateRemainingTime, simulateQueueTimeline, formatTimerString } from '../../utils/labCalculations';
 import styles from './ComputerLab.module.scss';
 
 const StudentPortal = () => {
+  const navigate = useNavigate();
   const [students, setStudents] = useState([]);
   const [sessions, setSessions] = useState([]);
   const [requests, setRequests] = useState([]);
@@ -218,6 +221,16 @@ const StudentPortal = () => {
     }
   };
 
+  const handlePlatformLogout = async () => {
+    if (!window.confirm('Sign out of the computer lab terminal?')) return;
+    try {
+      await AuthService.signOut();
+      navigate('/login', { replace: true });
+    } catch (err) {
+      alert('Logout failed: ' + err.message);
+    }
+  };
+
   // Filter student selection term
   const filteredStudents = students.filter(s => 
     (s.name || '').toLowerCase().includes(searchStudentTerm.toLowerCase()) ||
@@ -345,8 +358,31 @@ const StudentPortal = () => {
               )}
             </div>
 
-            <div style={{ marginTop: 'auto', textAlign: 'center', fontSize: '11px', color: '#64748B' }}>
-              Ignite Computer LabOS terminal interface
+            <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', width: '100%' }}>
+              <span style={{ fontSize: '11px', color: '#64748B' }}>Ignite Computer LabOS terminal interface</span>
+              <button 
+                type="button" 
+                onClick={handlePlatformLogout}
+                style={{ 
+                  background: 'none', 
+                  border: 'none', 
+                  color: '#EF4444', 
+                  fontSize: '12px', 
+                  cursor: 'pointer', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '4px',
+                  fontWeight: '600',
+                  opacity: 0.8,
+                  padding: '4px 8px',
+                  borderRadius: '6px',
+                  transition: 'opacity 0.2s'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.opacity = 1}
+                onMouseLeave={(e) => e.currentTarget.style.opacity = 0.8}
+              >
+                <LogOut size={12} /> Sign Out Terminal
+              </button>
             </div>
           </motion.div>
         ) : (
