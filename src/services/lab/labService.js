@@ -381,10 +381,35 @@ export const LabService = {
   },
 
   approveExtension: async (requestId) => {
+    // Fetch request to get student details and requested extension duration
+    const { data: request, error: fetchReqError } = await supabase
+      .from('lab_requests')
+      .select('student_id, extension_requested_duration, credits_used')
+      .eq('id', requestId)
+      .single();
+
+    if (fetchReqError || !request) {
+      throw new Error(fetchReqError?.message || 'Lab request not found.');
+    }
+
+    const minutes = request.extension_requested_duration || 0;
+
+    // Load student to calculate credit allocation
+    const student = await LabService.getStudentById(request.student_id);
+    const available = student.credit_balance || 0;
+
+    let creditsToDeduct = Math.min(available, minutes);
+    let newBalance = available - creditsToDeduct;
+
+    // Deduct credits from student wallet
+    await LabService.updateStudent(request.student_id, { credit_balance: newBalance });
+
+    // Update request extension status and increment credits_used
     const { data, error } = await supabase
       .from('lab_requests')
       .update({
-        extension_status: 'approved'
+        extension_status: 'approved',
+        credits_used: (request.credits_used || 0) + creditsToDeduct
       })
       .eq('id', requestId)
       .select()
